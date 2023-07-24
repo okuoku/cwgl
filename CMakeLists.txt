@@ -41,20 +41,20 @@ if(YFRM_CWGL_EXPERIMENTAL_TRACKER)
     if(YFRM_CWGL_USE_VULKAN)
         add_definitions(-DCWGL_EXPERIMENTAL_USE_VOLK)
         include_directories(
-            ${CMAKE_CURRENT_LIST_DIR}/ext/cwgl/Vulkan-Headers/include)
+            ${VULKAN_HEADERS_ROOT}/include)
         include_directories(
-            ${CMAKE_CURRENT_LIST_DIR}/ext/cwgl/volk
+            ${VOLK_ROOT}
             )
         include_directories(
-            ext/cwgl/SPIRV-Tools/include
-            ext/cwgl/SPIRV-Cross
-            ext/cwgl/glslang
-            ext/cwgl/glslang/glslang/Public
+            ${SPIRV_TOOLS_ROOT}/include
+            ${SPIRV_CROSS_ROOT}
+            ${GLSLANG_ROOT}
+            ${GLSLANG_ROOT}/glslang/Public
             shxm/include
             )
         list(APPEND cwglsrc
             # Volk
-            ${CMAKE_CURRENT_LIST_DIR}/ext/cwgl/volk/volk.c
+            ${VOLK_ROOT}/volk.c
             # CWGL
             src-vulkan/cwgl-vk-ctx.c
             src-vulkan/cwgl-vk-obj.c
@@ -115,5 +115,7 @@ if(CWGL_KHRONOS_HEADER_DIR)
 endif()
 
 target_include_directories(cwgl PUBLIC include)
-target_link_libraries(cwgl PUBLIC angle_static)
+if(YFRM_CWGL_USE_ANGLE)
+    target_link_libraries(cwgl PUBLIC angle_static)
+endif()
 

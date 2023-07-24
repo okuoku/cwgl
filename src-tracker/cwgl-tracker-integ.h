@@ -2,7 +2,7 @@
 #define __YUNI_CWGL_TRACKER_INTEG_H
 
 #define CWGL_DECL_ENUMS
-#include "cwgl.h"
+#include "yuniframe/cwgl.h"
 #include "cwgl-tracker-states.h"
 
 #ifdef __cplusplus

@@ -2,7 +2,7 @@
 #define __YUNI_CWGL_TRACKER_STATES_H
 
 #include <stdint.h>
-#include "cwgl.h"
+#include "yuniframe/cwgl.h"
 
 #ifdef __cplusplus
 extern "C" {
