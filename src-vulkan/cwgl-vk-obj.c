@@ -50,6 +50,7 @@ cwgl_backend_ctx_init(cwgl_ctx_t* ctx){
     char** device_extensions;
     VkSemaphoreCreateInfo si;
     VkPipelineCacheCreateInfo pci;
+    const uint32_t device_idx = 0;
 
     VkResult r;
     cwgl_backend_ctx_t* c;
@@ -120,11 +121,15 @@ cwgl_backend_ctx_init(cwgl_ctx_t* ctx){
             goto initfail_instance;
         }
         /* Vulkan: Search appropriate queue */
-        physical_device = devices[0];
-        vkGetPhysicalDeviceQueueFamilyProperties(devices[0], &qfs, NULL);
+        if(device_idx >= gpus){
+            goto initfail_instance;
+        }
+        physical_device = devices[device_idx];
+        vkGetPhysicalDeviceQueueFamilyProperties(physical_device, &qfs, NULL);
         qfp = malloc(sizeof(VkQueueFamilyProperties)*qfs);
-        vkGetPhysicalDeviceMemoryProperties(devices[0], &memory_properties);
-        vkGetPhysicalDeviceQueueFamilyProperties(devices[0], &qfs, qfp);
+        vkGetPhysicalDeviceMemoryProperties(physical_device, 
+                                            &memory_properties);
+        vkGetPhysicalDeviceQueueFamilyProperties(physical_device, &qfs, qfp);
         queue_index = -1;
         for(i=0;i!=qfs;i++){
             /* Pickup a graphics queue */
@@ -156,7 +161,7 @@ cwgl_backend_ctx_init(cwgl_ctx_t* ctx){
         di.enabledLayerCount = 0;
         di.ppEnabledLayerNames = NULL;
         di.pEnabledFeatures = NULL;
-        r = vkCreateDevice(devices[0], &di, NULL, &device);
+        r = vkCreateDevice(physical_device, &di, NULL, &device);
         free(devices);
         /* Vulkan: Create command buffer */
         cpi.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
