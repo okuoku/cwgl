@@ -333,6 +333,8 @@ cwgl_backend_linkProgram(cwgl_ctx_t* ctx, cwgl_Program_t* program){
             w.pBufferInfo = &dbi;
             w.dstArrayElement = 0;
             w.dstBinding = 0;
+            w.pTexelBufferView = 0; /* Workaround for Android-Goldfish */
+            w.pImageInfo = 0; /* Workaround for Android-Goldfish */
             vkUpdateDescriptorSets(backend->device, 1, &w, 0, NULL);
         }
 
