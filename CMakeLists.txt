@@ -1,6 +1,10 @@
 cmake_minimum_required(VERSION 3.12)
 project(cwgl C CXX) # FIXME: Enable CXX only if we need SHXM
 
+if(NOT CMAKE_CXX_STANDARD)
+    # For SHXM
+    set(CMAKE_CXX_STANDARD 17)
+endif()
 
 if(NOT YFRM_CWGL_USE_PLATFORMGLES)
     add_definitions(
