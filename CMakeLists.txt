@@ -2,15 +2,17 @@ cmake_minimum_required(VERSION 3.12)
 project(cwgl C CXX) # FIXME: Enable CXX only if we need SHXM
 
 
-add_definitions(
-    # Use static-link
-    -DANGLE_EXPORT=
-    -DKHRONOS_STATIC
-    #-DEGLAPI=
-    #-DGL_API=
-    #-DGL_APIENTRY=
-    #-DGL_APICALL=
-    )
+if(NOT YFRM_CWGL_USE_PLATFORMGLES)
+    add_definitions(
+        # Use static-link
+        -DANGLE_EXPORT=
+        -DKHRONOS_STATIC
+        #-DEGLAPI=
+        #-DGL_API=
+        #-DGL_APIENTRY=
+        #-DGL_APICALL=
+        )
+endif()
 
 if(YFRM_BUILD_MODULE)
     add_definitions(
