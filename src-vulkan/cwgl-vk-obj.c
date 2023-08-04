@@ -60,6 +60,8 @@ cwgl_backend_ctx_init(cwgl_ctx_t* ctx){
     if(r != VK_SUCCESS){
         return -1;
     }
+#elif CWGL_USE_STATIC_VULKAN
+    /* Do nothing */
 #else
 #error UNIMPL
 #endif

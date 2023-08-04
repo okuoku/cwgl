@@ -9,7 +9,7 @@
 #ifdef CWGL_EXPERIMENTAL_USE_VOLK
 #include "volk.h"
 #else
-#error NEED CWGL_EXPERIMENTAL_USE_VOLK
+#include <vulkan/vulkan.h>
 #endif
 
 #define CWGL_FRAMEBUFFER_COUNT 2

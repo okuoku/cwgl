@@ -45,7 +45,6 @@ if(YFRM_CWGL_EXPERIMENTAL_TRACKER)
     add_definitions(-DCWGL_EXPERIMENTAL_TRACKER)
 
     if(YFRM_CWGL_USE_VULKAN)
-        add_definitions(-DCWGL_EXPERIMENTAL_USE_VOLK)
         include_directories(
             ${VULKAN_HEADERS_ROOT}/include)
         include_directories(
@@ -59,8 +58,6 @@ if(YFRM_CWGL_EXPERIMENTAL_TRACKER)
             shxm/include
             )
         list(APPEND cwglsrc
-            # Volk
-            ${VOLK_ROOT}/volk.c
             # CWGL
             src-vulkan/cwgl-vk-ctx.c
             src-vulkan/cwgl-vk-obj.c
@@ -84,6 +81,15 @@ if(YFRM_CWGL_EXPERIMENTAL_TRACKER)
             shxm/src/shxm_ms_test0.cpp
             shxm/src/shxm_ms_asm0.c
             )
+        if(APPLE)
+            # On Apple platforms, we'll use MoltenVk that includes
+            # Vulkan entrypoints
+            add_definitions(-DCWGL_USE_STATIC_VULKAN)
+        else()
+            # On other platforms, we link against platform Vulkan dynamically
+            list(APPEND cwglsrc ${VOLK_ROOT}/volk.c)
+            add_definitions(-DCWGL_EXPERIMENTAL_USE_VOLK)
+        endif()
     else()
         include_directories(src-tgles2)
         list(APPEND cwglsrc
