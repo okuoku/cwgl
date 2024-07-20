@@ -2,6 +2,7 @@
 #include "SPIRV/GlslangToSpv.h"
 #include "SPIRV/disassemble.h"
 #include "glslang/Public/ResourceLimits.h"
+#include "glslang/MachineIndependent/localintermediate.h" /* setOriginUpperLeft */
 #include <iostream>
 
 #include <stdlib.h>
