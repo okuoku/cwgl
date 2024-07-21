@@ -25,7 +25,7 @@ cwgl_priv_alloc_string(cwgl_ctx_t* ctx, const char* str, size_t buflen){
 }
 
 static int /* -1 for non-digit */
-fetchdigit(const char* c){
+fetchdigit(const char c){
     int r;
     r = c - '0';
     if((r >= 0) && (r < 10)){
