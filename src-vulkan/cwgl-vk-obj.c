@@ -39,7 +39,7 @@ cwgl_backend_ctx_init(cwgl_ctx_t* ctx){
     VkBool32 valid_surface;
     VkSurfaceKHR surface;
     int instance_extensions_count;
-    char** instance_extensions;
+    const char** instance_extensions;
     const float queue_priorities = 0.0;
     VkCommandPoolCreateInfo cpi;
     VkCommandPool command_pool;
@@ -193,7 +193,7 @@ cwgl_backend_ctx_init(cwgl_ctx_t* ctx){
         r = vkCreatePipelineCache(device, &pci, NULL, &c->pipeline_cache);
         if(r != VK_SUCCESS){
             printf("Failed to create pipeline cache.\n");
-            c->pipeline_cache = NULL;
+            c->pipeline_cache = 0;
         }
         
         /* Create surface */

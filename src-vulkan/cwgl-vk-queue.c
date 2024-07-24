@@ -40,7 +40,7 @@ cwgl_vkpriv_graphics_submit(cwgl_ctx_t* ctx){
         }
         si.signalSemaphoreCount = 0;
         si.pSignalSemaphores = NULL;
-        r = vkQueueSubmit(backend->queue, 1, &si, NULL);
+        r = vkQueueSubmit(backend->queue, 1, &si, 0);
         if(r == VK_SUCCESS){
             backend->queue_active = 1;
         }else{
