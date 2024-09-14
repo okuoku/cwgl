@@ -41,6 +41,7 @@ if(YFRM_CWGL_EXPERIMENTAL_TRACKER)
         src-tracker/cwgl-tracker-snone.c
         src-tracker/cwgl-tracker-vao.c
         src-tracker/cwgl-tracker-init.c
+        src-tracker/cwgl-integ-tracker.c
         )
     add_definitions(-DCWGL_EXPERIMENTAL_TRACKER)
 
@@ -116,6 +117,7 @@ else()
         src-gles2/cwgl-gles2-s6shader.c
         src-gles2/cwgl-gles2-snone.c
         src-gles2/cwgl-gles2-vao.c
+        src-gles2/cwgl-integ-gles2.c
         )
 endif()
 
