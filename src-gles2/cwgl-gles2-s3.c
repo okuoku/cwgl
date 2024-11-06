@@ -2,7 +2,7 @@
 
 // 3.4 Line Segments
 CWGL_API void 
-cwgl_lineWidth(cwgl_ctx_t* ctx, float width){
+cwgl_lineWidth(cwgl_ctx* ctx, float width){
     CTX_ENTER(ctx);
     glLineWidth(width);
     CTX_LEAVE(ctx);
@@ -10,14 +10,14 @@ cwgl_lineWidth(cwgl_ctx_t* ctx, float width){
 
 // 3.5 Polygons
 CWGL_API void 
-cwgl_frontFace(cwgl_ctx_t* ctx, cwgl_enum_t mode){
+cwgl_frontFace(cwgl_ctx* ctx, cwgl_enum mode){
     CTX_ENTER(ctx);
     glFrontFace(mode);
     CTX_LEAVE(ctx);
 }
 
 CWGL_API void 
-cwgl_cullFace(cwgl_ctx_t* ctx, cwgl_enum_t mode){
+cwgl_cullFace(cwgl_ctx* ctx, cwgl_enum mode){
     CTX_ENTER(ctx);
     glCullFace(mode);
     CTX_LEAVE(ctx);
@@ -25,7 +25,7 @@ cwgl_cullFace(cwgl_ctx_t* ctx, cwgl_enum_t mode){
 
 // 3.5.2 Depth offset
 CWGL_API void 
-cwgl_polygonOffset(cwgl_ctx_t* ctx, float factor, float units){
+cwgl_polygonOffset(cwgl_ctx* ctx, float factor, float units){
     CTX_ENTER(ctx);
     glPolygonOffset(factor, units);
     CTX_LEAVE(ctx);
@@ -33,7 +33,7 @@ cwgl_polygonOffset(cwgl_ctx_t* ctx, float factor, float units){
 
 // 3.6.1 Pixel Storage Modes
 CWGL_API void 
-cwgl_pixelStorei(cwgl_ctx_t* ctx, cwgl_enum_t pname, int32_t param){
+cwgl_pixelStorei(cwgl_ctx* ctx, cwgl_enum pname, int32_t param){
     CTX_ENTER(ctx);
     // FIXME: Implement Y-flip ??
     glPixelStorei(pname, param);
@@ -42,7 +42,7 @@ cwgl_pixelStorei(cwgl_ctx_t* ctx, cwgl_enum_t pname, int32_t param){
 
 // 3.7 Texturing
 CWGL_API void 
-cwgl_activeTexture(cwgl_ctx_t* ctx, cwgl_enum_t texture){
+cwgl_activeTexture(cwgl_ctx* ctx, cwgl_enum texture){
     CTX_ENTER(ctx);
     glActiveTexture(texture);
     CTX_LEAVE(ctx);
@@ -50,10 +50,10 @@ cwgl_activeTexture(cwgl_ctx_t* ctx, cwgl_enum_t texture){
 
 // 3.7.1 Texture Image Specification
 CWGL_API void 
-cwgl_texImage2D(cwgl_ctx_t* ctx, cwgl_enum_t target, 
-                int32_t level, cwgl_enum_t internalformat, 
+cwgl_texImage2D(cwgl_ctx* ctx, cwgl_enum target, 
+                int32_t level, cwgl_enum internalformat, 
                 uint32_t width, uint32_t height, int32_t border, 
-                cwgl_enum_t format, cwgl_enum_t type, 
+                cwgl_enum format, cwgl_enum type, 
                 const void* buf, size_t buflen){
     CTX_ENTER(ctx);
     // FIXME: Check bufsize??
@@ -64,7 +64,7 @@ cwgl_texImage2D(cwgl_ctx_t* ctx, cwgl_enum_t target,
 
 // 3.7.2 Alternate Texture Image Specification Commands
 CWGL_API void 
-cwgl_copyTexImage2D(cwgl_ctx_t* ctx, cwgl_enum_t target, int32_t level, cwgl_enum_t internalformat, int32_t x, int32_t y, uint32_t width, uint32_t height, int32_t border){
+cwgl_copyTexImage2D(cwgl_ctx* ctx, cwgl_enum target, int32_t level, cwgl_enum internalformat, int32_t x, int32_t y, uint32_t width, uint32_t height, int32_t border){
     CTX_ENTER(ctx);
     glCopyTexImage2D(target, level, internalformat,
                      x, y, width, height, border);
@@ -72,7 +72,7 @@ cwgl_copyTexImage2D(cwgl_ctx_t* ctx, cwgl_enum_t target, int32_t level, cwgl_enu
 }
 
 CWGL_API void 
-cwgl_texSubImage2D(cwgl_ctx_t* ctx, cwgl_enum_t target, int32_t level, int32_t xoffset, int32_t yoffset, uint32_t width, uint32_t height, cwgl_enum_t format, cwgl_enum_t type, const void* buf, size_t buflen){
+cwgl_texSubImage2D(cwgl_ctx* ctx, cwgl_enum target, int32_t level, int32_t xoffset, int32_t yoffset, uint32_t width, uint32_t height, cwgl_enum format, cwgl_enum type, const void* buf, size_t buflen){
     CTX_ENTER(ctx);
     // FIXME: Check bufsize??
     glTexSubImage2D(target, level, 
@@ -82,7 +82,7 @@ cwgl_texSubImage2D(cwgl_ctx_t* ctx, cwgl_enum_t target, int32_t level, int32_t x
 }
 
 CWGL_API void 
-cwgl_copyTexSubImage2D(cwgl_ctx_t* ctx, cwgl_enum_t target, int32_t level, int32_t xoffset, int32_t yoffset, int32_t x, int32_t y, uint32_t width, uint32_t height){
+cwgl_copyTexSubImage2D(cwgl_ctx* ctx, cwgl_enum target, int32_t level, int32_t xoffset, int32_t yoffset, int32_t x, int32_t y, uint32_t width, uint32_t height){
     CTX_ENTER(ctx);
     glCopyTexSubImage2D(target, level, xoffset, yoffset, x, y, width, height);
     CTX_LEAVE(ctx);
@@ -90,7 +90,7 @@ cwgl_copyTexSubImage2D(cwgl_ctx_t* ctx, cwgl_enum_t target, int32_t level, int32
 
 // 3.7.3 Compressed Texture Images
 CWGL_API void 
-cwgl_compressedTexImage2D(cwgl_ctx_t* ctx, cwgl_enum_t target, int32_t level, cwgl_enum_t internalformat, uint32_t width, uint32_t height, int32_t border, const void* buf, size_t buflen){
+cwgl_compressedTexImage2D(cwgl_ctx* ctx, cwgl_enum target, int32_t level, cwgl_enum internalformat, uint32_t width, uint32_t height, int32_t border, const void* buf, size_t buflen){
     CTX_ENTER(ctx);
     // NB: Buflen for imagesize
     glCompressedTexImage2D(target, level, internalformat,
@@ -99,7 +99,7 @@ cwgl_compressedTexImage2D(cwgl_ctx_t* ctx, cwgl_enum_t target, int32_t level, cw
 }
 
 CWGL_API void 
-cwgl_compressedTexSubImage2D(cwgl_ctx_t* ctx, cwgl_enum_t target, int32_t level, int32_t xoffset, int32_t yoffset, uint32_t width, uint32_t height, cwgl_enum_t format, const void* buf, size_t buflen){
+cwgl_compressedTexSubImage2D(cwgl_ctx* ctx, cwgl_enum target, int32_t level, int32_t xoffset, int32_t yoffset, uint32_t width, uint32_t height, cwgl_enum format, const void* buf, size_t buflen){
     CTX_ENTER(ctx);
     // NB: Buflen for imagesize
     glCompressedTexSubImage2D(target, level,
@@ -110,14 +110,14 @@ cwgl_compressedTexSubImage2D(cwgl_ctx_t* ctx, cwgl_enum_t target, int32_t level,
 
 // 3.7.4 Texture Parameters
 CWGL_API void 
-cwgl_texParameterf(cwgl_ctx_t* ctx, cwgl_enum_t target, cwgl_enum_t pname, float param){
+cwgl_texParameterf(cwgl_ctx* ctx, cwgl_enum target, cwgl_enum pname, float param){
     CTX_ENTER(ctx);
     glTexParameterf(target, pname, param);
     CTX_LEAVE(ctx);
 }
 
 CWGL_API void 
-cwgl_texParameteri(cwgl_ctx_t* ctx, cwgl_enum_t target, cwgl_enum_t pname, int32_t param){
+cwgl_texParameteri(cwgl_ctx* ctx, cwgl_enum target, cwgl_enum pname, int32_t param){
     CTX_ENTER(ctx);
     glTexParameteri(target, pname, param);
     CTX_LEAVE(ctx);
@@ -125,7 +125,7 @@ cwgl_texParameteri(cwgl_ctx_t* ctx, cwgl_enum_t target, cwgl_enum_t pname, int32
 
 // 3.7.11 Mipmap Generation
 CWGL_API void 
-cwgl_generateMipmap(cwgl_ctx_t* ctx, cwgl_enum_t target){
+cwgl_generateMipmap(cwgl_ctx* ctx, cwgl_enum target){
     CTX_ENTER(ctx);
     glGenerateMipmap(target);
     CTX_LEAVE(ctx);
@@ -133,7 +133,7 @@ cwgl_generateMipmap(cwgl_ctx_t* ctx, cwgl_enum_t target){
 
 // 3.7.13 Texture Objects
 CWGL_API void 
-cwgl_bindTexture(cwgl_ctx_t* ctx, cwgl_enum_t target, cwgl_Texture_t* texture){
+cwgl_bindTexture(cwgl_ctx* ctx, cwgl_enum target, cwgl_Texture* texture){
     GLuint name;
     CTX_ENTER(ctx);
     if(texture){
@@ -146,7 +146,7 @@ cwgl_bindTexture(cwgl_ctx_t* ctx, cwgl_enum_t target, cwgl_Texture_t* texture){
 }
 
 CWGL_API void 
-cwgl_deleteTexture(cwgl_ctx_t* ctx, cwgl_Texture_t* texture){
+cwgl_deleteTexture(cwgl_ctx* ctx, cwgl_Texture* texture){
     GLuint name;
     CTX_ENTER(ctx);
     if(texture){
@@ -156,10 +156,10 @@ cwgl_deleteTexture(cwgl_ctx_t* ctx, cwgl_Texture_t* texture){
     CTX_LEAVE(ctx);
 }
 
-CWGL_API cwgl_Texture_t* 
-cwgl_createTexture(cwgl_ctx_t* ctx){
+CWGL_API cwgl_Texture* 
+cwgl_createTexture(cwgl_ctx* ctx){
     GLuint name = 0;
-    cwgl_Texture_t* t;
+    cwgl_Texture* t;
     CTX_ENTER(ctx);
     glGenTextures(1, &name);
     t = CTX_ALLOC(ctx, Texture);
@@ -169,7 +169,7 @@ cwgl_createTexture(cwgl_ctx_t* ctx){
 }
 
 CWGL_API void
-cwgl_Texture_release(cwgl_ctx_t* ctx, cwgl_Texture_t* texture){
+cwgl_Texture_release(cwgl_ctx* ctx, cwgl_Texture* texture){
     //CTX_ENTER(ctx);
     if(texture){
         CTX_FREE(ctx, Texture, texture);

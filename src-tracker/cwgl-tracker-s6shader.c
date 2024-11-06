@@ -2,14 +2,14 @@
 
 // 6.1.8 Shader and Program Queries
 CWGL_API int 
-cwgl_isShader(cwgl_ctx_t* ctx, cwgl_Shader_t* shader){
+cwgl_isShader(cwgl_ctx* ctx, cwgl_Shader* shader){
     // FIXME: Check context lost flag
     return 1;
 }
 
-CWGL_API cwgl_query_result_t 
-cwgl_getShaderParameter_i1(cwgl_ctx_t* ctx, cwgl_Shader_t* shader, 
-                           cwgl_enum_t pname, int32_t* x){
+CWGL_API cwgl_query_result 
+cwgl_getShaderParameter_i1(cwgl_ctx* ctx, cwgl_Shader* shader, 
+                           cwgl_enum pname, int32_t* x){
     switch(pname){
         case SHADER_TYPE:
             *x = shader->state.SHADER_TYPE;
@@ -30,14 +30,14 @@ cwgl_getShaderParameter_i1(cwgl_ctx_t* ctx, cwgl_Shader_t* shader,
 }
 
 CWGL_API int 
-cwgl_isProgram(cwgl_ctx_t* ctx, cwgl_Program_t* program){
+cwgl_isProgram(cwgl_ctx* ctx, cwgl_Program* program){
     // FIXME: Check context lost flag
     return 1;
 }
 
-CWGL_API cwgl_query_result_t 
-cwgl_getProgramParameter_i1(cwgl_ctx_t* ctx, cwgl_Program_t* program, 
-                            cwgl_enum_t pname, int32_t* x){
+CWGL_API cwgl_query_result 
+cwgl_getProgramParameter_i1(cwgl_ctx* ctx, cwgl_Program* program, 
+                            cwgl_enum pname, int32_t* x){
     switch(pname){
         case DELETE_STATUS:
             *x = program->state.DELETE_STATUS ? 
@@ -67,17 +67,17 @@ cwgl_getProgramParameter_i1(cwgl_ctx_t* ctx, cwgl_Program_t* program,
     return CWGL_QR_SUCCESS;
 }
 
-CWGL_API cwgl_query_result_t 
-cwgl_getAttachedShaders(cwgl_ctx_t* ctx, cwgl_Program_t* program, 
-                        cwgl_Shader_t** vertex_shader,
-                        cwgl_Shader_t** fragment_shader){
+CWGL_API cwgl_query_result 
+cwgl_getAttachedShaders(cwgl_ctx* ctx, cwgl_Program* program, 
+                        cwgl_Shader** vertex_shader,
+                        cwgl_Shader** fragment_shader){
     *vertex_shader = program->state.vertex_shader;
     *fragment_shader = program->state.fragment_shader;
     return CWGL_QR_SUCCESS;
 }
 
-CWGL_API cwgl_string_t* 
-cwgl_getProgramInfoLog(cwgl_ctx_t* ctx, cwgl_Program_t* program){
+CWGL_API cwgl_string* 
+cwgl_getProgramInfoLog(cwgl_ctx* ctx, cwgl_Program* program){
     if(program->state.infolog){
         return cwgl_priv_string_dup(ctx, program->state.infolog);
     }else{
@@ -85,8 +85,8 @@ cwgl_getProgramInfoLog(cwgl_ctx_t* ctx, cwgl_Program_t* program){
     }
 }
 
-CWGL_API cwgl_string_t* 
-cwgl_getShaderInfoLog(cwgl_ctx_t* ctx, cwgl_Shader_t* shader){
+CWGL_API cwgl_string* 
+cwgl_getShaderInfoLog(cwgl_ctx* ctx, cwgl_Shader* shader){
     if(shader->state.infolog){
         return cwgl_priv_string_dup(ctx, shader->state.infolog);
     }else{
@@ -94,8 +94,8 @@ cwgl_getShaderInfoLog(cwgl_ctx_t* ctx, cwgl_Shader_t* shader){
     }
 }
 
-CWGL_API cwgl_string_t* 
-cwgl_getShaderSource(cwgl_ctx_t* ctx, cwgl_Shader_t* shader){
+CWGL_API cwgl_string* 
+cwgl_getShaderSource(cwgl_ctx* ctx, cwgl_Shader* shader){
     if(shader->state.source){
         return cwgl_priv_string_dup(ctx, shader->state.source);
     }else{
@@ -103,13 +103,13 @@ cwgl_getShaderSource(cwgl_ctx_t* ctx, cwgl_Shader_t* shader){
     }
 }
 
-CWGL_API cwgl_query_result_t 
-cwgl_getShaderPrecisionFormat(cwgl_ctx_t* ctx, cwgl_enum_t shadertype, 
-                              cwgl_enum_t precisiontype, 
+CWGL_API cwgl_query_result 
+cwgl_getShaderPrecisionFormat(cwgl_ctx* ctx, cwgl_enum shadertype, 
+                              cwgl_enum precisiontype, 
                               int32_t* rangeMin, int32_t* rangeMax, 
                               int32_t* precision){
-    cwgl_ctx_config_shaderprecisiontype_t* t;
-    cwgl_ctx_config_shaderprecisionformat_t* p;
+    cwgl_ctx_config_shaderprecisiontype* t;
+    cwgl_ctx_config_shaderprecisionformat* p;
     switch(shadertype){
         case VERTEX_SHADER:
             t = &ctx->state.cfg.shader_precision_format.VERTEX_SHADER;
@@ -154,8 +154,8 @@ cwgl_getShaderPrecisionFormat(cwgl_ctx_t* ctx, cwgl_enum_t shadertype,
 }
 
 // FIXME: Copied from s6obj
-static cwgl_VertexArrayObject_t*
-current_vao(cwgl_ctx_t* ctx){
+static cwgl_VertexArrayObject*
+current_vao(cwgl_ctx* ctx){
     if(ctx->state.bin.VERTEX_ARRAY_BINDING){
         return ctx->state.bin.VERTEX_ARRAY_BINDING;
     }else{
@@ -163,10 +163,10 @@ current_vao(cwgl_ctx_t* ctx){
     }
 }
 
-CWGL_API cwgl_query_result_t 
-cwgl_getVertexAttrib_i1(cwgl_ctx_t* ctx, uint32_t index, 
-                        cwgl_enum_t pname, int32_t* x){
-    cwgl_VertexArrayObject_t* vao;
+CWGL_API cwgl_query_result 
+cwgl_getVertexAttrib_i1(cwgl_ctx* ctx, uint32_t index, 
+                        cwgl_enum pname, int32_t* x){
+    cwgl_VertexArrayObject* vao;
     vao = current_vao(ctx);
 
     if(index >= CWGL_MAX_VAO_SIZE){
@@ -197,11 +197,11 @@ cwgl_getVertexAttrib_i1(cwgl_ctx_t* ctx, uint32_t index,
     return CWGL_QR_SUCCESS;
 }
 
-CWGL_API cwgl_query_result_t 
-cwgl_getVertexAttrib_f4(cwgl_ctx_t* ctx, uint32_t index, 
-                        cwgl_enum_t pname, 
+CWGL_API cwgl_query_result 
+cwgl_getVertexAttrib_f4(cwgl_ctx* ctx, uint32_t index, 
+                        cwgl_enum pname, 
                         float* x, float* y, float* z, float* w){
-    cwgl_VertexArrayObject_t* vao;
+    cwgl_VertexArrayObject* vao;
     vao = current_vao(ctx);
 
     if(index >= CWGL_MAX_VAO_SIZE){
@@ -223,10 +223,10 @@ cwgl_getVertexAttrib_f4(cwgl_ctx_t* ctx, uint32_t index,
     return CWGL_QR_SUCCESS;
 }
 
-CWGL_API cwgl_query_result_t 
-cwgl_getVertexAttrib_Buffer(cwgl_ctx_t* ctx, uint32_t index, 
-                            cwgl_enum_t pname, cwgl_Buffer_t** buffer){
-    cwgl_VertexArrayObject_t* vao;
+CWGL_API cwgl_query_result 
+cwgl_getVertexAttrib_Buffer(cwgl_ctx* ctx, uint32_t index, 
+                            cwgl_enum pname, cwgl_Buffer** buffer){
+    cwgl_VertexArrayObject* vao;
     vao = current_vao(ctx);
 
     if(index >= CWGL_MAX_VAO_SIZE){
@@ -247,8 +247,8 @@ cwgl_getVertexAttrib_Buffer(cwgl_ctx_t* ctx, uint32_t index,
 }
 
 CWGL_API uint32_t 
-cwgl_getVertexAttribOffset(cwgl_ctx_t* ctx, uint32_t index, cwgl_enum_t pname){
-        cwgl_VertexArrayObject_t* vao;
+cwgl_getVertexAttribOffset(cwgl_ctx* ctx, uint32_t index, cwgl_enum pname){
+        cwgl_VertexArrayObject* vao;
     vao = current_vao(ctx);
 
     if(index >= CWGL_MAX_VAO_SIZE){
@@ -267,7 +267,7 @@ cwgl_getVertexAttribOffset(cwgl_ctx_t* ctx, uint32_t index, cwgl_enum_t pname){
 
 // FIXME: Copied from s2
 static int /* bool */
-valid_uniformlocation_p(cwgl_UniformLocation_t* loc, int req){
+valid_uniformlocation_p(cwgl_UniformLocation* loc, int req){
     if(loc->age_link != loc->program->state.age_link){
         return 0;
     }else{
@@ -280,10 +280,10 @@ valid_uniformlocation_p(cwgl_UniformLocation_t* loc, int req){
     }
 }
 
-CWGL_API cwgl_query_result_t 
-cwgl_getUniform_i1(cwgl_ctx_t* ctx, cwgl_Program_t* program, 
-                   cwgl_UniformLocation_t* location, int32_t* x){
-    cwgl_uniformcontent_t* u;
+CWGL_API cwgl_query_result 
+cwgl_getUniform_i1(cwgl_ctx* ctx, cwgl_Program* program, 
+                   cwgl_UniformLocation* location, int32_t* x){
+    cwgl_uniformcontent* u;
     uint32_t off;
     u = location->program->state.uniformcontents;
     off = location->offset;
@@ -296,10 +296,10 @@ cwgl_getUniform_i1(cwgl_ctx_t* ctx, cwgl_Program_t* program,
     return CWGL_QR_SUCCESS;
 }
 
-CWGL_API cwgl_query_result_t 
-cwgl_getUniform_i2(cwgl_ctx_t* ctx, cwgl_Program_t* program, 
-                   cwgl_UniformLocation_t* location, int32_t* x, int32_t* y){
-    cwgl_uniformcontent_t* u;
+CWGL_API cwgl_query_result 
+cwgl_getUniform_i2(cwgl_ctx* ctx, cwgl_Program* program, 
+                   cwgl_UniformLocation* location, int32_t* x, int32_t* y){
+    cwgl_uniformcontent* u;
     uint32_t off;
     u = location->program->state.uniformcontents;
     off = location->offset;
@@ -313,11 +313,11 @@ cwgl_getUniform_i2(cwgl_ctx_t* ctx, cwgl_Program_t* program,
     return CWGL_QR_SUCCESS;
 }
 
-CWGL_API cwgl_query_result_t 
-cwgl_getUniform_i3(cwgl_ctx_t* ctx, cwgl_Program_t* program, 
-                   cwgl_UniformLocation_t* location, 
+CWGL_API cwgl_query_result 
+cwgl_getUniform_i3(cwgl_ctx* ctx, cwgl_Program* program, 
+                   cwgl_UniformLocation* location, 
                    int32_t* x, int32_t* y, int32_t* z){
-    cwgl_uniformcontent_t* u;
+    cwgl_uniformcontent* u;
     uint32_t off;
     u = location->program->state.uniformcontents;
     off = location->offset;
@@ -332,11 +332,11 @@ cwgl_getUniform_i3(cwgl_ctx_t* ctx, cwgl_Program_t* program,
     return CWGL_QR_SUCCESS;
 }
 
-CWGL_API cwgl_query_result_t 
-cwgl_getUniform_i4(cwgl_ctx_t* ctx, cwgl_Program_t* program, 
-                   cwgl_UniformLocation_t* location, 
+CWGL_API cwgl_query_result 
+cwgl_getUniform_i4(cwgl_ctx* ctx, cwgl_Program* program, 
+                   cwgl_UniformLocation* location, 
                    int32_t* x, int32_t* y, int32_t* z, int32_t* w){
-    cwgl_uniformcontent_t* u;
+    cwgl_uniformcontent* u;
     uint32_t off;
     u = location->program->state.uniformcontents;
     off = location->offset;
@@ -352,10 +352,10 @@ cwgl_getUniform_i4(cwgl_ctx_t* ctx, cwgl_Program_t* program,
     return CWGL_QR_SUCCESS;
 }
 
-CWGL_API cwgl_query_result_t 
-cwgl_getUniform_f1(cwgl_ctx_t* ctx, cwgl_Program_t* program, 
-                   cwgl_UniformLocation_t* location, float* x){
-    cwgl_uniformcontent_t* u;
+CWGL_API cwgl_query_result 
+cwgl_getUniform_f1(cwgl_ctx* ctx, cwgl_Program* program, 
+                   cwgl_UniformLocation* location, float* x){
+    cwgl_uniformcontent* u;
     uint32_t off;
     u = location->program->state.uniformcontents;
     off = location->offset;
@@ -368,10 +368,10 @@ cwgl_getUniform_f1(cwgl_ctx_t* ctx, cwgl_Program_t* program,
     return CWGL_QR_SUCCESS;
 }
 
-CWGL_API cwgl_query_result_t 
-cwgl_getUniform_f2(cwgl_ctx_t* ctx, cwgl_Program_t* program, 
-                   cwgl_UniformLocation_t* location, float* x, float* y){
-    cwgl_uniformcontent_t* u;
+CWGL_API cwgl_query_result 
+cwgl_getUniform_f2(cwgl_ctx* ctx, cwgl_Program* program, 
+                   cwgl_UniformLocation* location, float* x, float* y){
+    cwgl_uniformcontent* u;
     uint32_t off;
     u = location->program->state.uniformcontents;
     off = location->offset;
@@ -385,11 +385,11 @@ cwgl_getUniform_f2(cwgl_ctx_t* ctx, cwgl_Program_t* program,
     return CWGL_QR_SUCCESS;
 }
 
-CWGL_API cwgl_query_result_t 
-cwgl_getUniform_f3(cwgl_ctx_t* ctx, cwgl_Program_t* program, 
-                   cwgl_UniformLocation_t* location, 
+CWGL_API cwgl_query_result 
+cwgl_getUniform_f3(cwgl_ctx* ctx, cwgl_Program* program, 
+                   cwgl_UniformLocation* location, 
                    float* x, float* y, float* z){
-    cwgl_uniformcontent_t* u;
+    cwgl_uniformcontent* u;
     uint32_t off;
     u = location->program->state.uniformcontents;
     off = location->offset;
@@ -404,11 +404,11 @@ cwgl_getUniform_f3(cwgl_ctx_t* ctx, cwgl_Program_t* program,
     return CWGL_QR_SUCCESS;
 }
 
-CWGL_API cwgl_query_result_t 
-cwgl_getUniform_f4(cwgl_ctx_t* ctx, cwgl_Program_t* program, 
-                   cwgl_UniformLocation_t* location, 
+CWGL_API cwgl_query_result 
+cwgl_getUniform_f4(cwgl_ctx* ctx, cwgl_Program* program, 
+                   cwgl_UniformLocation* location, 
                    float* x, float* y, float* z, float* w){
-    cwgl_uniformcontent_t* u;
+    cwgl_uniformcontent* u;
     uint32_t off;
     u = location->program->state.uniformcontents;
     off = location->offset;
@@ -424,10 +424,10 @@ cwgl_getUniform_f4(cwgl_ctx_t* ctx, cwgl_Program_t* program,
     return CWGL_QR_SUCCESS;
 }
 
-CWGL_API cwgl_query_result_t 
-cwgl_getUniform_m2(cwgl_ctx_t* ctx, cwgl_Program_t* program, 
-                   cwgl_UniformLocation_t* location, float* x){
-    cwgl_uniformcontent_t* u;
+CWGL_API cwgl_query_result 
+cwgl_getUniform_m2(cwgl_ctx* ctx, cwgl_Program* program, 
+                   cwgl_UniformLocation* location, float* x){
+    cwgl_uniformcontent* u;
     uint32_t off;
     int i;
     u = location->program->state.uniformcontents;
@@ -443,10 +443,10 @@ cwgl_getUniform_m2(cwgl_ctx_t* ctx, cwgl_Program_t* program,
     return CWGL_QR_SUCCESS;
 }
 
-CWGL_API cwgl_query_result_t 
-cwgl_getUniform_m3(cwgl_ctx_t* ctx, cwgl_Program_t* program, 
-                   cwgl_UniformLocation_t* location, float* x){
-    cwgl_uniformcontent_t* u;
+CWGL_API cwgl_query_result 
+cwgl_getUniform_m3(cwgl_ctx* ctx, cwgl_Program* program, 
+                   cwgl_UniformLocation* location, float* x){
+    cwgl_uniformcontent* u;
     uint32_t off;
     int i;
     u = location->program->state.uniformcontents;
@@ -462,10 +462,10 @@ cwgl_getUniform_m3(cwgl_ctx_t* ctx, cwgl_Program_t* program,
     return CWGL_QR_SUCCESS;
 }
 
-CWGL_API cwgl_query_result_t 
-cwgl_getUniform_m4(cwgl_ctx_t* ctx, cwgl_Program_t* program, 
-                   cwgl_UniformLocation_t* location, float* x){
-    cwgl_uniformcontent_t* u;
+CWGL_API cwgl_query_result 
+cwgl_getUniform_m4(cwgl_ctx* ctx, cwgl_Program* program, 
+                   cwgl_UniformLocation* location, float* x){
+    cwgl_uniformcontent* u;
     uint32_t off;
     int i;
     u = location->program->state.uniformcontents;

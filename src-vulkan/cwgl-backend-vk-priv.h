@@ -42,12 +42,12 @@ struct cwgl_backend_Framebuffer_s {
     int has_color0;
     int has_depth;
     int has_stencil;
-    cwgl_enum_t color_type0;
-    cwgl_enum_t depth_stencil_type;
-    cwgl_backend_Renderbuffer_t* rb_color0;
-    cwgl_backend_Renderbuffer_t* rb_depth_stencil;
-    cwgl_backend_Texture_t* texture_color0;
-    cwgl_backend_Texture_t* texture_depth_stencil;
+    cwgl_enum color_type0;
+    cwgl_enum depth_stencil_type;
+    cwgl_backend_Renderbuffer* rb_color0;
+    cwgl_backend_Renderbuffer* rb_depth_stencil;
+    cwgl_backend_Texture* texture_color0;
+    cwgl_backend_Texture* texture_depth_stencil;
 };
 
 struct cwgl_backend_pipeline_identity_s {
@@ -66,16 +66,16 @@ struct cwgl_backend_pipeline_identity_s {
     VkVertexInputBindingDescription binds[CWGL_MAX_VAO_SIZE];
 };
 
-typedef struct cwgl_backend_pipeline_identity_s cwgl_backend_pipeline_identity_t;
+typedef struct cwgl_backend_pipeline_identity_s cwgl_backend_pipeline_identity;
 
 struct cwgl_backend_pipeline_s {
     int allocated;
     uint64_t ident;
     VkPipeline pipeline;
-    cwgl_backend_pipeline_identity_t cache;
+    cwgl_backend_pipeline_identity cache;
 };
 
-typedef struct cwgl_backend_pipeline_s cwgl_backend_pipeline_t;
+typedef struct cwgl_backend_pipeline_s cwgl_backend_pipeline;
 
 #define CWGL_PIPELINE_CACHE_SIZE 40
 
@@ -103,20 +103,20 @@ struct cwgl_backend_ctx_s {
     int render_to_fb;
 
     // FIXME: Implement backbuffer (if required)
-    cwgl_backend_Framebuffer_t default_fb;
-    cwgl_backend_Renderbuffer_t depth;
+    cwgl_backend_Framebuffer default_fb;
+    cwgl_backend_Renderbuffer depth;
     /* Vulkan Queue status */
     int queue_active;
     int queue_has_command;
     /* Object ident */
     uint64_t ident_age;
     /* SHXM */
-    shxm_ctx_t* shxm_ctx;
+    shxm_ctx* shxm_ctx;
     /* Pipeline cache */
-    cwgl_backend_pipeline_t pipelines[CWGL_PIPELINE_CACHE_SIZE];
+    cwgl_backend_pipeline pipelines[CWGL_PIPELINE_CACHE_SIZE];
 };
 
-typedef struct buffer_patch_request_s buffer_patch_request_t;
+typedef struct buffer_patch_request_s buffer_patch_request;
 
 struct cwgl_backend_Buffer_s {
     int allocated;
@@ -126,7 +126,7 @@ struct cwgl_backend_Buffer_s {
 
 struct cwgl_backend_Shader_s {
     /* SHXM */
-    shxm_shader_t* shader;
+    shxm_shader* shader;
 };
 
 struct cwgl_backend_Program_s {
@@ -140,11 +140,11 @@ struct cwgl_backend_Program_s {
     VkDescriptorSetLayout desc_set_layout;
     VkDescriptorSet desc_set;
     VkPipelineLayout pipeline_layout;
-    cwgl_backend_Buffer_t uniform_buffer; /* Includes vertex registers */
+    cwgl_backend_Buffer uniform_buffer; /* Includes vertex registers */
     /* Vulkan: Vertex attributes */
     int input_count; /* Cache */
     /* SHXM */
-    shxm_program_t* program;
+    shxm_program* program;
 };
 
 struct cwgl_backend_Texture_s {
@@ -160,22 +160,22 @@ struct cwgl_backend_Texture_s {
     /* Combined sampler (Updated during render kick) */
     int sampler_allocated;
     VkSampler sampler;
-    cwgl_texture_state_t cached_tracker_state;
+    cwgl_texture_state cached_tracker_state;
 };
 
-void cwgl_vkpriv_prepare_fb(cwgl_ctx_t* ctx);
-void cwgl_vkpriv_graphics_submit(cwgl_ctx_t* ctx);
-void cwgl_vkpriv_graphics_wait(cwgl_ctx_t* ctx);
-void cwgl_vkpriv_destroy_texture(cwgl_ctx_t* ctx,
-                                 cwgl_backend_Texture_t* texture_backend);
-void cwgl_vkpriv_destroy_buffer(cwgl_ctx_t* ctx,
-                                cwgl_backend_Buffer_t* buffer_backend);
-void cwgl_vkpriv_destroy_program(cwgl_ctx_t* ctx,
-                                 cwgl_backend_Program_t* program_backend);
-int32_t cwgl_vkpriv_select_memory_type(cwgl_ctx_t* ctx, uint32_t requirement,
+void cwgl_vkpriv_prepare_fb(cwgl_ctx* ctx);
+void cwgl_vkpriv_graphics_submit(cwgl_ctx* ctx);
+void cwgl_vkpriv_graphics_wait(cwgl_ctx* ctx);
+void cwgl_vkpriv_destroy_texture(cwgl_ctx* ctx,
+                                 cwgl_backend_Texture* texture_backend);
+void cwgl_vkpriv_destroy_buffer(cwgl_ctx* ctx,
+                                cwgl_backend_Buffer* buffer_backend);
+void cwgl_vkpriv_destroy_program(cwgl_ctx* ctx,
+                                 cwgl_backend_Program* program_backend);
+int32_t cwgl_vkpriv_select_memory_type(cwgl_ctx* ctx, uint32_t requirement,
                                        VkMemoryPropertyFlags request);
 
 #define CWGL_VK_INVALID_IDENT 0
-uint64_t cwgl_vkpriv_newident(cwgl_ctx_t* ctx);
+uint64_t cwgl_vkpriv_newident(cwgl_ctx* ctx);
 
 #endif

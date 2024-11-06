@@ -3,8 +3,8 @@
 
 #define SETB1(name, x) ctx->state.glo.name = x ? CWGL_TRUE : CWGL_FALSE
 int
-cwgl_integ_ctx_init(cwgl_ctx_t* ctx){
-    memset(&ctx->state, 0, sizeof(cwgl_ctx_tracker_state_t));
+cwgl_integ_ctx_init(cwgl_ctx* ctx){
+    memset(&ctx->state, 0, sizeof(cwgl_ctx_tracker_state));
     CTX_SET_ERROR(ctx, NO_ERROR);
 
     /* enable */
@@ -88,13 +88,13 @@ cwgl_integ_ctx_init(cwgl_ctx_t* ctx){
 }
 
 void
-cwgl_priv_buffer_init(cwgl_buffer_state_t* state){
+cwgl_priv_buffer_init(cwgl_buffer_state* state){
     state->BUFFER_SIZE = 0;
     state->BUFFER_USAGE = STATIC_DRAW;
 }
 
 void
-cwgl_priv_framebuffer_attachment_init(cwgl_framebuffer_attachment_state_t* state){
+cwgl_priv_framebuffer_attachment_init(cwgl_framebuffer_attachment_state* state){
     state->FRAMEBUFFER_ATTACHMENT_OBJECT_TYPE = NONE;
     state->FRAMEBUFFER_ATTACHMENT_OBJECT_NAME.asVoid = 0;
     state->FRAMEBUFFER_ATTACHMENT_TEXTURE_LEVEL = 0;
@@ -102,7 +102,7 @@ cwgl_priv_framebuffer_attachment_init(cwgl_framebuffer_attachment_state_t* state
 }
 
 void
-cwgl_priv_renderbuffer_init(cwgl_renderbuffer_state_t* state){
+cwgl_priv_renderbuffer_init(cwgl_renderbuffer_state* state){
     state->RENDERBUFFER_WIDTH = 0;
     state->RENDERBUFFER_HEIGHT = 0;
     state->RENDERBUFFER_INTERNAL_FORMAT = RGBA4;
@@ -115,7 +115,7 @@ cwgl_priv_renderbuffer_init(cwgl_renderbuffer_state_t* state){
 }
 
 void
-cwgl_priv_texture_init(cwgl_texture_state_t* state){
+cwgl_priv_texture_init(cwgl_texture_state* state){
     state->TEXTURE_MAG_FILTER = LINEAR;
     state->TEXTURE_MIN_FILTER = NEAREST_MIPMAP_LINEAR;
     state->TEXTURE_WRAP_S = REPEAT;
@@ -124,8 +124,8 @@ cwgl_priv_texture_init(cwgl_texture_state_t* state){
 }
 
 void
-cwgl_priv_vao_init(cwgl_vao_state_t* state, 
-                   cwgl_vao_attrib_state_t attrib[CWGL_MAX_VAO_SIZE]){
+cwgl_priv_vao_init(cwgl_vao_state* state, 
+                   cwgl_vao_attrib_state attrib[CWGL_MAX_VAO_SIZE]){
     int i;
     state->ELEMENT_ARRAY_BUFFER_BINDING = NULL;
     for(i=0;i!=CWGL_MAX_VAO_SIZE;i++){
@@ -145,15 +145,15 @@ cwgl_priv_vao_init(cwgl_vao_state_t* state,
 /* Object header */
 
 void
-cwgl_priv_objhdr_init(cwgl_ctx_t* ctx, cwgl_objhdr_t* hdr, 
-                      cwgl_objtype_t objtype){
+cwgl_priv_objhdr_init(cwgl_ctx* ctx, cwgl_objhdr* hdr, 
+                      cwgl_objtype objtype){
     hdr->refcnt = 1;
     hdr->type = objtype;
     hdr->ctx = ctx;
 }
 
 uintptr_t
-cwgl_priv_objhdr_release(cwgl_objhdr_t* hdr){
+cwgl_priv_objhdr_release(cwgl_objhdr* hdr){
     uintptr_t v;
     v = hdr->refcnt;
     v--;
@@ -162,6 +162,6 @@ cwgl_priv_objhdr_release(cwgl_objhdr_t* hdr){
 }
 
 void
-cwgl_priv_objhdr_retain(cwgl_objhdr_t* hdr){
+cwgl_priv_objhdr_retain(cwgl_objhdr* hdr){
     hdr->refcnt++;
 }

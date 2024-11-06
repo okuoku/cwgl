@@ -2,13 +2,13 @@
 #include <string.h>
 #include <stdlib.h>
 
-cwgl_string_t* 
-cwgl_priv_alloc_string(cwgl_ctx_t* ctx, const char* str, size_t buflen){
-    cwgl_string_t* r;
+cwgl_string* 
+cwgl_priv_alloc_string(cwgl_ctx* ctx, const char* str, size_t buflen){
+    cwgl_string* r;
     char* buf;
     buf = malloc(buflen+1);
     if(buf){
-        r = malloc(sizeof(cwgl_string_t));
+        r = malloc(sizeof(cwgl_string));
         if(!r){
             free(buf);
             return NULL;
@@ -80,7 +80,7 @@ parsesym(const char* sym, int len, int* out_symlen, int* out_idx){
 }
 
 int /* bool */
-cwgl_priv_match_symobj(cwgl_ctx_t* ctx, cwgl_string_t* s, cwgl_string_t* t,
+cwgl_priv_match_symobj(cwgl_ctx* ctx, cwgl_string* s, cwgl_string* t,
                        int* array_idx_l, int* array_idx_r){
     int idx_l;
     int idx_r;
@@ -107,7 +107,7 @@ cwgl_priv_match_symobj(cwgl_ctx_t* ctx, cwgl_string_t* s, cwgl_string_t* t,
 }
 
 int /* bool */
-cwgl_priv_match_sym(cwgl_ctx_t* ctx, cwgl_string_t* s, const char* name,
+cwgl_priv_match_sym(cwgl_ctx* ctx, cwgl_string* s, const char* name,
                     int* array_idx_l, int* array_idx_r){
     int idx_l;
     int idx_r;
@@ -133,13 +133,13 @@ cwgl_priv_match_sym(cwgl_ctx_t* ctx, cwgl_string_t* s, const char* name,
     }
 }
 
-cwgl_string_t*
-cwgl_priv_string_dup(cwgl_ctx_t* ctx, cwgl_string_t* src){
+cwgl_string*
+cwgl_priv_string_dup(cwgl_ctx* ctx, cwgl_string* src){
     return cwgl_priv_alloc_string(ctx, src->str, src->size);
 }
 
 CWGL_API size_t
-cwgl_string_size(cwgl_ctx_t* ctx, cwgl_string_t* str){
+cwgl_string_size(cwgl_ctx* ctx, cwgl_string* str){
     if(str){
         return str->size;
     }else{
@@ -147,8 +147,8 @@ cwgl_string_size(cwgl_ctx_t* ctx, cwgl_string_t* str){
     }
 }
 
-CWGL_API cwgl_query_result_t
-cwgl_string_read(cwgl_ctx_t* ctx, cwgl_string_t* str, char* buf, size_t buflen){
+CWGL_API cwgl_query_result
+cwgl_string_read(cwgl_ctx* ctx, cwgl_string* str, char* buf, size_t buflen){
     const size_t siz = cwgl_string_size(ctx, str);
     if(str){
         if(buflen >= siz){
@@ -171,7 +171,7 @@ cwgl_string_read(cwgl_ctx_t* ctx, cwgl_string_t* str, char* buf, size_t buflen){
 }
 
 CWGL_API void
-cwgl_string_release(cwgl_ctx_t* ctx, cwgl_string_t* str){
+cwgl_string_release(cwgl_ctx* ctx, cwgl_string* str){
     if(str){
         free(str->str);
         free(str);

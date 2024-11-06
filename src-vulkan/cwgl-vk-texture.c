@@ -3,7 +3,7 @@
 #include <stdio.h>
 
 void 
-cwgl_vkpriv_destroy_texture(cwgl_ctx_t* ctx, cwgl_backend_Texture_t* texture_backend){
+cwgl_vkpriv_destroy_texture(cwgl_ctx* ctx, cwgl_backend_Texture* texture_backend){
     if(texture_backend->sampler_allocated){
         vkDestroySampler(ctx->backend->device, texture_backend->sampler, NULL);
         texture_backend->sampler_allocated = 0;
@@ -15,10 +15,10 @@ cwgl_vkpriv_destroy_texture(cwgl_ctx_t* ctx, cwgl_backend_Texture_t* texture_bac
     texture_backend->allocated = 0;
 }
 
-static cwgl_Texture_t*
-current_texture(cwgl_ctx_t* ctx, cwgl_enum_t target){
+static cwgl_Texture*
+current_texture(cwgl_ctx* ctx, cwgl_enum target){
     int id;
-    cwgl_texture_unit_state_t* s;
+    cwgl_texture_unit_state* s;
     id = (int)ctx->state.glo.ACTIVE_TEXTURE - (int)TEXTURE0;
     s = &ctx->state.bin.texture_unit[id];
     if(target == TEXTURE_2D){
@@ -30,7 +30,7 @@ current_texture(cwgl_ctx_t* ctx, cwgl_enum_t target){
 
 // From Vulkan 1.1 spec
 int32_t 
-cwgl_vkpriv_select_memory_type(cwgl_ctx_t* ctx, uint32_t requirement,
+cwgl_vkpriv_select_memory_type(cwgl_ctx* ctx, uint32_t requirement,
                                        VkMemoryPropertyFlags request){
     VkPhysicalDeviceMemoryProperties* props;
     int count;
@@ -52,7 +52,7 @@ cwgl_vkpriv_select_memory_type(cwgl_ctx_t* ctx, uint32_t requirement,
 }
 
 static VkFormat
-to_vulkan_format(cwgl_enum_t format, cwgl_enum_t type){
+to_vulkan_format(cwgl_enum format, cwgl_enum type){
     switch(type){
         case UNSIGNED_BYTE:
             switch(format){
@@ -109,7 +109,7 @@ to_vulkan_format(cwgl_enum_t format, cwgl_enum_t type){
 }
 
 static int
-to_vk_cubemap_face(cwgl_enum_t target){
+to_vk_cubemap_face(cwgl_enum target){
     switch(target){
         default:
             return -1;
@@ -129,15 +129,15 @@ to_vk_cubemap_face(cwgl_enum_t target){
 }
 
 int
-cwgl_backend_texImage2D(cwgl_ctx_t* ctx, cwgl_enum_t target,
-                        int32_t level, cwgl_enum_t internalformat,
+cwgl_backend_texImage2D(cwgl_ctx* ctx, cwgl_enum target,
+                        int32_t level, cwgl_enum internalformat,
                         uint32_t width, uint32_t height, int32_t border,
-                        cwgl_enum_t format, cwgl_enum_t type,
+                        cwgl_enum format, cwgl_enum type,
                         const void* buf, size_t buflen){
     // FIXME: Optimize for updating texture
-    cwgl_Texture_t* texture;
-    cwgl_backend_ctx_t* backend;
-    cwgl_backend_Texture_t* texture_backend;
+    cwgl_Texture* texture;
+    cwgl_backend_ctx* backend;
+    cwgl_backend_Texture* texture_backend;
     int i;
     int is_cubemap;
     int cubemap_face;
@@ -440,8 +440,8 @@ cwgl_backend_texImage2D(cwgl_ctx_t* ctx, cwgl_enum_t target,
 }
 
 int
-cwgl_backend_copyTexImage2D(cwgl_ctx_t* ctx, cwgl_enum_t target,
-                            int32_t level, cwgl_enum_t internalformat,
+cwgl_backend_copyTexImage2D(cwgl_ctx* ctx, cwgl_enum target,
+                            int32_t level, cwgl_enum internalformat,
                             int32_t x, int32_t y,
                             uint32_t width, uint32_t height, int32_t border){
     // FIXME: Implement this
@@ -449,17 +449,17 @@ cwgl_backend_copyTexImage2D(cwgl_ctx_t* ctx, cwgl_enum_t target,
 }
 
 int
-cwgl_backend_texSubImage2D(cwgl_ctx_t* ctx, cwgl_enum_t target,
+cwgl_backend_texSubImage2D(cwgl_ctx* ctx, cwgl_enum target,
                            int32_t level, int32_t xoffset, int32_t yoffset,
                            uint32_t width, uint32_t height,
-                           cwgl_enum_t format, cwgl_enum_t type,
+                           cwgl_enum format, cwgl_enum type,
                            const void* buf, size_t buflen){
     // FIXME: Implement this
     return 0;
 }
 
 int
-cwgl_backend_copyTexSubImage2D(cwgl_ctx_t* ctx, cwgl_enum_t target,
+cwgl_backend_copyTexSubImage2D(cwgl_ctx* ctx, cwgl_enum target,
                                int32_t level, int32_t xoffset, int32_t yoffset,
                                int32_t x, int32_t y,
                                uint32_t width, uint32_t height){
@@ -468,8 +468,8 @@ cwgl_backend_copyTexSubImage2D(cwgl_ctx_t* ctx, cwgl_enum_t target,
 }
 
 int
-cwgl_backend_compressedTexImage2D(cwgl_ctx_t* ctx, cwgl_enum_t target,
-                                  int32_t level, cwgl_enum_t internalformat,
+cwgl_backend_compressedTexImage2D(cwgl_ctx* ctx, cwgl_enum target,
+                                  int32_t level, cwgl_enum internalformat,
                                   uint32_t width, uint32_t height,
                                   int32_t border,
                                   const void* buf, size_t buflen){
@@ -477,11 +477,11 @@ cwgl_backend_compressedTexImage2D(cwgl_ctx_t* ctx, cwgl_enum_t target,
 }
 
 int
-cwgl_backend_compressedTexSubImage2D(cwgl_ctx_t* ctx, cwgl_enum_t target,
+cwgl_backend_compressedTexSubImage2D(cwgl_ctx* ctx, cwgl_enum target,
                                      int32_t level,
                                      int32_t xoffset, int32_t yoffset,
                                      uint32_t width, uint32_t height,
-                                     cwgl_enum_t format,
+                                     cwgl_enum format,
                                      const void* buf, size_t buflen){
     return 0;
 }

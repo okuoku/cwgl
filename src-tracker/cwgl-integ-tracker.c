@@ -3,13 +3,13 @@
 
 void*
 cwgl_ctx_platform_get(void* c){
-    cwgl_ctx_t* ctx = (cwgl_ctx_t*)c;
+    cwgl_ctx* ctx = (cwgl_ctx*)c;
     return ctx->platform;
 }
 
 void*
 cwgl_ctx_alloc(void* platform){
-    cwgl_ctx_t* ctx = malloc(sizeof(cwgl_ctx_t));
+    cwgl_ctx* ctx = malloc(sizeof(cwgl_ctx));
     ctx->platform = platform;
     cwgl_integ_ctx_init(ctx);
     return ctx;

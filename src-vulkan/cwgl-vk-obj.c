@@ -4,11 +4,11 @@
 #include <stdio.h>
 
 /* In platform/src-sdl2 */
-int cwgl_integ_vkpriv_getextensions(cwgl_ctx_t* ctx, int* out_count, const char** out_extensions);
-int cwgl_integ_vkpriv_createsurface(cwgl_ctx_t* ctx, VkInstance instance, VkSurfaceKHR* surface);
+int cwgl_integ_vkpriv_getextensions(cwgl_ctx* ctx, int* out_count, const char** out_extensions);
+int cwgl_integ_vkpriv_createsurface(cwgl_ctx* ctx, VkInstance instance, VkSurfaceKHR* surface);
 
 uint64_t
-cwgl_vkpriv_newident(cwgl_ctx_t* ctx){
+cwgl_vkpriv_newident(cwgl_ctx* ctx){
     uint64_t c;
     c = ctx->backend->ident_age;
     if(ctx->backend->ident_age == UINT64_MAX){
@@ -20,7 +20,7 @@ cwgl_vkpriv_newident(cwgl_ctx_t* ctx){
 }
 
 int
-cwgl_backend_ctx_init(cwgl_ctx_t* ctx){
+cwgl_backend_ctx_init(cwgl_ctx* ctx){
     VkInstance instance;
     VkApplicationInfo ai;
     VkInstanceCreateInfo ci;
@@ -53,7 +53,7 @@ cwgl_backend_ctx_init(cwgl_ctx_t* ctx){
     const uint32_t device_idx = 0;
 
     VkResult r;
-    cwgl_backend_ctx_t* c;
+    cwgl_backend_ctx* c;
     /* Detect Vulkan */
 #ifdef CWGL_EXPERIMENTAL_USE_VOLK
     r = volkInitialize();
@@ -65,7 +65,7 @@ cwgl_backend_ctx_init(cwgl_ctx_t* ctx){
 #else
 #error UNIMPL
 #endif
-    c = malloc(sizeof(cwgl_backend_ctx_t));
+    c = malloc(sizeof(cwgl_backend_ctx));
     ctx->backend = c;
     if(c){
         /* Init flags */
@@ -276,9 +276,9 @@ initfail:
 }
 
 int
-cwgl_backend_Buffer_init(cwgl_ctx_t* ctx, cwgl_Buffer_t* buffer){
-    cwgl_backend_Buffer_t* b;
-    b = malloc(sizeof(cwgl_backend_Buffer_t));
+cwgl_backend_Buffer_init(cwgl_ctx* ctx, cwgl_Buffer* buffer){
+    cwgl_backend_Buffer* b;
+    b = malloc(sizeof(cwgl_backend_Buffer));
     if(b){
         b->allocated = 0;
     }
@@ -287,9 +287,9 @@ cwgl_backend_Buffer_init(cwgl_ctx_t* ctx, cwgl_Buffer_t* buffer){
 }
 
 int
-cwgl_backend_Shader_init(cwgl_ctx_t* ctx, cwgl_Shader_t* shader){
-    cwgl_backend_Shader_t* s;
-    s = malloc(sizeof(cwgl_backend_Shader_t));
+cwgl_backend_Shader_init(cwgl_ctx* ctx, cwgl_Shader* shader){
+    cwgl_backend_Shader* s;
+    s = malloc(sizeof(cwgl_backend_Shader));
     if(s){
         if(shader->state.SHADER_TYPE == VERTEX_SHADER){
             s->shader = shxm_shader_create(ctx->backend->shxm_ctx,
@@ -303,9 +303,9 @@ cwgl_backend_Shader_init(cwgl_ctx_t* ctx, cwgl_Shader_t* shader){
     return 0;
 }
 int
-cwgl_backend_Program_init(cwgl_ctx_t* ctx, cwgl_Program_t* program){
-    cwgl_backend_Program_t* p;
-    p = malloc(sizeof(cwgl_backend_Program_t));
+cwgl_backend_Program_init(cwgl_ctx* ctx, cwgl_Program* program){
+    cwgl_backend_Program* p;
+    p = malloc(sizeof(cwgl_backend_Program));
     if(p){
         p->allocated = 0;
         p->uniform_buffer.allocated = 0;
@@ -315,9 +315,9 @@ cwgl_backend_Program_init(cwgl_ctx_t* ctx, cwgl_Program_t* program){
     return 0;
 }
 int
-cwgl_backend_Texture_init(cwgl_ctx_t* ctx, cwgl_Texture_t* texture){
-    cwgl_backend_Texture_t* t;
-    t = malloc(sizeof(cwgl_backend_Texture_t));
+cwgl_backend_Texture_init(cwgl_ctx* ctx, cwgl_Texture* texture){
+    cwgl_backend_Texture* t;
+    t = malloc(sizeof(cwgl_backend_Texture));
     if(t){
         t->sampler_allocated = 0;
         t->allocated = 0;
@@ -326,10 +326,10 @@ cwgl_backend_Texture_init(cwgl_ctx_t* ctx, cwgl_Texture_t* texture){
     return 0;
 }
 int
-cwgl_backend_Renderbuffer_init(cwgl_ctx_t* ctx,
-                               cwgl_Renderbuffer_t* renderbuffer){
-    cwgl_backend_Renderbuffer_t* r;
-    r = malloc(sizeof(cwgl_backend_Renderbuffer_t));
+cwgl_backend_Renderbuffer_init(cwgl_ctx* ctx,
+                               cwgl_Renderbuffer* renderbuffer){
+    cwgl_backend_Renderbuffer* r;
+    r = malloc(sizeof(cwgl_backend_Renderbuffer));
     if(r){
         r->allocated = 0;
     }
@@ -337,10 +337,10 @@ cwgl_backend_Renderbuffer_init(cwgl_ctx_t* ctx,
     return 0;
 }
 int
-cwgl_backend_Framebuffer_init(cwgl_ctx_t* ctx,
-                              cwgl_Framebuffer_t* framebuffer){
-    cwgl_backend_Framebuffer_t* f;
-    f = malloc(sizeof(cwgl_backend_Framebuffer_t));
+cwgl_backend_Framebuffer_init(cwgl_ctx* ctx,
+                              cwgl_Framebuffer* framebuffer){
+    cwgl_backend_Framebuffer* f;
+    f = malloc(sizeof(cwgl_backend_Framebuffer));
     if(f){
         f->allocated = 0;
     }
@@ -348,51 +348,51 @@ cwgl_backend_Framebuffer_init(cwgl_ctx_t* ctx,
     return 0;
 }
 int
-cwgl_backend_ctx_release(cwgl_ctx_t* ctx){
+cwgl_backend_ctx_release(cwgl_ctx* ctx){
     // FIXME: Release Vulkan objects here
     free(ctx->backend);
     ctx->backend = NULL;
     return 0;
 }
 int
-cwgl_backend_Buffer_release(cwgl_ctx_t* ctx, cwgl_Buffer_t* buffer){
+cwgl_backend_Buffer_release(cwgl_ctx* ctx, cwgl_Buffer* buffer){
     cwgl_vkpriv_destroy_buffer(ctx, buffer->backend);
     free(buffer->backend);
     buffer->backend = NULL;
     return 0;
 }
 int
-cwgl_backend_Shader_release(cwgl_ctx_t* ctx, cwgl_Shader_t* shader){
+cwgl_backend_Shader_release(cwgl_ctx* ctx, cwgl_Shader* shader){
     // FIXME: Free object here
     free(shader->backend);
     shader->backend = NULL;
     return 0;
 }
 int
-cwgl_backend_Program_release(cwgl_ctx_t* ctx, cwgl_Program_t* program){
+cwgl_backend_Program_release(cwgl_ctx* ctx, cwgl_Program* program){
     cwgl_vkpriv_destroy_program(ctx, program->backend);
     free(program->backend);
     program->backend = NULL;
     return 0;
 }
 int
-cwgl_backend_Texture_release(cwgl_ctx_t* ctx, cwgl_Texture_t* texture){
+cwgl_backend_Texture_release(cwgl_ctx* ctx, cwgl_Texture* texture){
     cwgl_vkpriv_destroy_texture(ctx, texture->backend);
     free(texture->backend);
     texture->backend = NULL;
     return 0;
 }
 int
-cwgl_backend_Renderbuffer_release(cwgl_ctx_t* ctx,
-                                  cwgl_Renderbuffer_t* renderbuffer){
+cwgl_backend_Renderbuffer_release(cwgl_ctx* ctx,
+                                  cwgl_Renderbuffer* renderbuffer){
     // FIXME: Free object here
     free(renderbuffer->backend);
     renderbuffer->backend = NULL;
     return 0;
 }
 int
-cwgl_backend_Framebuffer_release(cwgl_ctx_t* ctx,
-                                 cwgl_Framebuffer_t* framebuffer){
+cwgl_backend_Framebuffer_release(cwgl_ctx* ctx,
+                                 cwgl_Framebuffer* framebuffer){
     // FIXME: Free object here
     free(framebuffer->backend);
     framebuffer->backend = NULL;

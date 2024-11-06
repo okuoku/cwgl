@@ -3,7 +3,7 @@
 
 // 4.1.2 Scissor Test
 CWGL_API void
-cwgl_scissor(cwgl_ctx_t* ctx, 
+cwgl_scissor(cwgl_ctx* ctx, 
              int32_t x, int32_t y, uint32_t width, uint32_t height){
     /* GLES2: CWGL never return INVALID_VALUE */
     ctx->state.glo.SCISSOR_BOX[0] = x;
@@ -14,15 +14,15 @@ cwgl_scissor(cwgl_ctx_t* ctx,
 
 // 4.1.3 Multisample Fragment Operations
 CWGL_API void 
-cwgl_sampleCoverage(cwgl_ctx_t* ctx, float value, int invert){
+cwgl_sampleCoverage(cwgl_ctx* ctx, float value, int invert){
     ctx->state.glo.SAMPLE_COVERAGE_VALUE = value;
     ctx->state.glo.SAMPLE_COVERAGE_INVERT = invert ? CWGL_TRUE : CWGL_FALSE;
 }
 
 // 4.1.4 Stencil Test
 CWGL_API void 
-cwgl_stencilFunc(cwgl_ctx_t* ctx, 
-                 cwgl_enum_t func, int32_t ref, uint32_t mask){
+cwgl_stencilFunc(cwgl_ctx* ctx, 
+                 cwgl_enum func, int32_t ref, uint32_t mask){
     switch(func){
         case NEVER:
         case LESS:
@@ -47,8 +47,8 @@ cwgl_stencilFunc(cwgl_ctx_t* ctx,
 }
 
 CWGL_API void 
-cwgl_stencilFuncSeparate(cwgl_ctx_t* ctx, 
-                         cwgl_enum_t face, cwgl_enum_t func, 
+cwgl_stencilFuncSeparate(cwgl_ctx* ctx, 
+                         cwgl_enum face, cwgl_enum func, 
                          int32_t ref, uint32_t mask){
     switch(func){
         case NEVER:
@@ -90,8 +90,8 @@ cwgl_stencilFuncSeparate(cwgl_ctx_t* ctx,
 }
 
 CWGL_API void 
-cwgl_stencilOp(cwgl_ctx_t* ctx, 
-               cwgl_enum_t fail, cwgl_enum_t zfail, cwgl_enum_t zpass){
+cwgl_stencilOp(cwgl_ctx* ctx, 
+               cwgl_enum fail, cwgl_enum zfail, cwgl_enum zpass){
     switch(fail){
         case KEEP:
         case ZERO:
@@ -146,9 +146,9 @@ cwgl_stencilOp(cwgl_ctx_t* ctx,
 }
 
 CWGL_API void 
-cwgl_stencilOpSeparate(cwgl_ctx_t* ctx,
-                       cwgl_enum_t face, cwgl_enum_t fail, 
-                       cwgl_enum_t zfail, cwgl_enum_t zpass){
+cwgl_stencilOpSeparate(cwgl_ctx* ctx,
+                       cwgl_enum face, cwgl_enum fail, 
+                       cwgl_enum zfail, cwgl_enum zpass){
     switch(fail){
         case KEEP:
         case ZERO:
@@ -215,7 +215,7 @@ cwgl_stencilOpSeparate(cwgl_ctx_t* ctx,
 
 // 4.1.5 Depth Buffer Test
 CWGL_API void 
-cwgl_depthFunc(cwgl_ctx_t* ctx, cwgl_enum_t func){
+cwgl_depthFunc(cwgl_ctx* ctx, cwgl_enum func){
     switch(func){
         case NEVER:
         case LESS:
@@ -235,7 +235,7 @@ cwgl_depthFunc(cwgl_ctx_t* ctx, cwgl_enum_t func){
 
 // 4.1.6 Blending
 CWGL_API void 
-cwgl_blendEquation(cwgl_ctx_t* ctx, cwgl_enum_t mode){
+cwgl_blendEquation(cwgl_ctx* ctx, cwgl_enum mode){
     switch(mode){
         case FUNC_ADD:
         case FUNC_SUBTRACT:
@@ -250,8 +250,8 @@ cwgl_blendEquation(cwgl_ctx_t* ctx, cwgl_enum_t mode){
 }
 
 CWGL_API void 
-cwgl_blendEquationSeparate(cwgl_ctx_t* ctx,
-                           cwgl_enum_t modeRGB, cwgl_enum_t modeAlpha){
+cwgl_blendEquationSeparate(cwgl_ctx* ctx,
+                           cwgl_enum modeRGB, cwgl_enum modeAlpha){
     switch(modeRGB){
         case FUNC_ADD:
         case FUNC_SUBTRACT:
@@ -275,7 +275,7 @@ cwgl_blendEquationSeparate(cwgl_ctx_t* ctx,
 }
 
 CWGL_API void 
-cwgl_blendFuncSeparate(cwgl_ctx_t* ctx, cwgl_enum_t srcRGB, cwgl_enum_t dstRGB, cwgl_enum_t srcAlpha, cwgl_enum_t dstAlpha){
+cwgl_blendFuncSeparate(cwgl_ctx* ctx, cwgl_enum srcRGB, cwgl_enum dstRGB, cwgl_enum srcAlpha, cwgl_enum dstAlpha){
     switch(srcRGB){
         case ZERO:
         case ONE:
@@ -365,7 +365,7 @@ cwgl_blendFuncSeparate(cwgl_ctx_t* ctx, cwgl_enum_t srcRGB, cwgl_enum_t dstRGB, 
 }
 
 CWGL_API void 
-cwgl_blendFunc(cwgl_ctx_t* ctx, cwgl_enum_t sfactor, cwgl_enum_t dfactor){
+cwgl_blendFunc(cwgl_ctx* ctx, cwgl_enum sfactor, cwgl_enum dfactor){
     switch(sfactor){
         case ZERO:
         case ONE:
@@ -414,7 +414,7 @@ cwgl_blendFunc(cwgl_ctx_t* ctx, cwgl_enum_t sfactor, cwgl_enum_t dfactor){
 }
 
 CWGL_API void 
-cwgl_blendColor(cwgl_ctx_t* ctx, 
+cwgl_blendColor(cwgl_ctx* ctx, 
                 float red, float green, float blue, float alpha){
     ctx->state.glo.BLEND_COLOR[0] = red;
     ctx->state.glo.BLEND_COLOR[1] = green;
@@ -424,7 +424,7 @@ cwgl_blendColor(cwgl_ctx_t* ctx,
 
 // 4.2.2 Fine Control of Buffer Updates
 CWGL_API void 
-cwgl_colorMask(cwgl_ctx_t* ctx, int red, int green, int blue, int alpha){
+cwgl_colorMask(cwgl_ctx* ctx, int red, int green, int blue, int alpha){
     ctx->state.glo.COLOR_WRITEMASK[0] = red ? CWGL_TRUE : CWGL_FALSE;
     ctx->state.glo.COLOR_WRITEMASK[1] = green ? CWGL_TRUE : CWGL_FALSE;
     ctx->state.glo.COLOR_WRITEMASK[2] = blue ? CWGL_TRUE : CWGL_FALSE;
@@ -432,18 +432,18 @@ cwgl_colorMask(cwgl_ctx_t* ctx, int red, int green, int blue, int alpha){
 }
 
 CWGL_API void 
-cwgl_depthMask(cwgl_ctx_t* ctx, int flag){
+cwgl_depthMask(cwgl_ctx* ctx, int flag){
     ctx->state.glo.DEPTH_WRITEMASK = flag ? CWGL_TRUE : CWGL_FALSE;
 }
 
 CWGL_API void 
-cwgl_stencilMask(cwgl_ctx_t* ctx, uint32_t mask){
+cwgl_stencilMask(cwgl_ctx* ctx, uint32_t mask){
     ctx->state.glo.STENCIL_WRITEMASK = mask;
     ctx->state.glo.STENCIL_BACK_WRITEMASK = mask;
 }
 
 CWGL_API void 
-cwgl_stencilMaskSeparate(cwgl_ctx_t* ctx, cwgl_enum_t face, uint32_t mask){
+cwgl_stencilMaskSeparate(cwgl_ctx* ctx, cwgl_enum face, uint32_t mask){
     switch(mask){
         case FRONT:
             ctx->state.glo.STENCIL_WRITEMASK = mask;
@@ -464,12 +464,12 @@ cwgl_stencilMaskSeparate(cwgl_ctx_t* ctx, cwgl_enum_t face, uint32_t mask){
 
 // 4.2.3 Clearing the Buffers
 CWGL_API void 
-cwgl_clear(cwgl_ctx_t* ctx, uint32_t mask){
+cwgl_clear(cwgl_ctx* ctx, uint32_t mask){
     cwgl_backend_clear(ctx, mask);
 }
 
 CWGL_API void 
-cwgl_clearColor(cwgl_ctx_t* ctx, 
+cwgl_clearColor(cwgl_ctx* ctx, 
                 float red, float green, float blue, float alpha){
     ctx->state.glo.COLOR_CLEAR_VALUE[0] = red;
     ctx->state.glo.COLOR_CLEAR_VALUE[1] = green;
@@ -478,7 +478,7 @@ cwgl_clearColor(cwgl_ctx_t* ctx,
 }
 
 CWGL_API void 
-cwgl_clearDepth(cwgl_ctx_t* ctx, float depth){
+cwgl_clearDepth(cwgl_ctx* ctx, float depth){
     if(depth > 1.0f){
         ctx->state.glo.DEPTH_CLEAR_VALUE = 1.0f;
     }else if(depth < 0.0f){
@@ -489,7 +489,7 @@ cwgl_clearDepth(cwgl_ctx_t* ctx, float depth){
 }
 
 CWGL_API void 
-cwgl_clearStencil(cwgl_ctx_t* ctx, int32_t s){
+cwgl_clearStencil(cwgl_ctx* ctx, int32_t s){
     /* FIXME: GLES2 requires implicit AND against with current STENCIL_BITS */
     /*
     const unsigned int stencilwidth = ctx->state.cfg.STENCIL_BITS;
@@ -503,14 +503,14 @@ cwgl_clearStencil(cwgl_ctx_t* ctx, int32_t s){
 
 // 4.3.1 Reading Pixels
 CWGL_API void 
-cwgl_readPixels(cwgl_ctx_t* ctx, int32_t x, int32_t y, uint32_t width, uint32_t height, cwgl_enum_t format, cwgl_enum_t type, void* buf, size_t buflen){
+cwgl_readPixels(cwgl_ctx* ctx, int32_t x, int32_t y, uint32_t width, uint32_t height, cwgl_enum format, cwgl_enum type, void* buf, size_t buflen){
     cwgl_backend_readPixels(ctx, x, y, width, height, format, type, buf, buflen);
 }
 
 // 4.4.1 Binding and Managing Framebuffer Objects
-static void release_renderbuffer(cwgl_ctx_t* ctx, cwgl_Renderbuffer_t* rb);
+static void release_renderbuffer(cwgl_ctx* ctx, cwgl_Renderbuffer* rb);
 static void
-release_framebuffer_attachment(cwgl_ctx_t* ctx, cwgl_framebuffer_attachment_state_t* a){
+release_framebuffer_attachment(cwgl_ctx* ctx, cwgl_framebuffer_attachment_state* a){
     switch(a->FRAMEBUFFER_ATTACHMENT_OBJECT_TYPE){
         case RENDERBUFFER:
             release_renderbuffer(ctx, a->FRAMEBUFFER_ATTACHMENT_OBJECT_NAME.asRenderbuffer);
@@ -525,7 +525,7 @@ release_framebuffer_attachment(cwgl_ctx_t* ctx, cwgl_framebuffer_attachment_stat
 }
 
 static void
-release_framebuffer(cwgl_ctx_t* ctx, cwgl_Framebuffer_t* fb){
+release_framebuffer(cwgl_ctx* ctx, cwgl_Framebuffer* fb){
     uintptr_t v;
     if(fb){
         v = cwgl_priv_objhdr_release(&fb->hdr);
@@ -539,7 +539,7 @@ release_framebuffer(cwgl_ctx_t* ctx, cwgl_Framebuffer_t* fb){
     }
 }
 static void
-unbind_framebuffer(cwgl_ctx_t* ctx, cwgl_Framebuffer_t* fb){
+unbind_framebuffer(cwgl_ctx* ctx, cwgl_Framebuffer* fb){
     if(fb){
         if(ctx->state.bin.FRAMEBUFFER_BINDING == fb){
             release_framebuffer(ctx, fb);
@@ -548,8 +548,8 @@ unbind_framebuffer(cwgl_ctx_t* ctx, cwgl_Framebuffer_t* fb){
     }
 }
 CWGL_API void 
-cwgl_bindFramebuffer(cwgl_ctx_t* ctx, 
-                     cwgl_enum_t target, cwgl_Framebuffer_t* framebuffer){
+cwgl_bindFramebuffer(cwgl_ctx* ctx, 
+                     cwgl_enum target, cwgl_Framebuffer* framebuffer){
     switch(target){
         case FRAMEBUFFER:
             unbind_framebuffer(ctx, ctx->state.bin.FRAMEBUFFER_BINDING);
@@ -566,14 +566,14 @@ cwgl_bindFramebuffer(cwgl_ctx_t* ctx,
 }
 
 CWGL_API void 
-cwgl_deleteFramebuffer(cwgl_ctx_t* ctx, cwgl_Framebuffer_t* framebuffer){
+cwgl_deleteFramebuffer(cwgl_ctx* ctx, cwgl_Framebuffer* framebuffer){
     unbind_framebuffer(ctx, framebuffer);
 }
 
-CWGL_API cwgl_Framebuffer_t* 
-cwgl_createFramebuffer(cwgl_ctx_t* ctx){
-    cwgl_Framebuffer_t* fb;
-    fb = malloc(sizeof(cwgl_Framebuffer_t));
+CWGL_API cwgl_Framebuffer* 
+cwgl_createFramebuffer(cwgl_ctx* ctx){
+    cwgl_Framebuffer* fb;
+    fb = malloc(sizeof(cwgl_Framebuffer));
     if(fb){
         cwgl_priv_objhdr_init(ctx, &fb->hdr, CWGL_OBJ_FRAMEBUFFER);
         cwgl_priv_framebuffer_attachment_init(&fb->state.COLOR_ATTACHMENT0);
@@ -585,13 +585,13 @@ cwgl_createFramebuffer(cwgl_ctx_t* ctx){
 }
 
 CWGL_API void
-cwgl_Framebuffer_release(cwgl_ctx_t* ctx, cwgl_Framebuffer_t* framebuffer){
+cwgl_Framebuffer_release(cwgl_ctx* ctx, cwgl_Framebuffer* framebuffer){
     release_framebuffer(ctx, framebuffer);
 }
 
 // 4.4.3 Renderbuffer Objects
 static void
-release_renderbuffer(cwgl_ctx_t* ctx, cwgl_Renderbuffer_t* rb){
+release_renderbuffer(cwgl_ctx* ctx, cwgl_Renderbuffer* rb){
     uintptr_t v;
     if(rb){
         v = cwgl_priv_objhdr_release(&rb->hdr);
@@ -602,7 +602,7 @@ release_renderbuffer(cwgl_ctx_t* ctx, cwgl_Renderbuffer_t* rb){
     }
 }
 static void
-unbind_renderbuffer(cwgl_ctx_t* ctx, cwgl_Renderbuffer_t* rb){
+unbind_renderbuffer(cwgl_ctx* ctx, cwgl_Renderbuffer* rb){
     if(rb){
         if(ctx->state.bin.RENDERBUFFER_BINDING == rb){
             release_renderbuffer(ctx, rb);
@@ -612,8 +612,8 @@ unbind_renderbuffer(cwgl_ctx_t* ctx, cwgl_Renderbuffer_t* rb){
 }
 
 CWGL_API void 
-cwgl_bindRenderbuffer(cwgl_ctx_t* ctx, cwgl_enum_t target, 
-                      cwgl_Renderbuffer_t* renderbuffer){
+cwgl_bindRenderbuffer(cwgl_ctx* ctx, cwgl_enum target, 
+                      cwgl_Renderbuffer* renderbuffer){
     switch(target){
         case RENDERBUFFER:
             unbind_renderbuffer(ctx, ctx->state.bin.RENDERBUFFER_BINDING);
@@ -629,14 +629,14 @@ cwgl_bindRenderbuffer(cwgl_ctx_t* ctx, cwgl_enum_t target,
 }
 
 CWGL_API void 
-cwgl_deleteRenderbuffer(cwgl_ctx_t* ctx, cwgl_Renderbuffer_t* renderbuffer){
+cwgl_deleteRenderbuffer(cwgl_ctx* ctx, cwgl_Renderbuffer* renderbuffer){
     release_renderbuffer(ctx, renderbuffer);
 }
 
-CWGL_API cwgl_Renderbuffer_t* 
-cwgl_createRenderbuffer(cwgl_ctx_t* ctx){
-    cwgl_Renderbuffer_t* rb;
-    rb = malloc(sizeof(cwgl_Renderbuffer_t));
+CWGL_API cwgl_Renderbuffer* 
+cwgl_createRenderbuffer(cwgl_ctx* ctx){
+    cwgl_Renderbuffer* rb;
+    rb = malloc(sizeof(cwgl_Renderbuffer));
     if(rb){
         cwgl_priv_objhdr_init(ctx, &rb->hdr, CWGL_OBJ_RENDERBUFFER);
         cwgl_priv_renderbuffer_init(&rb->state);
@@ -646,13 +646,13 @@ cwgl_createRenderbuffer(cwgl_ctx_t* ctx){
 }
 
 CWGL_API void
-cwgl_Renderbuffer_release(cwgl_ctx_t* ctx, cwgl_Renderbuffer_t* renderbuffer){
+cwgl_Renderbuffer_release(cwgl_ctx* ctx, cwgl_Renderbuffer* renderbuffer){
     release_renderbuffer(ctx, renderbuffer);
 }
 
 CWGL_API void 
-cwgl_renderbufferStorage(cwgl_ctx_t* ctx, 
-                         cwgl_enum_t target, cwgl_enum_t internalformat, 
+cwgl_renderbufferStorage(cwgl_ctx* ctx, 
+                         cwgl_enum target, cwgl_enum internalformat, 
                          uint32_t width, uint32_t height){
     if(target != RENDERBUFFER){
         CTX_SET_ERROR(ctx, INVALID_ENUM);
@@ -667,12 +667,12 @@ cwgl_renderbufferStorage(cwgl_ctx_t* ctx,
 }
 
 CWGL_API void 
-cwgl_framebufferRenderbuffer(cwgl_ctx_t* ctx, cwgl_enum_t target, 
-                             cwgl_enum_t attachment, 
-                             cwgl_enum_t renderbuffertarget, 
-                             cwgl_Renderbuffer_t* renderbuffer){
-    cwgl_Framebuffer_t* fb;
-    cwgl_framebuffer_attachment_state_t* point;
+cwgl_framebufferRenderbuffer(cwgl_ctx* ctx, cwgl_enum target, 
+                             cwgl_enum attachment, 
+                             cwgl_enum renderbuffertarget, 
+                             cwgl_Renderbuffer* renderbuffer){
+    cwgl_Framebuffer* fb;
+    cwgl_framebuffer_attachment_state* point;
     if(renderbuffertarget != RENDERBUFFER){
         CTX_SET_ERROR(ctx, INVALID_ENUM);
         return;
@@ -713,11 +713,11 @@ cwgl_framebufferRenderbuffer(cwgl_ctx_t* ctx, cwgl_enum_t target,
 }
 
 CWGL_API void 
-cwgl_framebufferTexture2D(cwgl_ctx_t* ctx, cwgl_enum_t target, 
-                          cwgl_enum_t attachment, cwgl_enum_t textarget, 
-                          cwgl_Texture_t* texture, int32_t level){
-    cwgl_Framebuffer_t* fb;
-    cwgl_framebuffer_attachment_state_t* point;
+cwgl_framebufferTexture2D(cwgl_ctx* ctx, cwgl_enum target, 
+                          cwgl_enum attachment, cwgl_enum textarget, 
+                          cwgl_Texture* texture, int32_t level){
+    cwgl_Framebuffer* fb;
+    cwgl_framebuffer_attachment_state* point;
     if(texture){
         if(level != 0){
             CTX_SET_ERROR(ctx, INVALID_VALUE);
@@ -776,9 +776,9 @@ cwgl_framebufferTexture2D(cwgl_ctx_t* ctx, cwgl_enum_t target,
 
 
 // 4.4.5 Framebuffer Completeness
-CWGL_API cwgl_enum_t 
-cwgl_checkFramebufferStatus(cwgl_ctx_t* ctx, cwgl_enum_t target){
-    cwgl_enum_t e;
+CWGL_API cwgl_enum 
+cwgl_checkFramebufferStatus(cwgl_ctx* ctx, cwgl_enum target){
+    cwgl_enum e;
     cwgl_backend_configure_framebuffer(ctx, &e);
     return e;
 }

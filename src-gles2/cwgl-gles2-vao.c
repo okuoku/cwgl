@@ -4,11 +4,11 @@
 void cwgl_ctx_glGenVertexArray(uintptr_t* id);
 void cwgl_ctx_glBindVertexArray(uintptr_t id);
 
-CWGL_API cwgl_VertexArrayObject_t* 
-cwgl_createVertexArray(cwgl_ctx_t* ctx){
+CWGL_API cwgl_VertexArrayObject* 
+cwgl_createVertexArray(cwgl_ctx* ctx){
     uintptr_t p;
     GLuint name = 0;
-    cwgl_VertexArrayObject_t* o;
+    cwgl_VertexArrayObject* o;
     CTX_ENTER(ctx);
     cwgl_ctx_glGenVertexArray(&p);
     name = p;
@@ -20,7 +20,7 @@ cwgl_createVertexArray(cwgl_ctx_t* ctx){
 
 
 CWGL_API void 
-cwgl_bindVertexArray(cwgl_ctx_t* ctx, cwgl_VertexArrayObject_t* obj){
+cwgl_bindVertexArray(cwgl_ctx* ctx, cwgl_VertexArrayObject* obj){
     GLuint name;
     CTX_ENTER(ctx);
     if(obj){

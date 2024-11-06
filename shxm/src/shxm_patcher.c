@@ -37,8 +37,8 @@ struct patchctx_s {
     int integers_id_base;
     int unused_pointer_id_base;
     uint32_t* ir;
-    shxm_program_t* prog;
-    shxm_spirv_intr_t* intr;
+    shxm_program* prog;
+    shxm_spirv_intr* intr;
     struct idpatchparam_s* idpatch; /* Indexed by ID */
 
     /* main() related */
@@ -49,13 +49,13 @@ struct patchctx_s {
 };
 
 static int
-patch_main_load(struct patchctx_s* cur, shxm_util_buf_t* target){
+patch_main_load(struct patchctx_s* cur, shxm_util_buf* target){
     int u;
     int id;
     int i;
     uint32_t op[6];
     struct idpatchparam_s* param;
-    shxm_uniform_t* uniform;
+    shxm_uniform* uniform;
     for(u=0;u!=cur->prog->uniform_count;u++){
         uniform = &cur->prog->uniform[u];
         id = uniform->slot->id[cur->phase];
@@ -143,7 +143,7 @@ patch_main_load(struct patchctx_s* cur, shxm_util_buf_t* target){
 }
 
 static int
-inject_integers(struct patchctx_s* cur, shxm_util_buf_t* defs){
+inject_integers(struct patchctx_s* cur, shxm_util_buf* defs){
     uint32_t op[4];
     int i;
 
@@ -177,7 +177,7 @@ fill_ubo_info(struct patchctx_s* cur){
     int uboindex;
     int id_type;
     uint32_t* op;
-    shxm_uniform_t* uniform;
+    shxm_uniform* uniform;
     /* at least, we need intergers for uniform entries */
     cur->integers = cur->prog->uniform_count;
 
@@ -276,7 +276,7 @@ nopout(uint32_t* ir){
 }
 
 static int
-patch_unused_output(struct patchctx_s* cur, shxm_util_buf_t* defs){
+patch_unused_output(struct patchctx_s* cur, shxm_util_buf* defs){
     int i;
     int j;
     int id;
@@ -286,7 +286,7 @@ patch_unused_output(struct patchctx_s* cur, shxm_util_buf_t* defs){
     uint32_t op[4];
     uint32_t* ir;
     uint32_t* ir_type;
-    shxm_attribute_t* un;
+    shxm_attribute* un;
     ir = &cur->ir[cur->intr->entrypoint_loc];
     /* Patch to call fakemain */
     if(cur->fakemain_id){
@@ -351,14 +351,14 @@ patch_unused_output(struct patchctx_s* cur, shxm_util_buf_t* defs){
 }
 
 static int
-patch_uniform_to_private(struct patchctx_s* cur, shxm_util_buf_t* defs){
+patch_uniform_to_private(struct patchctx_s* cur, shxm_util_buf* defs){
     int u;
     int id;
     int curid;
     uint32_t op[4];
     uint32_t* ir;
     struct idpatchparam_s* param;
-    shxm_uniform_t* uniform;
+    shxm_uniform* uniform;
     /* Phase1: Convert direct loads */
     for(u=0;u!=cur->prog->uniform_count;u++){
         uniform = &cur->prog->uniform[u];
@@ -430,7 +430,7 @@ patch_uniform_to_private(struct patchctx_s* cur, shxm_util_buf_t* defs){
 }
 
 static int
-inject_opname(shxm_util_buf_t* out, int id, const char* name){
+inject_opname(shxm_util_buf* out, int id, const char* name){
     size_t namelen;
     int namewords;
     uint32_t* op;
@@ -450,7 +450,7 @@ inject_opname(shxm_util_buf_t* out, int id, const char* name){
 }
 
 static int
-inject_opmembername(shxm_util_buf_t* out, int id, int idx, const char* name){
+inject_opmembername(shxm_util_buf* out, int id, int idx, const char* name){
     size_t namelen;
     int namewords;
     uint32_t* op;
@@ -471,7 +471,7 @@ inject_opmembername(shxm_util_buf_t* out, int id, int idx, const char* name){
 }
 
 static int
-is_matrix(cwgl_var_type_t type){
+is_matrix(cwgl_var_type type){
     switch(type){
         case CWGL_VAR_FLOAT_MAT2:
         case CWGL_VAR_FLOAT_MAT3:
@@ -483,7 +483,7 @@ is_matrix(cwgl_var_type_t type){
 }
 
 static int
-calc_matrix_stride(cwgl_var_type_t type){
+calc_matrix_stride(cwgl_var_type type){
     switch(type){
         case CWGL_VAR_FLOAT_MAT2:
             return 4*2;
@@ -497,16 +497,16 @@ calc_matrix_stride(cwgl_var_type_t type){
 
 static int
 inject_ubo_def(struct patchctx_s* cur, 
-               shxm_util_buf_t* names,
-               shxm_util_buf_t* decorations,
-               shxm_util_buf_t* defs){
+               shxm_util_buf* names,
+               shxm_util_buf* decorations,
+               shxm_util_buf* defs){
     int u;
     int id;
     int membercount;
     uint32_t* opa;
     uint32_t op[5];
     struct idpatchparam_s* param;
-    shxm_uniform_t* uniform;
+    shxm_uniform* uniform;
     if(inject_opname(names, cur->ubo_structure_id, "cwgl_ubo_s")){
         return 1;
     }
@@ -629,9 +629,9 @@ inject_ubo_def(struct patchctx_s* cur,
 
 static int
 inject_fakemain(struct patchctx_s* cur, 
-                shxm_util_buf_t* names,
-                shxm_util_buf_t* defs,
-                shxm_util_buf_t* body){
+                shxm_util_buf* names,
+                shxm_util_buf* defs,
+                shxm_util_buf* body){
     const float f = 0.5;
     uint32_t op[5];
     int curid;
@@ -781,10 +781,10 @@ inject_fakemain(struct patchctx_s* cur,
 }
 
 static int
-patch_binding_numbers(struct patchctx_s* cur, shxm_util_buf_t* decorations){
+patch_binding_numbers(struct patchctx_s* cur, shxm_util_buf* decorations){
     int i;
     int id;
-    shxm_opaque_t* o;
+    shxm_opaque* o;
     uint32_t op[4];
     // FIXME: Bind UBO to 0 here
     for(i=0;i!=cur->prog->opaque_count;i++){
@@ -812,11 +812,11 @@ patch_binding_numbers(struct patchctx_s* cur, shxm_util_buf_t* decorations){
 }
 
 static int
-patch_locations(struct patchctx_s* cur, shxm_util_buf_t* decorations){
+patch_locations(struct patchctx_s* cur, shxm_util_buf* decorations){
     int i;
     int id;
     uint32_t op[4];
-    shxm_attribute_t* a;
+    shxm_attribute* a;
     for(i=0;i!=cur->prog->input_count;i++){
         // FIXME: Search existing location 
         a = &cur->prog->input[i];
@@ -910,9 +910,9 @@ calc_main_skip(uint32_t* ir, int start){
 }
 
 int
-shxm_private_patch_spirv(shxm_ctx_t* ctx,
-                         shxm_program_t* prog,
-                         shxm_spirv_intr_t* intr,
+shxm_private_patch_spirv(shxm_ctx* ctx,
+                         shxm_program* prog,
+                         shxm_spirv_intr* intr,
                          int phase){
     int is_vertex_shader;
     int has_glposition;
@@ -925,12 +925,12 @@ shxm_private_patch_spirv(shxm_ctx_t* ctx,
     int i;
 
     struct patchctx_s cur;
-    shxm_util_buf_t* patch_names;
-    shxm_util_buf_t* patch_decoration;
-    shxm_util_buf_t* patch_defs;
-    shxm_util_buf_t* patch_main;
-    shxm_util_buf_t* fakemain_body;
-    shxm_util_buf_t* final_output;
+    shxm_util_buf* patch_names;
+    shxm_util_buf* patch_decoration;
+    shxm_util_buf* patch_defs;
+    shxm_util_buf* patch_main;
+    shxm_util_buf* fakemain_body;
+    shxm_util_buf* final_output;
 
     uint32_t* source_ir;
     unsigned int source_ir_len;

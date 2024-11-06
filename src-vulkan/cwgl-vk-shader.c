@@ -6,11 +6,11 @@
 #include "shxm_private.h"
 
 // FIXME: Consider where to decl APIs
-cwgl_string_t* cwgl_priv_alloc_string(cwgl_ctx_t* ctx, const char* str, size_t buflen);
+cwgl_string* cwgl_priv_alloc_string(cwgl_ctx* ctx, const char* str, size_t buflen);
 
 void
-cwgl_vkpriv_destroy_program(cwgl_ctx_t* ctx, cwgl_backend_Program_t* program_backend){
-    cwgl_backend_ctx_t* backend;
+cwgl_vkpriv_destroy_program(cwgl_ctx* ctx, cwgl_backend_Program* program_backend){
+    cwgl_backend_ctx* backend;
     backend = ctx->backend;
     // FIXME: Free SHXM object here.
     cwgl_vkpriv_destroy_buffer(ctx, &program_backend->uniform_buffer);
@@ -26,12 +26,12 @@ cwgl_vkpriv_destroy_program(cwgl_ctx_t* ctx, cwgl_backend_Program_t* program_bac
 }
 
 int
-cwgl_backend_compileShader(cwgl_ctx_t* ctx, cwgl_Shader_t* shader){
+cwgl_backend_compileShader(cwgl_ctx* ctx, cwgl_Shader* shader){
     int r;
     size_t srcsize;
     char* buf;
-    shxm_ctx_t* shxm;
-    shxm_shader_t* s;
+    shxm_ctx* shxm;
+    shxm_shader* s;
     shxm = ctx->backend->shxm_ctx;
     s = shader->backend->shader;
     // FIXME: Move this to tracker
@@ -57,8 +57,8 @@ cwgl_backend_compileShader(cwgl_ctx_t* ctx, cwgl_Shader_t* shader){
 }
 
 
-static cwgl_enum_t
-to_gltype(cwgl_var_type_t type){
+static cwgl_enum
+to_gltype(cwgl_var_type type){
     switch(type){
         default:
             printf("INVALID TYPE!!\n");
@@ -110,17 +110,17 @@ to_activesize(int s){
 }
 
 int
-cwgl_backend_linkProgram(cwgl_ctx_t* ctx, cwgl_Program_t* program){
+cwgl_backend_linkProgram(cwgl_ctx* ctx, cwgl_Program* program){
     int i;
     int b;
     int o;
     int r;
-    cwgl_activeinfo_t* a;
+    cwgl_activeinfo* a;
     size_t namelen;
-    cwgl_backend_ctx_t* backend;
-    cwgl_backend_Program_t* program_backend;
-    shxm_ctx_t* shxm;
-    shxm_program_t* p;
+    cwgl_backend_ctx* backend;
+    cwgl_backend_Program* program_backend;
+    shxm_ctx* shxm;
+    shxm_program* p;
     VkResult rv;
     VkShaderModuleCreateInfo mi;
     backend = ctx->backend;
@@ -349,7 +349,7 @@ cwgl_backend_linkProgram(cwgl_ctx_t* ctx, cwgl_Program_t* program){
 }
 
 int
-cwgl_backend_validateProgram(cwgl_ctx_t* ctx, cwgl_Program_t* program){
+cwgl_backend_validateProgram(cwgl_ctx* ctx, cwgl_Program* program){
     // FIXME: Implement this
     program->state.VALIDATE_STATUS = CWGL_TRUE;
     return 0;

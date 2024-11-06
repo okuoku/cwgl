@@ -54,7 +54,7 @@ get_float_2(GLenum pname, float* f32){
 }
 
 static int
-fill_shader_prec(GLenum type, GLenum v, cwgl_ctx_config_shaderprecisionformat_t* fmt) {
+fill_shader_prec(GLenum type, GLenum v, cwgl_ctx_config_shaderprecisionformat* fmt) {
     int r;
     GLint range[2];
     GLint precision;
@@ -68,7 +68,7 @@ fill_shader_prec(GLenum type, GLenum v, cwgl_ctx_config_shaderprecisionformat_t*
 }
 
 int
-cwgl_backend_cfg_init(cwgl_ctx_config_t* cfg){
+cwgl_backend_cfg_init(cwgl_ctx_config* cfg){
     int r;
     (void)checkerr(); /* Flush current error */
     r = get_int32(GL_SUBPIXEL_BITS, &cfg->SUBPIXEL_BITS);

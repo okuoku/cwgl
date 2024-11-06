@@ -10,13 +10,13 @@ struct shxm_util_buf_s {
     int ptr;
 };
 
-shxm_util_buf_t* 
+shxm_util_buf* 
 shxm_private_util_buf_new(int siz){
     uint32_t* buf;
-    shxm_util_buf_t* r;
+    shxm_util_buf* r;
     buf = malloc(sizeof(uint32_t)*siz);
     if(buf){
-        r = malloc(sizeof(shxm_util_buf_t));
+        r = malloc(sizeof(shxm_util_buf));
         if(!r){
             free(buf);
             return NULL;
@@ -31,7 +31,7 @@ shxm_private_util_buf_new(int siz){
 }
 
 void
-shxm_private_util_buf_release(shxm_util_buf_t* buf){
+shxm_private_util_buf_release(shxm_util_buf* buf){
     if(buf){
         free(buf->buf);
         free(buf);
@@ -39,7 +39,7 @@ shxm_private_util_buf_release(shxm_util_buf_t* buf){
 }
 
 int
-shxm_private_util_buf_dup(shxm_util_buf_t* buf, uint32_t** out_buf,
+shxm_private_util_buf_dup(shxm_util_buf* buf, uint32_t** out_buf,
                           int* out_count){
     uint32_t* r;
     int len;
@@ -56,7 +56,7 @@ shxm_private_util_buf_dup(shxm_util_buf_t* buf, uint32_t** out_buf,
 }
 
 static int
-checksize(shxm_util_buf_t* buf, int cnt){
+checksize(shxm_util_buf* buf, int cnt){
     if(cnt < 0){
         printf("ERROR: Negative cnt %d\n",cnt);
         return 1;
@@ -70,7 +70,7 @@ checksize(shxm_util_buf_t* buf, int cnt){
 }
 
 int 
-shxm_private_util_buf_write_raw(shxm_util_buf_t* buf, uint32_t* obj,
+shxm_private_util_buf_write_raw(shxm_util_buf* buf, uint32_t* obj,
                                     int len){
     int i;
     int s;
@@ -86,7 +86,7 @@ shxm_private_util_buf_write_raw(shxm_util_buf_t* buf, uint32_t* obj,
 }
 
 int 
-shxm_private_util_buf_write_op(shxm_util_buf_t* buf, uint32_t* obj,
+shxm_private_util_buf_write_op(shxm_util_buf* buf, uint32_t* obj,
                                    int len){
     int i;
     int s;
@@ -108,17 +108,17 @@ shxm_private_util_buf_write_op(shxm_util_buf_t* buf, uint32_t* obj,
 }
 
 int 
-shxm_private_util_buf_size(shxm_util_buf_t* buf){
+shxm_private_util_buf_size(shxm_util_buf* buf){
     return buf->ptr;
 }
 
 uint32_t* 
-shxm_private_util_buf_ptr(shxm_util_buf_t* buf){
+shxm_private_util_buf_ptr(shxm_util_buf* buf){
     return buf->buf;
 }
 
 int 
-shxm_private_util_buf_merge(shxm_util_buf_t* dest, shxm_util_buf_t* src){
+shxm_private_util_buf_merge(shxm_util_buf* dest, shxm_util_buf* src){
     int i;
     int len;
     int ptr;
@@ -136,7 +136,7 @@ shxm_private_util_buf_merge(shxm_util_buf_t* dest, shxm_util_buf_t* src){
 }
 
 void
-shxm_private_util_buf_clearnop(shxm_util_buf_t* buf){
+shxm_private_util_buf_clearnop(shxm_util_buf* buf){
     int i;
     int w;
     int len;

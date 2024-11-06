@@ -7,8 +7,8 @@
 #include <yuniframe/cwgl.h>
 
 /* Context */
-void cwgl_priv_check_current(cwgl_ctx_t* ctx);
-cwgl_string_t* cwgl_priv_alloc_string(cwgl_ctx_t* ctx, const char* str,
+void cwgl_priv_check_current(cwgl_ctx* ctx);
+cwgl_string* cwgl_priv_alloc_string(cwgl_ctx* ctx, const char* str,
                                       size_t buflen);
 struct cwgl_string_s {
     size_t size; /* Includes nul */
@@ -53,7 +53,7 @@ struct cwgl_VertexArrayObject_s {
 #include <stdlib.h>
 
 #define CTX_ALLOC(ctx, type) \
-    malloc(sizeof(cwgl_ ## type ## _t))
+    malloc(sizeof(cwgl_ ## type))
 
 #define CTX_FREE(ctx, type, p) \
     free(p)

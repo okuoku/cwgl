@@ -1,8 +1,8 @@
 #include "cwgl-backend-gles2-priv.h"
 
 static void
-configure_tu(cwgl_ctx_t* ctx, cwgl_enum_t target){
-    cwgl_texture_unit_state_t* s;
+configure_tu(cwgl_ctx* ctx, cwgl_enum target){
+    cwgl_texture_unit_state* s;
     int id;
     id = (int)ctx->state.glo.ACTIVE_TEXTURE - (int)TEXTURE0;
     s = &ctx->state.bin.texture_unit[id];
@@ -20,15 +20,15 @@ configure_tu(cwgl_ctx_t* ctx, cwgl_enum_t target){
 }
 
 static void
-configure_fb(cwgl_ctx_t* ctx){
+configure_fb(cwgl_ctx* ctx){
     cwgl_backend_configure_framebuffer(ctx, NULL);
 }
 
 int 
-cwgl_backend_texImage2D(cwgl_ctx_t* ctx, cwgl_enum_t target, 
-                        int32_t level, cwgl_enum_t internalformat, 
+cwgl_backend_texImage2D(cwgl_ctx* ctx, cwgl_enum target, 
+                        int32_t level, cwgl_enum internalformat, 
                         uint32_t width, uint32_t height, int32_t border, 
-                        cwgl_enum_t format, cwgl_enum_t type, 
+                        cwgl_enum format, cwgl_enum type, 
                         const void* buf, size_t buflen){
     // FIXME: WebGL pixelstore??
     configure_tu(ctx, target);
@@ -41,8 +41,8 @@ cwgl_backend_texImage2D(cwgl_ctx_t* ctx, cwgl_enum_t target,
 }
 
 int 
-cwgl_backend_copyTexImage2D(cwgl_ctx_t* ctx, cwgl_enum_t target, 
-                            int32_t level, cwgl_enum_t internalformat, 
+cwgl_backend_copyTexImage2D(cwgl_ctx* ctx, cwgl_enum target, 
+                            int32_t level, cwgl_enum internalformat, 
                             int32_t x, int32_t y, 
                             uint32_t width, uint32_t height, int32_t border){
     configure_tu(ctx, target);
@@ -53,10 +53,10 @@ cwgl_backend_copyTexImage2D(cwgl_ctx_t* ctx, cwgl_enum_t target,
 }
 
 int 
-cwgl_backend_texSubImage2D(cwgl_ctx_t* ctx, cwgl_enum_t target, 
+cwgl_backend_texSubImage2D(cwgl_ctx* ctx, cwgl_enum target, 
                            int32_t level, int32_t xoffset, int32_t yoffset, 
                            uint32_t width, uint32_t height, 
-                           cwgl_enum_t format, cwgl_enum_t type, 
+                           cwgl_enum format, cwgl_enum type, 
                            const void* buf, size_t buflen){
     configure_tu(ctx, target);
     glPixelStorei(GL_UNPACK_ALIGNMENT,
@@ -67,7 +67,7 @@ cwgl_backend_texSubImage2D(cwgl_ctx_t* ctx, cwgl_enum_t target,
 }
 
 int 
-cwgl_backend_copyTexSubImage2D(cwgl_ctx_t* ctx, cwgl_enum_t target, 
+cwgl_backend_copyTexSubImage2D(cwgl_ctx* ctx, cwgl_enum target, 
                                int32_t level, int32_t xoffset, int32_t yoffset, 
                                int32_t x, int32_t y, 
                                uint32_t width, uint32_t height){
@@ -79,8 +79,8 @@ cwgl_backend_copyTexSubImage2D(cwgl_ctx_t* ctx, cwgl_enum_t target,
 }
 
 int 
-cwgl_backend_compressedTexImage2D(cwgl_ctx_t* ctx, cwgl_enum_t target, 
-                                  int32_t level, cwgl_enum_t internalformat, 
+cwgl_backend_compressedTexImage2D(cwgl_ctx* ctx, cwgl_enum target, 
+                                  int32_t level, cwgl_enum internalformat, 
                                   uint32_t width, uint32_t height, 
                                   int32_t border, 
                                   const void* buf, size_t buflen){
@@ -92,11 +92,11 @@ cwgl_backend_compressedTexImage2D(cwgl_ctx_t* ctx, cwgl_enum_t target,
 }
 
 int 
-cwgl_backend_compressedTexSubImage2D(cwgl_ctx_t* ctx, cwgl_enum_t target, 
+cwgl_backend_compressedTexSubImage2D(cwgl_ctx* ctx, cwgl_enum target, 
                                      int32_t level, 
                                      int32_t xoffset, int32_t yoffset, 
                                      uint32_t width, uint32_t height, 
-                                     cwgl_enum_t format, 
+                                     cwgl_enum format, 
                                      const void* buf, size_t buflen){
     configure_tu(ctx, target);
     glCompressedTexSubImage2D(target, level,

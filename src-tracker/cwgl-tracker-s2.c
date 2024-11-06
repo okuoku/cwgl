@@ -4,8 +4,8 @@
 #include <string.h>
 
 /* Current VAO for attrib ops */
-static cwgl_VertexArrayObject_t*
-current_vao(cwgl_ctx_t* ctx){
+static cwgl_VertexArrayObject*
+current_vao(cwgl_ctx* ctx){
     if(ctx->state.bin.VERTEX_ARRAY_BINDING){
         return ctx->state.bin.VERTEX_ARRAY_BINDING;
     }else{
@@ -15,9 +15,9 @@ current_vao(cwgl_ctx_t* ctx){
 
 
 // 2.5 GL Errors
-CWGL_API cwgl_enum_t 
-cwgl_getError(cwgl_ctx_t* ctx){
-    cwgl_enum_t current_error;
+CWGL_API cwgl_enum 
+cwgl_getError(cwgl_ctx* ctx){
+    cwgl_enum current_error;
     current_error = ctx->state.err;
     CTX_SET_ERROR(ctx, NO_ERROR);
     return current_error;
@@ -34,8 +34,8 @@ valid_attrib_index_p(uint32_t i){
 }
 
 CWGL_API void 
-cwgl_vertexAttrib1f(cwgl_ctx_t* ctx, uint32_t indx, float x){
-    cwgl_VertexArrayObject_t* vao;
+cwgl_vertexAttrib1f(cwgl_ctx* ctx, uint32_t indx, float x){
+    cwgl_VertexArrayObject* vao;
     vao = current_vao(ctx);
     if(! valid_attrib_index_p(indx)){
         CTX_SET_ERROR(ctx, INVALID_VALUE);
@@ -45,8 +45,8 @@ cwgl_vertexAttrib1f(cwgl_ctx_t* ctx, uint32_t indx, float x){
 }
 
 CWGL_API void 
-cwgl_vertexAttrib2f(cwgl_ctx_t* ctx, uint32_t indx, float x, float y){
-    cwgl_VertexArrayObject_t* vao;
+cwgl_vertexAttrib2f(cwgl_ctx* ctx, uint32_t indx, float x, float y){
+    cwgl_VertexArrayObject* vao;
     vao = current_vao(ctx);
     if(! valid_attrib_index_p(indx)){
         CTX_SET_ERROR(ctx, INVALID_VALUE);
@@ -57,8 +57,8 @@ cwgl_vertexAttrib2f(cwgl_ctx_t* ctx, uint32_t indx, float x, float y){
 }
 
 CWGL_API void 
-cwgl_vertexAttrib3f(cwgl_ctx_t* ctx, uint32_t indx, float x, float y, float z){
-    cwgl_VertexArrayObject_t* vao;
+cwgl_vertexAttrib3f(cwgl_ctx* ctx, uint32_t indx, float x, float y, float z){
+    cwgl_VertexArrayObject* vao;
     vao = current_vao(ctx);
     if(! valid_attrib_index_p(indx)){
         CTX_SET_ERROR(ctx, INVALID_VALUE);
@@ -70,9 +70,9 @@ cwgl_vertexAttrib3f(cwgl_ctx_t* ctx, uint32_t indx, float x, float y, float z){
 }
 
 CWGL_API void 
-cwgl_vertexAttrib4f(cwgl_ctx_t* ctx, uint32_t indx, 
+cwgl_vertexAttrib4f(cwgl_ctx* ctx, uint32_t indx, 
                     float x, float y, float z, float w){
-    cwgl_VertexArrayObject_t* vao;
+    cwgl_VertexArrayObject* vao;
     vao = current_vao(ctx);
     if(! valid_attrib_index_p(indx)){
         CTX_SET_ERROR(ctx, INVALID_VALUE);
@@ -86,11 +86,11 @@ cwgl_vertexAttrib4f(cwgl_ctx_t* ctx, uint32_t indx,
 
 // 2.8 Vertex Arrays
 CWGL_API void 
-cwgl_vertexAttribPointer(cwgl_ctx_t* ctx, uint32_t indx, 
-                         int32_t size, cwgl_enum_t type, int normalized, 
+cwgl_vertexAttribPointer(cwgl_ctx* ctx, uint32_t indx, 
+                         int32_t size, cwgl_enum type, int normalized, 
                          uint32_t stride, uint32_t offset){
-    cwgl_Buffer_t* buf;
-    cwgl_VertexArrayObject_t* vao;
+    cwgl_Buffer* buf;
+    cwgl_VertexArrayObject* vao;
     vao = current_vao(ctx);
     if(! valid_attrib_index_p(indx)){
         CTX_SET_ERROR(ctx, INVALID_VALUE);
@@ -147,8 +147,8 @@ cwgl_vertexAttribPointer(cwgl_ctx_t* ctx, uint32_t indx,
 }
 
 CWGL_API void 
-cwgl_enableVertexAttribArray(cwgl_ctx_t* ctx, uint32_t index){
-    cwgl_VertexArrayObject_t* vao;
+cwgl_enableVertexAttribArray(cwgl_ctx* ctx, uint32_t index){
+    cwgl_VertexArrayObject* vao;
     vao = current_vao(ctx);
     if(! valid_attrib_index_p(index)){
         CTX_SET_ERROR(ctx, INVALID_VALUE);
@@ -158,8 +158,8 @@ cwgl_enableVertexAttribArray(cwgl_ctx_t* ctx, uint32_t index){
 }
 
 CWGL_API void 
-cwgl_disableVertexAttribArray(cwgl_ctx_t* ctx, uint32_t index){
-    cwgl_VertexArrayObject_t* vao;
+cwgl_disableVertexAttribArray(cwgl_ctx* ctx, uint32_t index){
+    cwgl_VertexArrayObject* vao;
     vao = current_vao(ctx);
     if(! valid_attrib_index_p(index)){
         CTX_SET_ERROR(ctx, INVALID_VALUE);
@@ -169,28 +169,28 @@ cwgl_disableVertexAttribArray(cwgl_ctx_t* ctx, uint32_t index){
 }
 
 CWGL_API void 
-cwgl_drawArrays(cwgl_ctx_t* ctx, cwgl_enum_t mode, 
+cwgl_drawArrays(cwgl_ctx* ctx, cwgl_enum mode, 
                 int32_t first, uint32_t count){
     cwgl_backend_drawArrays(ctx, mode, first, count);
 }
 
 CWGL_API void 
-cwgl_drawElements(cwgl_ctx_t* ctx, cwgl_enum_t mode, 
-                  uint32_t count, cwgl_enum_t type, uint32_t offset){
+cwgl_drawElements(cwgl_ctx* ctx, cwgl_enum mode, 
+                  uint32_t count, cwgl_enum type, uint32_t offset){
     cwgl_backend_drawElements(ctx, mode, count, type, offset);
 }
 
 
 // 2.9 Buffer Objects
 static void
-free_buffer(cwgl_Buffer_t* buffer){
+free_buffer(cwgl_Buffer* buffer){
     free(buffer);
 }
 
 static void
-unbind_buffer(cwgl_ctx_t* ctx, cwgl_Buffer_t* buffer){
+unbind_buffer(cwgl_ctx* ctx, cwgl_Buffer* buffer){
     int i;
-    cwgl_VertexArrayObject_t* vao;
+    cwgl_VertexArrayObject* vao;
     if(buffer){
         if(ctx->state.bin.ARRAY_BUFFER_BINDING == buffer){
             cwgl_priv_buffer_release(ctx, buffer);
@@ -211,7 +211,7 @@ unbind_buffer(cwgl_ctx_t* ctx, cwgl_Buffer_t* buffer){
 }
 
 void /* exported to cwgl-tracker-vao.c */
-cwgl_priv_buffer_release(cwgl_ctx_t* ctx, cwgl_Buffer_t* buffer){
+cwgl_priv_buffer_release(cwgl_ctx* ctx, cwgl_Buffer* buffer){
     uintptr_t v;
     if(buffer){
         v = cwgl_priv_objhdr_release(&buffer->hdr);
@@ -223,9 +223,9 @@ cwgl_priv_buffer_release(cwgl_ctx_t* ctx, cwgl_Buffer_t* buffer){
 }
 
 CWGL_API void 
-cwgl_bindBuffer(cwgl_ctx_t* ctx, cwgl_enum_t target, cwgl_Buffer_t* buffer){
-    cwgl_Buffer_t** point;
-    cwgl_VertexArrayObject_t* vao;
+cwgl_bindBuffer(cwgl_ctx* ctx, cwgl_enum target, cwgl_Buffer* buffer){
+    cwgl_Buffer** point;
+    cwgl_VertexArrayObject* vao;
     switch(target){
         case ARRAY_BUFFER:
             point = &ctx->state.bin.ARRAY_BUFFER_BINDING;
@@ -248,14 +248,14 @@ cwgl_bindBuffer(cwgl_ctx_t* ctx, cwgl_enum_t target, cwgl_Buffer_t* buffer){
 }
 
 CWGL_API void 
-cwgl_deleteBuffer(cwgl_ctx_t* ctx, cwgl_Buffer_t* buffer){
+cwgl_deleteBuffer(cwgl_ctx* ctx, cwgl_Buffer* buffer){
     unbind_buffer(ctx, buffer);
 }
 
-CWGL_API cwgl_Buffer_t* 
-cwgl_createBuffer(cwgl_ctx_t* ctx){
-    cwgl_Buffer_t* buf;
-    buf = malloc(sizeof(cwgl_Buffer_t));
+CWGL_API cwgl_Buffer* 
+cwgl_createBuffer(cwgl_ctx* ctx){
+    cwgl_Buffer* buf;
+    buf = malloc(sizeof(cwgl_Buffer));
     if(buf){
         cwgl_priv_objhdr_init(ctx, &buf->hdr, CWGL_OBJ_BUFFER);
         cwgl_priv_buffer_init(&buf->state);
@@ -265,14 +265,14 @@ cwgl_createBuffer(cwgl_ctx_t* ctx){
 }
 
 CWGL_API void
-cwgl_Buffer_release(cwgl_ctx_t* ctx, cwgl_Buffer_t* buffer){
+cwgl_Buffer_release(cwgl_ctx* ctx, cwgl_Buffer* buffer){
     cwgl_priv_buffer_release(ctx, buffer);
 }
 
 CWGL_API void 
-cwgl_bufferData(cwgl_ctx_t* ctx, cwgl_enum_t target, 
-                uint32_t size, void* data, cwgl_enum_t usage){
-    cwgl_VertexArrayObject_t* vao;
+cwgl_bufferData(cwgl_ctx* ctx, cwgl_enum target, 
+                uint32_t size, void* data, cwgl_enum usage){
+    cwgl_VertexArrayObject* vao;
     switch(target){
         case ARRAY_BUFFER:
             if(! ctx->state.bin.ARRAY_BUFFER_BINDING){
@@ -305,14 +305,14 @@ cwgl_bufferData(cwgl_ctx_t* ctx, cwgl_enum_t target,
 }
 
 CWGL_API void 
-cwgl_bufferSubData(cwgl_ctx_t* ctx, cwgl_enum_t target, 
+cwgl_bufferSubData(cwgl_ctx* ctx, cwgl_enum target, 
                    uint32_t offset, void* data, size_t buflen){
     cwgl_backend_bufferSubData(ctx, target, offset, data, buflen);
 }
 
 // 2.10.1 Loading and Creating Shader Source
 static void
-release_shader(cwgl_ctx_t* ctx, cwgl_Shader_t* shader){
+release_shader(cwgl_ctx* ctx, cwgl_Shader* shader){
     uintptr_t v;
     if(shader){
         v = cwgl_priv_objhdr_release(&shader->hdr);
@@ -325,9 +325,9 @@ release_shader(cwgl_ctx_t* ctx, cwgl_Shader_t* shader){
     }
 }
 
-CWGL_API cwgl_Shader_t* 
-cwgl_createShader(cwgl_ctx_t* ctx, cwgl_enum_t type){
-    cwgl_Shader_t* shader;
+CWGL_API cwgl_Shader* 
+cwgl_createShader(cwgl_ctx* ctx, cwgl_enum type){
+    cwgl_Shader* shader;
     switch(type){
         case VERTEX_SHADER:
         case FRAGMENT_SHADER:
@@ -336,7 +336,7 @@ cwgl_createShader(cwgl_ctx_t* ctx, cwgl_enum_t type){
             CTX_SET_ERROR(ctx, INVALID_ENUM);
             return NULL;
     }
-    shader = malloc(sizeof(cwgl_Shader_t));
+    shader = malloc(sizeof(cwgl_Shader));
     if(shader){
         cwgl_priv_objhdr_init(ctx, &shader->hdr, CWGL_OBJ_SHADER);
         shader->state.SHADER_TYPE = type;
@@ -350,14 +350,14 @@ cwgl_createShader(cwgl_ctx_t* ctx, cwgl_enum_t type){
 }
 
 CWGL_API void
-cwgl_Shader_release(cwgl_ctx_t* ctx, cwgl_Shader_t* shader){
+cwgl_Shader_release(cwgl_ctx* ctx, cwgl_Shader* shader){
     release_shader(ctx, shader);
 }
 
 CWGL_API void 
-cwgl_shaderSource(cwgl_ctx_t* ctx, cwgl_Shader_t* shader, const char* source,
+cwgl_shaderSource(cwgl_ctx* ctx, cwgl_Shader* shader, const char* source,
                   size_t sourcelen){
-    cwgl_string_t* src;
+    cwgl_string* src;
     cwgl_string_release(ctx, shader->state.source);
     src = cwgl_priv_alloc_string(ctx, source, sourcelen);
     shader->state.source = src;
@@ -365,12 +365,12 @@ cwgl_shaderSource(cwgl_ctx_t* ctx, cwgl_Shader_t* shader, const char* source,
 }
 
 CWGL_API void 
-cwgl_compileShader(cwgl_ctx_t* ctx, cwgl_Shader_t* shader){
+cwgl_compileShader(cwgl_ctx* ctx, cwgl_Shader* shader){
     cwgl_backend_compileShader(ctx, shader);
 }
 
 CWGL_API void 
-cwgl_deleteShader(cwgl_ctx_t* ctx, cwgl_Shader_t* shader){
+cwgl_deleteShader(cwgl_ctx* ctx, cwgl_Shader* shader){
     if(shader){
         shader->state.DELETE_STATUS = CWGL_TRUE;
     }
@@ -378,7 +378,7 @@ cwgl_deleteShader(cwgl_ctx_t* ctx, cwgl_Shader_t* shader){
 
 // 2.10.3 Program Objects
 static void
-release_activeinfo(cwgl_ctx_t* ctx, cwgl_activeinfo_t* a, uint32_t count){
+release_activeinfo(cwgl_ctx* ctx, cwgl_activeinfo* a, uint32_t count){
     int i;
     if(a){
         for(i=0;i!=count;i++){
@@ -389,7 +389,7 @@ release_activeinfo(cwgl_ctx_t* ctx, cwgl_activeinfo_t* a, uint32_t count){
 }
 
 static void
-clear_attriblocations(cwgl_ctx_t* ctx, cwgl_attriblocation_t* loc){
+clear_attriblocations(cwgl_ctx* ctx, cwgl_attriblocation* loc){
     int i;
     for(i=0;i!=CWGL_MAX_VAO_SIZE;i++){
         cwgl_string_release(ctx, loc[i].name);
@@ -399,12 +399,12 @@ clear_attriblocations(cwgl_ctx_t* ctx, cwgl_attriblocation_t* loc){
 }
 
 int /* Exported to backend */
-cwgl_integ_program_setup(cwgl_ctx_t* ctx, cwgl_Program_t* program,
+cwgl_integ_program_setup(cwgl_ctx* ctx, cwgl_Program* program,
                          uint32_t n_uniform, uint32_t n_attribute){
     uint32_t uniformcount;
     uint32_t attributecount;
-    cwgl_activeinfo_t* uniforms;
-    cwgl_activeinfo_t* attributes;
+    cwgl_activeinfo* uniforms;
+    cwgl_activeinfo* attributes;
     release_activeinfo(ctx, program->state.uniforms, 
                        program->state.ACTIVE_UNIFORMS);
     release_activeinfo(ctx, program->state.attributes, 
@@ -413,13 +413,13 @@ cwgl_integ_program_setup(cwgl_ctx_t* ctx, cwgl_Program_t* program,
     program->state.ACTIVE_UNIFORMS = n_uniform;
     uniformcount = program->state.ACTIVE_UNIFORMS;
     attributecount = program->state.ACTIVE_ATTRIBUTES;
-    uniforms = malloc(sizeof(cwgl_activeinfo_t)*uniformcount);
+    uniforms = malloc(sizeof(cwgl_activeinfo)*uniformcount);
     if(uniforms){
-        memset(uniforms,0,sizeof(cwgl_activeinfo_t)*uniformcount);
+        memset(uniforms,0,sizeof(cwgl_activeinfo)*uniformcount);
     }
-    attributes = malloc(sizeof(cwgl_activeinfo_t)*attributecount);
+    attributes = malloc(sizeof(cwgl_activeinfo)*attributecount);
     if(attributes){
-        memset(attributes,0,sizeof(cwgl_activeinfo_t)*attributecount);
+        memset(attributes,0,sizeof(cwgl_activeinfo)*attributecount);
     }
     program->state.uniforms = uniforms;
     program->state.attributes = attributes;
@@ -427,7 +427,7 @@ cwgl_integ_program_setup(cwgl_ctx_t* ctx, cwgl_Program_t* program,
 }
 
 static void
-release_program(cwgl_ctx_t* ctx, cwgl_Program_t* program){
+release_program(cwgl_ctx* ctx, cwgl_Program* program){
     uintptr_t v;
     if(program){
         v = cwgl_priv_objhdr_release(&program->hdr);
@@ -446,14 +446,14 @@ release_program(cwgl_ctx_t* ctx, cwgl_Program_t* program){
     }
 }
 
-CWGL_API cwgl_Program_t* 
-cwgl_createProgram(cwgl_ctx_t* ctx){
-    cwgl_Program_t* program;
-    program = malloc(sizeof(cwgl_Program_t));
+CWGL_API cwgl_Program* 
+cwgl_createProgram(cwgl_ctx* ctx){
+    cwgl_Program* program;
+    program = malloc(sizeof(cwgl_Program));
     if(program){
         cwgl_priv_objhdr_init(ctx, &program->hdr, CWGL_OBJ_PROGRAM);
         memset(program->state.attriblocations, 0, 
-               sizeof(cwgl_attriblocation_t)*CWGL_MAX_VAO_SIZE);
+               sizeof(cwgl_attriblocation)*CWGL_MAX_VAO_SIZE);
         program->state.DELETE_STATUS = CWGL_FALSE;
         program->state.LINK_STATUS = CWGL_FALSE;
         program->state.VALIDATE_STATUS = CWGL_FALSE;
@@ -473,16 +473,16 @@ cwgl_createProgram(cwgl_ctx_t* ctx){
 }
 
 CWGL_API void
-cwgl_Program_release(cwgl_ctx_t* ctx, cwgl_Program_t* program){
+cwgl_Program_release(cwgl_ctx* ctx, cwgl_Program* program){
     release_program(ctx, program);
 }
 
 
 CWGL_API void 
-cwgl_attachShader(cwgl_ctx_t* ctx, cwgl_Program_t* program, 
-                  cwgl_Shader_t* shader){
+cwgl_attachShader(cwgl_ctx* ctx, cwgl_Program* program, 
+                  cwgl_Shader* shader){
     int i;
-    cwgl_enum_t type;
+    cwgl_enum type;
     type = shader->state.SHADER_TYPE;
     // FIXME: Single shader object should not be attached
     //        to multiple program
@@ -518,10 +518,10 @@ cwgl_attachShader(cwgl_ctx_t* ctx, cwgl_Program_t* program,
 }
 
 CWGL_API void 
-cwgl_detachShader(cwgl_ctx_t* ctx, cwgl_Program_t* program, 
-                  cwgl_Shader_t* shader){
+cwgl_detachShader(cwgl_ctx* ctx, cwgl_Program* program, 
+                  cwgl_Shader* shader){
     int i;
-    cwgl_enum_t type;
+    cwgl_enum type;
     type = shader->state.SHADER_TYPE;
     switch(type){
         case VERTEX_SHADER:
@@ -555,11 +555,11 @@ cwgl_detachShader(cwgl_ctx_t* ctx, cwgl_Program_t* program,
 }
 
 CWGL_API void 
-cwgl_linkProgram(cwgl_ctx_t* ctx, cwgl_Program_t* program){
+cwgl_linkProgram(cwgl_ctx* ctx, cwgl_Program* program){
     int i,j,r;
     unsigned int attrib_binding[CWGL_MAX_VAO_SIZE];
-    cwgl_attriblocation_t* a;
-    cwgl_activeinfo_t* f;
+    cwgl_attriblocation* a;
+    cwgl_activeinfo* f;
     cwgl_backend_linkProgram(ctx, program);
     program->state.age_link++;
     // FIXME: Follow WebGL alias rule
@@ -601,15 +601,15 @@ cwgl_linkProgram(cwgl_ctx_t* ctx, cwgl_Program_t* program){
         }
     }
     free(program->state.uniformcontents);
-    program->state.uniformcontents = malloc(sizeof(cwgl_uniformcontent_t)*
+    program->state.uniformcontents = malloc(sizeof(cwgl_uniformcontent)*
                                             program->state.uniform_buffer_size);
-    memset(program->state.uniformcontents,0,sizeof(cwgl_uniformcontent_t)*
+    memset(program->state.uniformcontents,0,sizeof(cwgl_uniformcontent)*
                                             program->state.uniform_buffer_size);
 
 }
 
 CWGL_API void 
-cwgl_useProgram(cwgl_ctx_t* ctx, cwgl_Program_t* program){
+cwgl_useProgram(cwgl_ctx* ctx, cwgl_Program* program){
     if(! program){
         CTX_SET_ERROR(ctx, INVALID_VALUE);
         return;
@@ -620,18 +620,18 @@ cwgl_useProgram(cwgl_ctx_t* ctx, cwgl_Program_t* program){
 }
 
 CWGL_API void 
-cwgl_deleteProgram(cwgl_ctx_t* ctx, cwgl_Program_t* program){
+cwgl_deleteProgram(cwgl_ctx* ctx, cwgl_Program* program){
     if(program){
         program->state.DELETE_STATUS = CWGL_TRUE;
     }
 }
 
 // 2.10.4 Shader Variables
-CWGL_API cwgl_query_result_t 
-cwgl_getActiveAttrib(cwgl_ctx_t* ctx, cwgl_Program_t* program, 
+CWGL_API cwgl_query_result 
+cwgl_getActiveAttrib(cwgl_ctx* ctx, cwgl_Program* program, 
                      int32_t index, int32_t* out_size, 
-                     int32_t* type, cwgl_string_t** name){
-    cwgl_activeinfo_t* a;
+                     int32_t* type, cwgl_string** name){
+    cwgl_activeinfo* a;
     if(! program){
         CTX_SET_ERROR(ctx, INVALID_VALUE);
         return CWGL_QR_GLERROR;
@@ -652,7 +652,7 @@ cwgl_getActiveAttrib(cwgl_ctx_t* ctx, cwgl_Program_t* program,
 }
 
 CWGL_API int32_t 
-cwgl_getAttribLocation(cwgl_ctx_t* ctx, cwgl_Program_t* program, 
+cwgl_getAttribLocation(cwgl_ctx* ctx, cwgl_Program* program, 
                        const char* name){
     // FIXME: Check for gl_
     int i,r;
@@ -673,7 +673,7 @@ cwgl_getAttribLocation(cwgl_ctx_t* ctx, cwgl_Program_t* program,
 }
 
 CWGL_API void 
-cwgl_bindAttribLocation(cwgl_ctx_t* ctx, cwgl_Program_t* program, 
+cwgl_bindAttribLocation(cwgl_ctx* ctx, cwgl_Program* program, 
                         uint32_t index, const char* name){
     // FIXME: Check for gl_
     size_t len;
@@ -688,10 +688,10 @@ cwgl_bindAttribLocation(cwgl_ctx_t* ctx, cwgl_Program_t* program,
 }
 
 static int
-calc_type_size(cwgl_Program_t* program, int index){
+calc_type_size(cwgl_Program* program, int index){
     int basetype;
-    cwgl_enum_t type;
-    cwgl_activeinfo_t* a;
+    cwgl_enum type;
+    cwgl_activeinfo* a;
     a = program->state.uniforms;
     type = a[index].type;
     switch(type){
@@ -731,15 +731,15 @@ calc_type_size(cwgl_Program_t* program, int index){
     return basetype;
 }
 
-CWGL_API cwgl_UniformLocation_t* 
-cwgl_getUniformLocation(cwgl_ctx_t* ctx, cwgl_Program_t* program, 
+CWGL_API cwgl_UniformLocation* 
+cwgl_getUniformLocation(cwgl_ctx* ctx, cwgl_Program* program, 
                         const char* name){
     int i,r;
     int ax, ay;
     int indx;
     int array_index;
-    cwgl_activeinfo_t* a;
-    cwgl_UniformLocation_t* u;
+    cwgl_activeinfo* a;
+    cwgl_UniformLocation* u;
     if(!program->state.LINK_STATUS){
         CTX_SET_ERROR(ctx, INVALID_OPERATION);
         return NULL;
@@ -763,7 +763,7 @@ cwgl_getUniformLocation(cwgl_ctx_t* ctx, cwgl_Program_t* program,
         return NULL;
     }
     /* Allocate object, retain Program */
-    u = malloc(sizeof(cwgl_UniformLocation_t));
+    u = malloc(sizeof(cwgl_UniformLocation));
     cwgl_priv_objhdr_init(ctx, &u->hdr, CWGL_OBJ_UNIFORMLOCATION);
     cwgl_priv_objhdr_retain(&program->hdr);
     u->index = indx;
@@ -776,7 +776,7 @@ cwgl_getUniformLocation(cwgl_ctx_t* ctx, cwgl_Program_t* program,
 }
 
 CWGL_API void
-cwgl_UniformLocation_release(cwgl_ctx_t* ctx, cwgl_UniformLocation_t* u){
+cwgl_UniformLocation_release(cwgl_ctx* ctx, cwgl_UniformLocation* u){
     uintptr_t v;
     if(u){
         v = cwgl_priv_objhdr_release(&u->hdr);
@@ -787,11 +787,11 @@ cwgl_UniformLocation_release(cwgl_ctx_t* ctx, cwgl_UniformLocation_t* u){
     }
 }
 
-CWGL_API cwgl_query_result_t 
-cwgl_getActiveUniform(cwgl_ctx_t* ctx, cwgl_Program_t* program, 
+CWGL_API cwgl_query_result 
+cwgl_getActiveUniform(cwgl_ctx* ctx, cwgl_Program* program, 
                       int32_t index, int32_t* out_size, int32_t* out_type, 
-                      cwgl_string_t** name){
-    cwgl_activeinfo_t* a;
+                      cwgl_string** name){
+    cwgl_activeinfo* a;
     if(! program){
         CTX_SET_ERROR(ctx, INVALID_VALUE);
         return CWGL_QR_GLERROR;
@@ -812,7 +812,7 @@ cwgl_getActiveUniform(cwgl_ctx_t* ctx, cwgl_Program_t* program,
 }
 
 static int /* bool */
-valid_uniformlocation_p(cwgl_UniformLocation_t* loc, int req){
+valid_uniformlocation_p(cwgl_UniformLocation* loc, int req){
     if(loc->age_link != loc->program->state.age_link){
         return 0;
     }else{
@@ -826,8 +826,8 @@ valid_uniformlocation_p(cwgl_UniformLocation_t* loc, int req){
 }
 
 CWGL_API void 
-cwgl_uniform1f(cwgl_ctx_t* ctx, cwgl_UniformLocation_t* location, float x){
-    cwgl_uniformcontent_t* u;
+cwgl_uniform1f(cwgl_ctx* ctx, cwgl_UniformLocation* location, float x){
+    cwgl_uniformcontent* u;
     uint32_t off;
     u = location->program->state.uniformcontents;
     off = location->offset;
@@ -839,8 +839,8 @@ cwgl_uniform1f(cwgl_ctx_t* ctx, cwgl_UniformLocation_t* location, float x){
 }
 
 CWGL_API void 
-cwgl_uniform1i(cwgl_ctx_t* ctx, cwgl_UniformLocation_t* location, int32_t x){
-    cwgl_uniformcontent_t* u;
+cwgl_uniform1i(cwgl_ctx* ctx, cwgl_UniformLocation* location, int32_t x){
+    cwgl_uniformcontent* u;
     uint32_t off;
     u = location->program->state.uniformcontents;
     off = location->offset;
@@ -852,9 +852,9 @@ cwgl_uniform1i(cwgl_ctx_t* ctx, cwgl_UniformLocation_t* location, int32_t x){
 }
 
 CWGL_API void 
-cwgl_uniform2f(cwgl_ctx_t* ctx, cwgl_UniformLocation_t* location, 
+cwgl_uniform2f(cwgl_ctx* ctx, cwgl_UniformLocation* location, 
                float x, float y){
-    cwgl_uniformcontent_t* u;
+    cwgl_uniformcontent* u;
     uint32_t off;
     u = location->program->state.uniformcontents;
     off = location->offset;
@@ -867,9 +867,9 @@ cwgl_uniform2f(cwgl_ctx_t* ctx, cwgl_UniformLocation_t* location,
 }
 
 CWGL_API void 
-cwgl_uniform2i(cwgl_ctx_t* ctx, cwgl_UniformLocation_t* location, 
+cwgl_uniform2i(cwgl_ctx* ctx, cwgl_UniformLocation* location, 
                int32_t x, int32_t y){
-    cwgl_uniformcontent_t* u;
+    cwgl_uniformcontent* u;
     uint32_t off;
     u = location->program->state.uniformcontents;
     off = location->offset;
@@ -882,9 +882,9 @@ cwgl_uniform2i(cwgl_ctx_t* ctx, cwgl_UniformLocation_t* location,
 }
 
 CWGL_API void 
-cwgl_uniform3f(cwgl_ctx_t* ctx, cwgl_UniformLocation_t* location, 
+cwgl_uniform3f(cwgl_ctx* ctx, cwgl_UniformLocation* location, 
                float x, float y, float z){
-    cwgl_uniformcontent_t* u;
+    cwgl_uniformcontent* u;
     uint32_t off;
     u = location->program->state.uniformcontents;
     off = location->offset;
@@ -898,9 +898,9 @@ cwgl_uniform3f(cwgl_ctx_t* ctx, cwgl_UniformLocation_t* location,
 }
 
 CWGL_API void 
-cwgl_uniform3i(cwgl_ctx_t* ctx, cwgl_UniformLocation_t* location, 
+cwgl_uniform3i(cwgl_ctx* ctx, cwgl_UniformLocation* location, 
                int32_t x, int32_t y, int32_t z){
-    cwgl_uniformcontent_t* u;
+    cwgl_uniformcontent* u;
     uint32_t off;
     u = location->program->state.uniformcontents;
     off = location->offset;
@@ -914,9 +914,9 @@ cwgl_uniform3i(cwgl_ctx_t* ctx, cwgl_UniformLocation_t* location,
 }
 
 CWGL_API void 
-cwgl_uniform4f(cwgl_ctx_t* ctx, cwgl_UniformLocation_t* location, 
+cwgl_uniform4f(cwgl_ctx* ctx, cwgl_UniformLocation* location, 
                float x, float y, float z, float w){
-    cwgl_uniformcontent_t* u;
+    cwgl_uniformcontent* u;
     uint32_t off;
     u = location->program->state.uniformcontents;
     off = location->offset;
@@ -931,9 +931,9 @@ cwgl_uniform4f(cwgl_ctx_t* ctx, cwgl_UniformLocation_t* location,
 }
 
 CWGL_API void 
-cwgl_uniform4i(cwgl_ctx_t* ctx, cwgl_UniformLocation_t* location, 
+cwgl_uniform4i(cwgl_ctx* ctx, cwgl_UniformLocation* location, 
                int32_t x, int32_t y, int32_t z, int32_t w){
-    cwgl_uniformcontent_t* u;
+    cwgl_uniformcontent* u;
     uint32_t off;
     u = location->program->state.uniformcontents;
     off = location->offset;
@@ -948,11 +948,11 @@ cwgl_uniform4i(cwgl_ctx_t* ctx, cwgl_UniformLocation_t* location,
 }
 
 static void
-fill_uniform_int(cwgl_UniformLocation_t* loc, int32_t* values,
+fill_uniform_int(cwgl_UniformLocation* loc, int32_t* values,
                  size_t count){
     uint32_t i;
     uint32_t off;
-    cwgl_uniformcontent_t* u;
+    cwgl_uniformcontent* u;
     u = loc->program->state.uniformcontents;
     off = loc->offset;
 
@@ -962,11 +962,11 @@ fill_uniform_int(cwgl_UniformLocation_t* loc, int32_t* values,
 }
 
 static void
-fill_uniform_float(cwgl_UniformLocation_t* loc, float* values,
+fill_uniform_float(cwgl_UniformLocation* loc, float* values,
                    size_t count){
     uint32_t i;
     uint32_t off;
-    cwgl_uniformcontent_t* u;
+    cwgl_uniformcontent* u;
     u = loc->program->state.uniformcontents;
     off = loc->offset;
 
@@ -976,9 +976,9 @@ fill_uniform_float(cwgl_UniformLocation_t* loc, float* values,
 }
 
 CWGL_API void 
-cwgl_uniform1fv(cwgl_ctx_t* ctx, cwgl_UniformLocation_t* location, 
+cwgl_uniform1fv(cwgl_ctx* ctx, cwgl_UniformLocation* location, 
                 float* values, size_t count){
-    cwgl_uniformcontent_t* u;
+    cwgl_uniformcontent* u;
     uint32_t off;
     u = location->program->state.uniformcontents;
     off = location->offset;
@@ -990,9 +990,9 @@ cwgl_uniform1fv(cwgl_ctx_t* ctx, cwgl_UniformLocation_t* location,
 }
 
 CWGL_API void 
-cwgl_uniform1iv(cwgl_ctx_t* ctx, cwgl_UniformLocation_t* location, 
+cwgl_uniform1iv(cwgl_ctx* ctx, cwgl_UniformLocation* location, 
                 int32_t* values, size_t count){
-    cwgl_uniformcontent_t* u;
+    cwgl_uniformcontent* u;
     uint32_t off;
     u = location->program->state.uniformcontents;
     off = location->offset;
@@ -1004,9 +1004,9 @@ cwgl_uniform1iv(cwgl_ctx_t* ctx, cwgl_UniformLocation_t* location,
 }
 
 CWGL_API void 
-cwgl_uniform2fv(cwgl_ctx_t* ctx, cwgl_UniformLocation_t* location, 
+cwgl_uniform2fv(cwgl_ctx* ctx, cwgl_UniformLocation* location, 
                 float* values, size_t count){
-    cwgl_uniformcontent_t* u;
+    cwgl_uniformcontent* u;
     uint32_t off;
     u = location->program->state.uniformcontents;
     off = location->offset;
@@ -1018,9 +1018,9 @@ cwgl_uniform2fv(cwgl_ctx_t* ctx, cwgl_UniformLocation_t* location,
 }
 
 CWGL_API void 
-cwgl_uniform2iv(cwgl_ctx_t* ctx, cwgl_UniformLocation_t* location, 
+cwgl_uniform2iv(cwgl_ctx* ctx, cwgl_UniformLocation* location, 
                 int32_t* values, size_t count){
-    cwgl_uniformcontent_t* u;
+    cwgl_uniformcontent* u;
     uint32_t off;
     u = location->program->state.uniformcontents;
     off = location->offset;
@@ -1032,9 +1032,9 @@ cwgl_uniform2iv(cwgl_ctx_t* ctx, cwgl_UniformLocation_t* location,
 }
 
 CWGL_API void 
-cwgl_uniform3fv(cwgl_ctx_t* ctx, cwgl_UniformLocation_t* location, 
+cwgl_uniform3fv(cwgl_ctx* ctx, cwgl_UniformLocation* location, 
                 float* values, size_t count){
-    cwgl_uniformcontent_t* u;
+    cwgl_uniformcontent* u;
     uint32_t off;
     u = location->program->state.uniformcontents;
     off = location->offset;
@@ -1046,9 +1046,9 @@ cwgl_uniform3fv(cwgl_ctx_t* ctx, cwgl_UniformLocation_t* location,
 }
 
 CWGL_API void 
-cwgl_uniform3iv(cwgl_ctx_t* ctx, cwgl_UniformLocation_t* location, 
+cwgl_uniform3iv(cwgl_ctx* ctx, cwgl_UniformLocation* location, 
                 int32_t* values, size_t count){
-    cwgl_uniformcontent_t* u;
+    cwgl_uniformcontent* u;
     uint32_t off;
     u = location->program->state.uniformcontents;
     off = location->offset;
@@ -1060,9 +1060,9 @@ cwgl_uniform3iv(cwgl_ctx_t* ctx, cwgl_UniformLocation_t* location,
 }
 
 CWGL_API void 
-cwgl_uniform4fv(cwgl_ctx_t* ctx, cwgl_UniformLocation_t* location, 
+cwgl_uniform4fv(cwgl_ctx* ctx, cwgl_UniformLocation* location, 
                 float* values, size_t count){
-    cwgl_uniformcontent_t* u;
+    cwgl_uniformcontent* u;
     uint32_t off;
     u = location->program->state.uniformcontents;
     off = location->offset;
@@ -1074,9 +1074,9 @@ cwgl_uniform4fv(cwgl_ctx_t* ctx, cwgl_UniformLocation_t* location,
 }
 
 CWGL_API void 
-cwgl_uniform4iv(cwgl_ctx_t* ctx, cwgl_UniformLocation_t* location, 
+cwgl_uniform4iv(cwgl_ctx* ctx, cwgl_UniformLocation* location, 
                 int32_t* values, size_t count){
-    cwgl_uniformcontent_t* u;
+    cwgl_uniformcontent* u;
     uint32_t off;
     u = location->program->state.uniformcontents;
     off = location->offset;
@@ -1088,12 +1088,12 @@ cwgl_uniform4iv(cwgl_ctx_t* ctx, cwgl_UniformLocation_t* location,
 }
 
 static void
-fill_uniform_float_xpose(cwgl_UniformLocation_t* loc, float* values,
+fill_uniform_float_xpose(cwgl_UniformLocation* loc, float* values,
                          int matsize, int count){
     uint32_t i,j,c;
     uint32_t off,b;
 
-    cwgl_uniformcontent_t* u;
+    cwgl_uniformcontent* u;
     u = loc->program->state.uniformcontents;
     off = loc->offset;
 
@@ -1108,9 +1108,9 @@ fill_uniform_float_xpose(cwgl_UniformLocation_t* loc, float* values,
 }
 
 CWGL_API void 
-cwgl_uniformMatrix2fv(cwgl_ctx_t* ctx, cwgl_UniformLocation_t* location, 
+cwgl_uniformMatrix2fv(cwgl_ctx* ctx, cwgl_UniformLocation* location, 
                       int transpose, float* value, size_t count){
-    cwgl_uniformcontent_t* u;
+    cwgl_uniformcontent* u;
     uint32_t off;
     u = location->program->state.uniformcontents;
     off = location->offset;
@@ -1128,9 +1128,9 @@ cwgl_uniformMatrix2fv(cwgl_ctx_t* ctx, cwgl_UniformLocation_t* location,
 }
 
 CWGL_API void 
-cwgl_uniformMatrix3fv(cwgl_ctx_t* ctx, cwgl_UniformLocation_t* location, 
+cwgl_uniformMatrix3fv(cwgl_ctx* ctx, cwgl_UniformLocation* location, 
                       int transpose, float* value, size_t count){
-    cwgl_uniformcontent_t* u;
+    cwgl_uniformcontent* u;
     uint32_t off;
     u = location->program->state.uniformcontents;
     off = location->offset;
@@ -1148,9 +1148,9 @@ cwgl_uniformMatrix3fv(cwgl_ctx_t* ctx, cwgl_UniformLocation_t* location,
 }
 
 CWGL_API void 
-cwgl_uniformMatrix4fv(cwgl_ctx_t* ctx, cwgl_UniformLocation_t* location, 
+cwgl_uniformMatrix4fv(cwgl_ctx* ctx, cwgl_UniformLocation* location, 
                       int transpose, float* value, size_t count){
-    cwgl_uniformcontent_t* u;
+    cwgl_uniformcontent* u;
     uint32_t off;
     u = location->program->state.uniformcontents;
     off = location->offset;
@@ -1170,13 +1170,13 @@ cwgl_uniformMatrix4fv(cwgl_ctx_t* ctx, cwgl_UniformLocation_t* location,
 
 // 2.10.5 Shader Execution
 CWGL_API void 
-cwgl_validateProgram(cwgl_ctx_t* ctx, cwgl_Program_t* program){
+cwgl_validateProgram(cwgl_ctx* ctx, cwgl_Program* program){
     cwgl_backend_validateProgram(ctx, program);
 }
 
 // 2.12.1 Controlling the Viewport
 CWGL_API void 
-cwgl_depthRange(cwgl_ctx_t* ctx, float zNear, float zFar){
+cwgl_depthRange(cwgl_ctx* ctx, float zNear, float zFar){
     float cnear;
     float cfar;
     cnear = zNear;
@@ -1204,7 +1204,7 @@ cwgl_depthRange(cwgl_ctx_t* ctx, float zNear, float zFar){
 
 
 CWGL_API void 
-cwgl_viewport(cwgl_ctx_t* ctx, 
+cwgl_viewport(cwgl_ctx* ctx, 
               int32_t x, int32_t y, int32_t width, int32_t height){
     // FIXME: width/height Signedness do not match with scissor
     int32_t cwidth;

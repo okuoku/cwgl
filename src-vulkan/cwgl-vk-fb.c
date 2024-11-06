@@ -2,7 +2,7 @@
 #include <stdio.h>
 
 static void
-destroy_rb(cwgl_ctx_t* ctx, cwgl_backend_Renderbuffer_t* rb){
+destroy_rb(cwgl_ctx* ctx, cwgl_backend_Renderbuffer* rb){
     vkDestroyImageView(ctx->backend->device, rb->image_view, NULL);
     vkDestroyImage(ctx->backend->device, rb->image, NULL);
     vkFreeMemory(ctx->backend->device, rb->device_memory, NULL);
@@ -10,7 +10,7 @@ destroy_rb(cwgl_ctx_t* ctx, cwgl_backend_Renderbuffer_t* rb){
 }
 
 static VkFormat
-to_vulkan_rb_format(cwgl_enum_t fmt){
+to_vulkan_rb_format(cwgl_enum fmt){
     switch(fmt){
         case RGBA4:
             return VK_FORMAT_R8G8B8A8_UNORM;
@@ -34,9 +34,9 @@ to_vulkan_rb_format(cwgl_enum_t fmt){
 }
 
 static void
-prepare_rb(cwgl_ctx_t* ctx, cwgl_backend_Renderbuffer_t* rb, cwgl_enum_t fmt,
+prepare_rb(cwgl_ctx* ctx, cwgl_backend_Renderbuffer* rb, cwgl_enum fmt,
            uint32_t width, uint32_t height){
-    cwgl_backend_ctx_t* backend;
+    cwgl_backend_ctx* backend;
     VkResult r;
     VkImageCreateInfo ii;
     VkImageViewCreateInfo vi;
@@ -144,11 +144,11 @@ prepare_rb(cwgl_ctx_t* ctx, cwgl_backend_Renderbuffer_t* rb, cwgl_enum_t fmt,
 }
 
 void
-cwgl_vkpriv_prepare_fb(cwgl_ctx_t* ctx){
+cwgl_vkpriv_prepare_fb(cwgl_ctx* ctx){
     VkResult r;
     int i;
     uint32_t imagecount;
-    cwgl_backend_ctx_t* backend;
+    cwgl_backend_ctx* backend;
     backend = ctx->backend;
     // FIXME: Consider stencil flag
     if(backend->framebuffer_allocated){
@@ -208,20 +208,20 @@ cwgl_vkpriv_prepare_fb(cwgl_ctx_t* ctx){
 }
 
 int
-cwgl_backend_readPixels(cwgl_ctx_t* ctx,
+cwgl_backend_readPixels(cwgl_ctx* ctx,
                         int32_t x, int32_t y, uint32_t width, uint32_t height,
-                        cwgl_enum_t format, cwgl_enum_t type,
+                        cwgl_enum format, cwgl_enum type,
                         void* buf, size_t buflen){
     // FIXME: Implement this
     return 0;
 }
 
 int
-cwgl_backend_renderbufferStorage(cwgl_ctx_t* ctx, cwgl_enum_t target,
-                                 cwgl_enum_t internalformat,
+cwgl_backend_renderbufferStorage(cwgl_ctx* ctx, cwgl_enum target,
+                                 cwgl_enum internalformat,
                                  uint32_t width, uint32_t height){
-    cwgl_Renderbuffer_t* rb;
-    cwgl_backend_Renderbuffer_t* rb_backend;
+    cwgl_Renderbuffer* rb;
+    cwgl_backend_Renderbuffer* rb_backend;
     uint32_t red_size = 0;
     uint32_t green_size = 0;
     uint32_t blue_size = 0;
@@ -272,14 +272,14 @@ cwgl_backend_renderbufferStorage(cwgl_ctx_t* ctx, cwgl_enum_t target,
 }
 
 int
-cwgl_backend_configure_framebuffer(cwgl_ctx_t* ctx, cwgl_enum_t* out_state){
-    cwgl_enum_t state;
-    cwgl_Framebuffer_t* fb;
-    cwgl_backend_ctx_t* backend;
-    cwgl_backend_Framebuffer_t* fb_backend;
-    cwgl_framebuffer_attachment_state_t* color0;
-    cwgl_framebuffer_attachment_state_t* depth;
-    cwgl_framebuffer_attachment_state_t* stencil;
+cwgl_backend_configure_framebuffer(cwgl_ctx* ctx, cwgl_enum* out_state){
+    cwgl_enum state;
+    cwgl_Framebuffer* fb;
+    cwgl_backend_ctx* backend;
+    cwgl_backend_Framebuffer* fb_backend;
+    cwgl_framebuffer_attachment_state* color0;
+    cwgl_framebuffer_attachment_state* depth;
+    cwgl_framebuffer_attachment_state* stencil;
     int has_depth = 0;
     int has_stencil = 0;
     backend = ctx->backend;

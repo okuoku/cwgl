@@ -2,10 +2,10 @@
 #include "cwgl-gles2-priv.h"
 
 // 6.1.1 Simple Queries
-CWGL_API cwgl_query_result_t 
-cwgl_getParameter_b1(cwgl_ctx_t* ctx, cwgl_enum_t pname, int32_t* x){
+CWGL_API cwgl_query_result
+cwgl_getParameter_b1(cwgl_ctx* ctx, cwgl_enum pname, int32_t* x){
     GLboolean b4[4] = { 0 };
-    cwgl_query_result_t r;
+    cwgl_query_result r;
     CTX_ENTER(ctx);
     glGetBooleanv(pname, b4);
     *x = b4[0];
@@ -14,11 +14,11 @@ cwgl_getParameter_b1(cwgl_ctx_t* ctx, cwgl_enum_t pname, int32_t* x){
     return r;
 }
 
-CWGL_API cwgl_query_result_t 
-cwgl_getParameter_b4(cwgl_ctx_t* ctx, cwgl_enum_t pname, 
+CWGL_API cwgl_query_result 
+cwgl_getParameter_b4(cwgl_ctx* ctx, cwgl_enum pname, 
                      int32_t* x, int32_t* y, int32_t* z, int32_t* w){
     GLboolean b4[4] = { 0 };
-    cwgl_query_result_t r;
+    cwgl_query_result r;
     CTX_ENTER(ctx);
     glGetBooleanv(pname, b4);
     *x = b4[0];
@@ -30,10 +30,10 @@ cwgl_getParameter_b4(cwgl_ctx_t* ctx, cwgl_enum_t pname,
     return r;
 }
 
-CWGL_API cwgl_query_result_t 
-cwgl_getParameter_i1(cwgl_ctx_t* ctx, cwgl_enum_t pname, int32_t* x){
+CWGL_API cwgl_query_result
+cwgl_getParameter_i1(cwgl_ctx* ctx, cwgl_enum pname, int32_t* x){
     GLint i4[4] = { 0 };
-    cwgl_query_result_t r;
+    cwgl_query_result r;
     CTX_ENTER(ctx);
     glGetIntegerv(pname, i4);
     *x = i4[0];
@@ -42,11 +42,11 @@ cwgl_getParameter_i1(cwgl_ctx_t* ctx, cwgl_enum_t pname, int32_t* x){
     return r;
 }
 
-CWGL_API cwgl_query_result_t 
-cwgl_getParameter_i2(cwgl_ctx_t* ctx, cwgl_enum_t pname, 
+CWGL_API cwgl_query_result 
+cwgl_getParameter_i2(cwgl_ctx* ctx, cwgl_enum pname, 
                      int32_t* x, int32_t* y){
     GLint i4[4] = { 0 };
-    cwgl_query_result_t r;
+    cwgl_query_result r;
     CTX_ENTER(ctx);
     glGetIntegerv(pname, i4);
     *x = i4[0];
@@ -56,11 +56,11 @@ cwgl_getParameter_i2(cwgl_ctx_t* ctx, cwgl_enum_t pname,
     return r;
 }
 
-CWGL_API cwgl_query_result_t 
-cwgl_getParameter_i4(cwgl_ctx_t* ctx, cwgl_enum_t pname, 
+CWGL_API cwgl_query_result 
+cwgl_getParameter_i4(cwgl_ctx* ctx, cwgl_enum pname, 
                      int32_t* x, int32_t* y, int32_t* z, int32_t* w){
     GLint i4[4] = { 0 };
-    cwgl_query_result_t r;
+    cwgl_query_result r;
     CTX_ENTER(ctx);
     glGetIntegerv(pname, i4);
     *x = i4[0];
@@ -72,9 +72,9 @@ cwgl_getParameter_i4(cwgl_ctx_t* ctx, cwgl_enum_t pname,
     return r;
 }
 
-CWGL_API cwgl_query_result_t 
-cwgl_getParameter_f1(cwgl_ctx_t* ctx, cwgl_enum_t pname, float* x){
-    cwgl_query_result_t r;
+CWGL_API cwgl_query_result 
+cwgl_getParameter_f1(cwgl_ctx* ctx, cwgl_enum pname, float* x){
+    cwgl_query_result r;
     float f4[4] = {0.0,0.0,0.0,0.0};
     CTX_ENTER(ctx);
     glGetFloatv(pname, f4);
@@ -84,9 +84,9 @@ cwgl_getParameter_f1(cwgl_ctx_t* ctx, cwgl_enum_t pname, float* x){
     return r;
 }
 
-CWGL_API cwgl_query_result_t 
-cwgl_getParameter_f2(cwgl_ctx_t* ctx, cwgl_enum_t pname, float* x, float* y){
-    cwgl_query_result_t r;
+CWGL_API cwgl_query_result
+cwgl_getParameter_f2(cwgl_ctx* ctx, cwgl_enum pname, float* x, float* y){
+    cwgl_query_result r;
     float f4[4] = {0.0,0.0,0.0,0.0};
     CTX_ENTER(ctx);
     glGetFloatv(pname, f4);
@@ -97,10 +97,10 @@ cwgl_getParameter_f2(cwgl_ctx_t* ctx, cwgl_enum_t pname, float* x, float* y){
     return r;
 }
 
-CWGL_API cwgl_query_result_t 
-cwgl_getParameter_f4(cwgl_ctx_t* ctx, cwgl_enum_t pname, 
+CWGL_API cwgl_query_result 
+cwgl_getParameter_f4(cwgl_ctx* ctx, cwgl_enum pname, 
                      float* x, float* y, float* z, float* w){
-    cwgl_query_result_t r;
+    cwgl_query_result r;
     float f4[4] = {0.0,0.0,0.0,0.0};
     CTX_ENTER(ctx);
     glGetFloatv(pname, f4);
@@ -113,12 +113,12 @@ cwgl_getParameter_f4(cwgl_ctx_t* ctx, cwgl_enum_t pname,
     return r;
 }
 
-CWGL_API cwgl_query_result_t 
-cwgl_getParameter_str(cwgl_ctx_t* ctx, cwgl_enum_t pname, cwgl_string_t** str){
+CWGL_API cwgl_query_result 
+cwgl_getParameter_str(cwgl_ctx* ctx, cwgl_enum pname, cwgl_string** str){
     const char* res;
     size_t xlen;
-    cwgl_string_t* out;
-    cwgl_query_result_t r;
+    cwgl_string* out;
+    cwgl_query_result r;
     CTX_ENTER(ctx);
     res = glGetString(pname);
     if(!res){
@@ -133,50 +133,50 @@ cwgl_getParameter_str(cwgl_ctx_t* ctx, cwgl_enum_t pname, cwgl_string_t** str){
     return r;
 }
 
-CWGL_API cwgl_query_result_t 
-cwgl_getParameter_Buffer(cwgl_ctx_t* ctx, cwgl_enum_t pname, 
-                         cwgl_Buffer_t** buffer){
-    cwgl_query_result_t r;
+CWGL_API cwgl_query_result 
+cwgl_getParameter_Buffer(cwgl_ctx* ctx, cwgl_enum pname, 
+                         cwgl_Buffer** buffer){
+    cwgl_query_result r;
     CTX_ENTER(ctx);
     r = CWGL_QR_UNIMPLEMENTED;
     CTX_LEAVE(ctx);
     return r;
 }
 
-CWGL_API cwgl_query_result_t 
-cwgl_getParameter_Program(cwgl_ctx_t* ctx, cwgl_enum_t pname, 
-                          cwgl_Program_t** program){
-    cwgl_query_result_t r;
+CWGL_API cwgl_query_result 
+cwgl_getParameter_Program(cwgl_ctx* ctx, cwgl_enum pname, 
+                          cwgl_Program** program){
+    cwgl_query_result r;
     CTX_ENTER(ctx);
     r = CWGL_QR_UNIMPLEMENTED;
     CTX_LEAVE(ctx);
     return r;
 }
 
-CWGL_API cwgl_query_result_t 
-cwgl_getParameter_Framebuffer(cwgl_ctx_t* ctx, cwgl_enum_t pname, 
-                              cwgl_Framebuffer_t** framebuffer){
-    cwgl_query_result_t r;
+CWGL_API cwgl_query_result 
+cwgl_getParameter_Framebuffer(cwgl_ctx* ctx, cwgl_enum pname, 
+                              cwgl_Framebuffer** framebuffer){
+    cwgl_query_result r;
     CTX_ENTER(ctx);
     r = CWGL_QR_UNIMPLEMENTED;
     CTX_LEAVE(ctx);
     return r;
 }
 
-CWGL_API cwgl_query_result_t 
-cwgl_getParameter_Renderbuffer(cwgl_ctx_t* ctx, cwgl_enum_t pname, 
-                               cwgl_Renderbuffer_t** renderbuffer){
-    cwgl_query_result_t r;
+CWGL_API cwgl_query_result 
+cwgl_getParameter_Renderbuffer(cwgl_ctx* ctx, cwgl_enum pname, 
+                               cwgl_Renderbuffer** renderbuffer){
+    cwgl_query_result r;
     CTX_ENTER(ctx);
     r = CWGL_QR_UNIMPLEMENTED;
     CTX_LEAVE(ctx);
     return r;
 }
 
-CWGL_API cwgl_query_result_t 
-cwgl_getParameter_Texture(cwgl_ctx_t* ctx, cwgl_enum_t pname, 
-                          cwgl_Texture_t** texture){
-    cwgl_query_result_t r;
+CWGL_API cwgl_query_result 
+cwgl_getParameter_Texture(cwgl_ctx* ctx, cwgl_enum pname, 
+                          cwgl_Texture** texture){
+    cwgl_query_result r;
     CTX_ENTER(ctx);
     r = CWGL_QR_UNIMPLEMENTED;
     CTX_LEAVE(ctx);
@@ -184,7 +184,7 @@ cwgl_getParameter_Texture(cwgl_ctx_t* ctx, cwgl_enum_t pname,
 }
 
 CWGL_API int 
-cwgl_isEnabled(cwgl_ctx_t* ctx, cwgl_enum_t cap){
+cwgl_isEnabled(cwgl_ctx* ctx, cwgl_enum cap){
     int r;
     CTX_ENTER(ctx);
     r = glIsEnabled(cap);
@@ -193,11 +193,11 @@ cwgl_isEnabled(cwgl_ctx_t* ctx, cwgl_enum_t cap){
 }
 
 // 6.1.3 Enumerated Queries
-CWGL_API cwgl_query_result_t 
-cwgl_getTexParameter_i1(cwgl_ctx_t* ctx, cwgl_enum_t target, cwgl_enum_t pname,
+CWGL_API cwgl_query_result 
+cwgl_getTexParameter_i1(cwgl_ctx* ctx, cwgl_enum target, cwgl_enum pname,
                         int32_t* x){
     GLint i4[4] = { 0 };
-    cwgl_query_result_t r;
+    cwgl_query_result r;
     CTX_ENTER(ctx);
     glGetTexParameteriv(target, pname, i4);
     *x = i4[0];
@@ -206,11 +206,11 @@ cwgl_getTexParameter_i1(cwgl_ctx_t* ctx, cwgl_enum_t target, cwgl_enum_t pname,
     return r;
 }
 
-CWGL_API cwgl_query_result_t 
-cwgl_getBufferParameter_i1(cwgl_ctx_t* ctx, cwgl_enum_t target, 
-                           cwgl_enum_t pname, int32_t* x){
+CWGL_API cwgl_query_result 
+cwgl_getBufferParameter_i1(cwgl_ctx* ctx, cwgl_enum target, 
+                           cwgl_enum pname, int32_t* x){
     GLint i4[4] = { 0 };
-    cwgl_query_result_t r;
+    cwgl_query_result r;
     CTX_ENTER(ctx);
     glGetBufferParameteriv(target, pname, i4);
     *x = i4[0];
@@ -219,12 +219,12 @@ cwgl_getBufferParameter_i1(cwgl_ctx_t* ctx, cwgl_enum_t target,
     return r;
 }
 
-CWGL_API cwgl_query_result_t 
-cwgl_getFramebufferAttachmentParameter_i1(cwgl_ctx_t* ctx, cwgl_enum_t target,
-                                          cwgl_enum_t attachment, 
-                                          cwgl_enum_t pname, int32_t* x){
+CWGL_API cwgl_query_result 
+cwgl_getFramebufferAttachmentParameter_i1(cwgl_ctx* ctx, cwgl_enum target,
+                                          cwgl_enum attachment, 
+                                          cwgl_enum pname, int32_t* x){
     GLint i4[4] = { 0 };
-    cwgl_query_result_t r;
+    cwgl_query_result r;
     CTX_ENTER(ctx);
     glGetFramebufferAttachmentParameteriv(target, attachment, pname, i4);
     *x = i4[0];
@@ -233,38 +233,38 @@ cwgl_getFramebufferAttachmentParameter_i1(cwgl_ctx_t* ctx, cwgl_enum_t target,
     return r;
 }
 
-CWGL_API cwgl_query_result_t 
-cwgl_getFramebufferAttachmentParameter_Renderbuffer(cwgl_ctx_t* ctx, 
-                                                    cwgl_enum_t target, 
-                                                    cwgl_enum_t attachment, 
-                                                    cwgl_enum_t pname, 
-                                                    cwgl_Renderbuffer_t** renderbuffer){
+CWGL_API cwgl_query_result 
+cwgl_getFramebufferAttachmentParameter_Renderbuffer(cwgl_ctx* ctx, 
+                                                    cwgl_enum target, 
+                                                    cwgl_enum attachment, 
+                                                    cwgl_enum pname, 
+                                                    cwgl_Renderbuffer** renderbuffer){
 
-    cwgl_query_result_t r;
+    cwgl_query_result r;
     CTX_ENTER(ctx);
     r = CWGL_QR_UNIMPLEMENTED;
     CTX_LEAVE(ctx);
     return r;
 }
 
-CWGL_API cwgl_query_result_t 
-cwgl_getFramebufferAttachmentParameter_Texture(cwgl_ctx_t* ctx, 
-                                               cwgl_enum_t target, 
-                                               cwgl_enum_t attachment, 
-                                               cwgl_enum_t pname, 
-                                               cwgl_Texture_t** texture){
-    cwgl_query_result_t r;
+CWGL_API cwgl_query_result 
+cwgl_getFramebufferAttachmentParameter_Texture(cwgl_ctx* ctx, 
+                                               cwgl_enum target, 
+                                               cwgl_enum attachment, 
+                                               cwgl_enum pname, 
+                                               cwgl_Texture** texture){
+    cwgl_query_result r;
     CTX_ENTER(ctx);
     r = CWGL_QR_UNIMPLEMENTED;
     CTX_LEAVE(ctx);
     return r;
 }
 
-CWGL_API cwgl_query_result_t 
-cwgl_getRenderbufferParameter_i1(cwgl_ctx_t* ctx, cwgl_enum_t target, 
-                                 cwgl_enum_t pname, int32_t* x){
+CWGL_API cwgl_query_result 
+cwgl_getRenderbufferParameter_i1(cwgl_ctx* ctx, cwgl_enum target, 
+                                 cwgl_enum pname, int32_t* x){
     GLint i4[4] = { 0 };
-    cwgl_query_result_t r;
+    cwgl_query_result r;
     CTX_ENTER(ctx);
     glGetRenderbufferParameteriv(target, pname, i4);
     *x = i4[0];
@@ -275,7 +275,7 @@ cwgl_getRenderbufferParameter_i1(cwgl_ctx_t* ctx, cwgl_enum_t target,
 
 // 6.1.4 Texture Queries
 CWGL_API int 
-cwgl_isTexture(cwgl_ctx_t* ctx, cwgl_Texture_t* texture){
+cwgl_isTexture(cwgl_ctx* ctx, cwgl_Texture* texture){
     int r;
     GLuint name;
     CTX_ENTER(ctx);
@@ -287,7 +287,7 @@ cwgl_isTexture(cwgl_ctx_t* ctx, cwgl_Texture_t* texture){
 
 // 6.1.6 Buffer Object Queries
 CWGL_API int 
-cwgl_isBuffer(cwgl_ctx_t* ctx, cwgl_Buffer_t* buffer){
+cwgl_isBuffer(cwgl_ctx* ctx, cwgl_Buffer* buffer){
     int r;
     GLuint name;
     CTX_ENTER(ctx);
@@ -299,7 +299,7 @@ cwgl_isBuffer(cwgl_ctx_t* ctx, cwgl_Buffer_t* buffer){
 
 // 6.1.7 Framebuffer Object and Renderbuffer Queries
 CWGL_API int 
-cwgl_isFramebuffer(cwgl_ctx_t* ctx, cwgl_Framebuffer_t* framebuffer){
+cwgl_isFramebuffer(cwgl_ctx* ctx, cwgl_Framebuffer* framebuffer){
     int r;
     GLuint name;
     CTX_ENTER(ctx);
@@ -310,7 +310,7 @@ cwgl_isFramebuffer(cwgl_ctx_t* ctx, cwgl_Framebuffer_t* framebuffer){
 }
 
 CWGL_API int 
-cwgl_isRenderbuffer(cwgl_ctx_t* ctx, cwgl_Renderbuffer_t* renderbuffer){
+cwgl_isRenderbuffer(cwgl_ctx* ctx, cwgl_Renderbuffer* renderbuffer){
     int r;
     GLuint name;
     CTX_ENTER(ctx);

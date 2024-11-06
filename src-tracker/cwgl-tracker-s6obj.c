@@ -16,8 +16,8 @@
                                            return CWGL_QR_SUCCESS
 
 // 6.1.1 Simple Queries
-CWGL_API cwgl_query_result_t 
-cwgl_getParameter_b1(cwgl_ctx_t* ctx, cwgl_enum_t pname, int32_t* x){
+CWGL_API cwgl_query_result 
+cwgl_getParameter_b1(cwgl_ctx* ctx, cwgl_enum pname, int32_t* x){
 #define GLO(x) _CASE1(glo, x)
     switch(pname){
         /* GLES2 Table 6.5 */
@@ -46,8 +46,8 @@ cwgl_getParameter_b1(cwgl_ctx_t* ctx, cwgl_enum_t pname, int32_t* x){
 #undef GLO
 }
 
-CWGL_API cwgl_query_result_t 
-cwgl_getParameter_b4(cwgl_ctx_t* ctx, cwgl_enum_t pname, 
+CWGL_API cwgl_query_result 
+cwgl_getParameter_b4(cwgl_ctx* ctx, cwgl_enum pname, 
                      int32_t* x, int32_t* y, int32_t* z, int32_t* w){
 #define GLO(x) _CASE4(glo, x)
     switch(pname){
@@ -59,8 +59,8 @@ cwgl_getParameter_b4(cwgl_ctx_t* ctx, cwgl_enum_t pname,
 #undef GLO
 }
 
-CWGL_API cwgl_query_result_t 
-cwgl_getParameter_i1(cwgl_ctx_t* ctx, cwgl_enum_t pname, int32_t* x){
+CWGL_API cwgl_query_result 
+cwgl_getParameter_i1(cwgl_ctx* ctx, cwgl_enum pname, int32_t* x){
 #define FB(n) case n: \
     if(ctx->state.bin.FRAMEBUFFER_BINDING){\
         /* FIXME: Check framebuffer completion status */ \
@@ -149,8 +149,8 @@ cwgl_getParameter_i1(cwgl_ctx_t* ctx, cwgl_enum_t pname, int32_t* x){
 #undef GLO
 }
 
-CWGL_API cwgl_query_result_t 
-cwgl_getParameter_i2(cwgl_ctx_t* ctx, cwgl_enum_t pname, 
+CWGL_API cwgl_query_result 
+cwgl_getParameter_i2(cwgl_ctx* ctx, cwgl_enum pname, 
                      int32_t* x, int32_t* y){
 #define CASE(x) _CASE2(cfg, x)
     switch(pname){
@@ -162,8 +162,8 @@ cwgl_getParameter_i2(cwgl_ctx_t* ctx, cwgl_enum_t pname,
 #undef CASE
 }
 
-CWGL_API cwgl_query_result_t 
-cwgl_getParameter_i4(cwgl_ctx_t* ctx, cwgl_enum_t pname, 
+CWGL_API cwgl_query_result 
+cwgl_getParameter_i4(cwgl_ctx* ctx, cwgl_enum pname, 
                      int32_t* x, int32_t* y, int32_t* z, int32_t* w){
 #define GLO(x) _CASE2(glo, x)
     switch(pname){
@@ -176,8 +176,8 @@ cwgl_getParameter_i4(cwgl_ctx_t* ctx, cwgl_enum_t pname,
 #undef GLO
 }
 
-CWGL_API cwgl_query_result_t 
-cwgl_getParameter_f1(cwgl_ctx_t* ctx, cwgl_enum_t pname, float* x){
+CWGL_API cwgl_query_result 
+cwgl_getParameter_f1(cwgl_ctx* ctx, cwgl_enum pname, float* x){
 #define GLO(x) _CASE1(glo, x)
     switch(pname){
         GLO(LINE_WIDTH);
@@ -192,8 +192,8 @@ cwgl_getParameter_f1(cwgl_ctx_t* ctx, cwgl_enum_t pname, float* x){
 #undef GLO
 }
 
-CWGL_API cwgl_query_result_t 
-cwgl_getParameter_f2(cwgl_ctx_t* ctx, cwgl_enum_t pname, float* x, float* y){
+CWGL_API cwgl_query_result 
+cwgl_getParameter_f2(cwgl_ctx* ctx, cwgl_enum pname, float* x, float* y){
 #define CASE(x) _CASE2(cfg, x)
 #define GLO(x) _CASE2(glo, x)
     switch(pname){
@@ -208,8 +208,8 @@ cwgl_getParameter_f2(cwgl_ctx_t* ctx, cwgl_enum_t pname, float* x, float* y){
 #undef GLO
 }
 
-CWGL_API cwgl_query_result_t 
-cwgl_getParameter_f4(cwgl_ctx_t* ctx, cwgl_enum_t pname, 
+CWGL_API cwgl_query_result 
+cwgl_getParameter_f4(cwgl_ctx* ctx, cwgl_enum pname, 
                      float* x, float* y, float* z, float* w){
 #define GLO(x) _CASE4(glo, x)
     switch(pname){
@@ -222,11 +222,11 @@ cwgl_getParameter_f4(cwgl_ctx_t* ctx, cwgl_enum_t pname,
 #undef GLO
 }
 
-CWGL_API cwgl_query_result_t 
-cwgl_getParameter_str(cwgl_ctx_t* ctx, cwgl_enum_t pname, cwgl_string_t** str){
+CWGL_API cwgl_query_result 
+cwgl_getParameter_str(cwgl_ctx* ctx, cwgl_enum pname, cwgl_string** str){
 #define TMPBUFLEN 512
     int r;
-    cwgl_string_t* out;
+    cwgl_string* out;
     char buf[TMPBUFLEN];
     switch(pname){
         case RENDERER:
@@ -252,8 +252,8 @@ cwgl_getParameter_str(cwgl_ctx_t* ctx, cwgl_enum_t pname, cwgl_string_t** str){
     return CWGL_QR_SUCCESS;
 }
 
-static cwgl_VertexArrayObject_t*
-current_vao(cwgl_ctx_t* ctx){
+static cwgl_VertexArrayObject*
+current_vao(cwgl_ctx* ctx){
     if(ctx->state.bin.VERTEX_ARRAY_BINDING){
         return ctx->state.bin.VERTEX_ARRAY_BINDING;
     }else{
@@ -261,10 +261,10 @@ current_vao(cwgl_ctx_t* ctx){
     }
 }
 
-CWGL_API cwgl_query_result_t 
-cwgl_getParameter_Buffer(cwgl_ctx_t* ctx, cwgl_enum_t pname, 
-                         cwgl_Buffer_t** buffer){
-    cwgl_VertexArrayObject_t* vao;
+CWGL_API cwgl_query_result 
+cwgl_getParameter_Buffer(cwgl_ctx* ctx, cwgl_enum pname, 
+                         cwgl_Buffer** buffer){
+    cwgl_VertexArrayObject* vao;
     switch(pname){
         case ARRAY_BUFFER_BINDING:
             *buffer = ctx->state.bin.ARRAY_BUFFER_BINDING;
@@ -279,9 +279,9 @@ cwgl_getParameter_Buffer(cwgl_ctx_t* ctx, cwgl_enum_t pname,
     }
 }
 
-CWGL_API cwgl_query_result_t 
-cwgl_getParameter_Program(cwgl_ctx_t* ctx, cwgl_enum_t pname, 
-                          cwgl_Program_t** program){
+CWGL_API cwgl_query_result 
+cwgl_getParameter_Program(cwgl_ctx* ctx, cwgl_enum pname, 
+                          cwgl_Program** program){
     switch(pname){
         case CURRENT_PROGRAM:
             *program = ctx->state.bin.CURRENT_PROGRAM;
@@ -292,9 +292,9 @@ cwgl_getParameter_Program(cwgl_ctx_t* ctx, cwgl_enum_t pname,
     }
 }
 
-CWGL_API cwgl_query_result_t 
-cwgl_getParameter_Framebuffer(cwgl_ctx_t* ctx, cwgl_enum_t pname, 
-                              cwgl_Framebuffer_t** framebuffer){
+CWGL_API cwgl_query_result 
+cwgl_getParameter_Framebuffer(cwgl_ctx* ctx, cwgl_enum pname, 
+                              cwgl_Framebuffer** framebuffer){
     switch(pname){
         case FRAMEBUFFER_BINDING:
             *framebuffer = ctx->state.bin.FRAMEBUFFER_BINDING;
@@ -305,9 +305,9 @@ cwgl_getParameter_Framebuffer(cwgl_ctx_t* ctx, cwgl_enum_t pname,
     }
 }
 
-CWGL_API cwgl_query_result_t 
-cwgl_getParameter_Renderbuffer(cwgl_ctx_t* ctx, cwgl_enum_t pname, 
-                               cwgl_Renderbuffer_t** renderbuffer){
+CWGL_API cwgl_query_result 
+cwgl_getParameter_Renderbuffer(cwgl_ctx* ctx, cwgl_enum pname, 
+                               cwgl_Renderbuffer** renderbuffer){
     switch(pname){
         case RENDERBUFFER_BINDING:
             *renderbuffer = ctx->state.bin.RENDERBUFFER_BINDING;
@@ -318,9 +318,9 @@ cwgl_getParameter_Renderbuffer(cwgl_ctx_t* ctx, cwgl_enum_t pname,
     }
 }
 
-CWGL_API cwgl_query_result_t 
-cwgl_getParameter_Texture(cwgl_ctx_t* ctx, cwgl_enum_t pname, 
-                          cwgl_Texture_t** texture){
+CWGL_API cwgl_query_result 
+cwgl_getParameter_Texture(cwgl_ctx* ctx, cwgl_enum pname, 
+                          cwgl_Texture** texture){
     int id = (ctx->state.glo.ACTIVE_TEXTURE - TEXTURE0);
     if(id < 0){
         CTX_SET_ERROR(ctx, INVALID_OPERATION);
@@ -344,7 +344,7 @@ cwgl_getParameter_Texture(cwgl_ctx_t* ctx, cwgl_enum_t pname,
 }
 
 CWGL_API int 
-cwgl_isEnabled(cwgl_ctx_t* ctx, cwgl_enum_t cap){
+cwgl_isEnabled(cwgl_ctx* ctx, cwgl_enum cap){
     int r = 0;
     switch(cap){
         case BLEND:
@@ -383,8 +383,8 @@ cwgl_isEnabled(cwgl_ctx_t* ctx, cwgl_enum_t cap){
 
 // 6.1.3 Enumerated Queries
 // FIXME: Copied from s3
-static cwgl_texture_unit_state_t*
-current_texture_unit(cwgl_ctx_t* ctx){
+static cwgl_texture_unit_state*
+current_texture_unit(cwgl_ctx* ctx){
     int id = (ctx->state.glo.ACTIVE_TEXTURE - TEXTURE0);
     if(id < 0){
         CTX_SET_ERROR(ctx, INVALID_OPERATION);
@@ -397,11 +397,11 @@ current_texture_unit(cwgl_ctx_t* ctx){
     return &ctx->state.bin.texture_unit[id];
 }
 
-CWGL_API cwgl_query_result_t 
-cwgl_getTexParameter_i1(cwgl_ctx_t* ctx, cwgl_enum_t target, cwgl_enum_t pname,
+CWGL_API cwgl_query_result 
+cwgl_getTexParameter_i1(cwgl_ctx* ctx, cwgl_enum target, cwgl_enum pname,
                         int32_t* x){
-    cwgl_texture_unit_state_t* current;
-    cwgl_Texture_t* tex;
+    cwgl_texture_unit_state* current;
+    cwgl_Texture* tex;
 
     current = current_texture_unit(ctx);
     if(! current){
@@ -446,11 +446,11 @@ cwgl_getTexParameter_i1(cwgl_ctx_t* ctx, cwgl_enum_t target, cwgl_enum_t pname,
     return CWGL_QR_SUCCESS;
 }
 
-CWGL_API cwgl_query_result_t 
-cwgl_getBufferParameter_i1(cwgl_ctx_t* ctx, cwgl_enum_t target, 
-                           cwgl_enum_t pname, int32_t* x){
-    cwgl_Buffer_t* point;
-    cwgl_VertexArrayObject_t* vao;
+CWGL_API cwgl_query_result 
+cwgl_getBufferParameter_i1(cwgl_ctx* ctx, cwgl_enum target, 
+                           cwgl_enum pname, int32_t* x){
+    cwgl_Buffer* point;
+    cwgl_VertexArrayObject* vao;
     switch(target){
         case ARRAY_BUFFER:
             point = ctx->state.bin.ARRAY_BUFFER_BINDING;
@@ -482,12 +482,12 @@ cwgl_getBufferParameter_i1(cwgl_ctx_t* ctx, cwgl_enum_t target,
     return CWGL_QR_SUCCESS;
 }
 
-CWGL_API cwgl_query_result_t 
-cwgl_getFramebufferAttachmentParameter_i1(cwgl_ctx_t* ctx, cwgl_enum_t target,
-                                          cwgl_enum_t attachment, 
-                                          cwgl_enum_t pname, int32_t* x){
-    cwgl_Framebuffer_t* fb;
-    cwgl_framebuffer_attachment_state_t* point;
+CWGL_API cwgl_query_result 
+cwgl_getFramebufferAttachmentParameter_i1(cwgl_ctx* ctx, cwgl_enum target,
+                                          cwgl_enum attachment, 
+                                          cwgl_enum pname, int32_t* x){
+    cwgl_Framebuffer* fb;
+    cwgl_framebuffer_attachment_state* point;
 
     if(target != FRAMEBUFFER){
         CTX_SET_ERROR(ctx, INVALID_ENUM);
@@ -541,14 +541,14 @@ cwgl_getFramebufferAttachmentParameter_i1(cwgl_ctx_t* ctx, cwgl_enum_t target,
     return CWGL_QR_SUCCESS;
 }
 
-CWGL_API cwgl_query_result_t 
-cwgl_getFramebufferAttachmentParameter_Renderbuffer(cwgl_ctx_t* ctx, 
-                                                    cwgl_enum_t target, 
-                                                    cwgl_enum_t attachment, 
-                                                    cwgl_enum_t pname, 
-                                                    cwgl_Renderbuffer_t** renderbuffer){
-    cwgl_Framebuffer_t* fb;
-    cwgl_framebuffer_attachment_state_t* point;
+CWGL_API cwgl_query_result 
+cwgl_getFramebufferAttachmentParameter_Renderbuffer(cwgl_ctx* ctx, 
+                                                    cwgl_enum target, 
+                                                    cwgl_enum attachment, 
+                                                    cwgl_enum pname, 
+                                                    cwgl_Renderbuffer** renderbuffer){
+    cwgl_Framebuffer* fb;
+    cwgl_framebuffer_attachment_state* point;
 
     if(target != FRAMEBUFFER){
         CTX_SET_ERROR(ctx, INVALID_ENUM);
@@ -583,14 +583,14 @@ cwgl_getFramebufferAttachmentParameter_Renderbuffer(cwgl_ctx_t* ctx,
     return CWGL_QR_SUCCESS;
 }
 
-CWGL_API cwgl_query_result_t 
-cwgl_getFramebufferAttachmentParameter_Texture(cwgl_ctx_t* ctx, 
-                                               cwgl_enum_t target, 
-                                               cwgl_enum_t attachment, 
-                                               cwgl_enum_t pname, 
-                                               cwgl_Texture_t** texture){
-    cwgl_Framebuffer_t* fb;
-    cwgl_framebuffer_attachment_state_t* point;
+CWGL_API cwgl_query_result 
+cwgl_getFramebufferAttachmentParameter_Texture(cwgl_ctx* ctx, 
+                                               cwgl_enum target, 
+                                               cwgl_enum attachment, 
+                                               cwgl_enum pname, 
+                                               cwgl_Texture** texture){
+    cwgl_Framebuffer* fb;
+    cwgl_framebuffer_attachment_state* point;
 
     if(target != FRAMEBUFFER){
         CTX_SET_ERROR(ctx, INVALID_ENUM);
@@ -625,10 +625,10 @@ cwgl_getFramebufferAttachmentParameter_Texture(cwgl_ctx_t* ctx,
     return CWGL_QR_SUCCESS;
 }
 
-CWGL_API cwgl_query_result_t 
-cwgl_getRenderbufferParameter_i1(cwgl_ctx_t* ctx, cwgl_enum_t target, 
-                                 cwgl_enum_t pname, int32_t* x){
-    cwgl_Renderbuffer_t* rb;
+CWGL_API cwgl_query_result 
+cwgl_getRenderbufferParameter_i1(cwgl_ctx* ctx, cwgl_enum target, 
+                                 cwgl_enum pname, int32_t* x){
+    cwgl_Renderbuffer* rb;
     if(target != RENDERBUFFER){
         CTX_SET_ERROR(ctx, INVALID_ENUM);
         return CWGL_QR_GLERROR;
@@ -677,27 +677,27 @@ cwgl_getRenderbufferParameter_i1(cwgl_ctx_t* ctx, cwgl_enum_t target,
 
 // 6.1.4 Texture Queries
 CWGL_API int 
-cwgl_isTexture(cwgl_ctx_t* ctx, cwgl_Texture_t* texture){
+cwgl_isTexture(cwgl_ctx* ctx, cwgl_Texture* texture){
     // FIXME: Check context lost flag
     return 1;
 }
 
 // 6.1.6 Buffer Object Queries
 CWGL_API int 
-cwgl_isBuffer(cwgl_ctx_t* ctx, cwgl_Buffer_t* buffer){
+cwgl_isBuffer(cwgl_ctx* ctx, cwgl_Buffer* buffer){
     // FIXME: Check context lost flag
     return 1;
 }
 
 // 6.1.7 Framebuffer Object and Renderbuffer Queries
 CWGL_API int 
-cwgl_isFramebuffer(cwgl_ctx_t* ctx, cwgl_Framebuffer_t* framebuffer){
+cwgl_isFramebuffer(cwgl_ctx* ctx, cwgl_Framebuffer* framebuffer){
     // FIXME: Check context lost flag
     return 1;
 }
 
 CWGL_API int 
-cwgl_isRenderbuffer(cwgl_ctx_t* ctx, cwgl_Renderbuffer_t* renderbuffer){
+cwgl_isRenderbuffer(cwgl_ctx* ctx, cwgl_Renderbuffer* renderbuffer){
     // FIXME: Check context lost flag
     return 1;
 }

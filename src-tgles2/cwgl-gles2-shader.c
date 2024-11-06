@@ -3,10 +3,10 @@
 #include <stdio.h>
 
 // FIXME: Consider where to decl APIs
-cwgl_string_t* cwgl_priv_alloc_string(cwgl_ctx_t* ctx, const char* str, size_t buflen);
+cwgl_string* cwgl_priv_alloc_string(cwgl_ctx* ctx, const char* str, size_t buflen);
 
 int 
-cwgl_backend_compileShader(cwgl_ctx_t* ctx, cwgl_Shader_t* shader){
+cwgl_backend_compileShader(cwgl_ctx* ctx, cwgl_Shader* shader){
     GLuint name;
     char* buf;
     GLint srcsize;
@@ -82,7 +82,7 @@ uniform_size(GLenum type, int size){
 }
 
 int 
-cwgl_backend_linkProgram(cwgl_ctx_t* ctx, cwgl_Program_t* program){
+cwgl_backend_linkProgram(cwgl_ctx* ctx, cwgl_Program* program){
     GLuint name;
     GLuint name_vs;
     GLuint name_fs;
@@ -97,7 +97,7 @@ cwgl_backend_linkProgram(cwgl_ctx_t* ctx, cwgl_Program_t* program){
     char* buf;
     uint32_t curoff;
     GLsizei infosize;
-    cwgl_activeinfo_t* a;
+    cwgl_activeinfo* a;
     name = program->backend->name;
     // FIXME: Move this to tracker
     cwgl_string_release(ctx, program->state.infolog);
@@ -171,7 +171,7 @@ cwgl_backend_linkProgram(cwgl_ctx_t* ctx, cwgl_Program_t* program){
 }
 
 int 
-cwgl_backend_validateProgram(cwgl_ctx_t* ctx, cwgl_Program_t* program){
+cwgl_backend_validateProgram(cwgl_ctx* ctx, cwgl_Program* program){
     // FIXME: Implement this
     program->state.VALIDATE_STATUS = CWGL_TRUE;
     return 0;

@@ -3,7 +3,7 @@
 
 // 3.4 Line Segments
 CWGL_API void 
-cwgl_lineWidth(cwgl_ctx_t* ctx, float width){
+cwgl_lineWidth(cwgl_ctx* ctx, float width){
     float cwidth;
     if(width <= 0){
         CTX_SET_ERROR(ctx, INVALID_VALUE);
@@ -19,7 +19,7 @@ cwgl_lineWidth(cwgl_ctx_t* ctx, float width){
 
 // 3.5 Polygons
 CWGL_API void 
-cwgl_frontFace(cwgl_ctx_t* ctx, cwgl_enum_t mode){
+cwgl_frontFace(cwgl_ctx* ctx, cwgl_enum mode){
     switch(mode){
         case CW:
         case CCW:
@@ -31,7 +31,7 @@ cwgl_frontFace(cwgl_ctx_t* ctx, cwgl_enum_t mode){
 }
 
 CWGL_API void 
-cwgl_cullFace(cwgl_ctx_t* ctx, cwgl_enum_t mode){
+cwgl_cullFace(cwgl_ctx* ctx, cwgl_enum mode){
     switch(mode){
         case FRONT:
         case BACK:
@@ -46,14 +46,14 @@ cwgl_cullFace(cwgl_ctx_t* ctx, cwgl_enum_t mode){
 
 // 3.5.2 Depth offset
 CWGL_API void 
-cwgl_polygonOffset(cwgl_ctx_t* ctx, float factor, float units){
+cwgl_polygonOffset(cwgl_ctx* ctx, float factor, float units){
     ctx->state.glo.POLYGON_OFFSET_FACTOR = factor;
     ctx->state.glo.POLYGON_OFFSET_UNITS = units;
 }
 
 // 3.6.1 Pixel Storage Modes
 CWGL_API void 
-cwgl_pixelStorei(cwgl_ctx_t* ctx, cwgl_enum_t pname, int32_t param){
+cwgl_pixelStorei(cwgl_ctx* ctx, cwgl_enum pname, int32_t param){
     switch(pname){
         case PACK_ALIGNMENT:
         case UNPACK_ALIGNMENT:
@@ -80,7 +80,7 @@ cwgl_pixelStorei(cwgl_ctx_t* ctx, cwgl_enum_t pname, int32_t param){
             ctx->state.glo.UNPACK_PREMULTIPLY_ALPHA_WEBGL = param ? CWGL_TRUE : CWGL_FALSE;
             break;
         case UNPACK_COLORSPACE_CONVERSION_WEBGL:
-            switch((cwgl_enum_t)param){
+            switch((cwgl_enum)param){
                 case BROWSER_DEFAULT_WEBGL:
                 case NONE:
                     ctx->state.glo.UNPACK_COLORSPACE_CONVERSION_WEBGL = param;
@@ -98,7 +98,7 @@ cwgl_pixelStorei(cwgl_ctx_t* ctx, cwgl_enum_t pname, int32_t param){
 
 // 3.7 Texturing
 CWGL_API void 
-cwgl_activeTexture(cwgl_ctx_t* ctx, cwgl_enum_t texture){
+cwgl_activeTexture(cwgl_ctx* ctx, cwgl_enum texture){
     const int maxtexture = ctx->state.cfg.MAX_COMBINED_TEXTURE_IMAGE_UNITS;
     const int number = (int)texture;
     const int base = (int)TEXTURE0;
@@ -113,8 +113,8 @@ cwgl_activeTexture(cwgl_ctx_t* ctx, cwgl_enum_t texture){
     }
 }
 
-static cwgl_texture_unit_state_t*
-current_texture_unit(cwgl_ctx_t* ctx){
+static cwgl_texture_unit_state*
+current_texture_unit(cwgl_ctx* ctx){
     int id = (ctx->state.glo.ACTIVE_TEXTURE - TEXTURE0);
     if(id < 0){
         CTX_SET_ERROR(ctx, INVALID_OPERATION);
@@ -128,8 +128,8 @@ current_texture_unit(cwgl_ctx_t* ctx){
 }
 
 static int /* bool */
-validtexture_p(cwgl_ctx_t* ctx, cwgl_enum_t target){
-    cwgl_texture_unit_state_t* s;
+validtexture_p(cwgl_ctx* ctx, cwgl_enum target){
+    cwgl_texture_unit_state* s;
     int id = (ctx->state.glo.ACTIVE_TEXTURE - TEXTURE0);
 
     s = current_texture_unit(ctx);
@@ -168,10 +168,10 @@ validtexture_p(cwgl_ctx_t* ctx, cwgl_enum_t target){
 
 // 3.7.1 Texture Image Specification
 CWGL_API void 
-cwgl_texImage2D(cwgl_ctx_t* ctx, cwgl_enum_t target, 
-                int32_t level, cwgl_enum_t internalformat, 
+cwgl_texImage2D(cwgl_ctx* ctx, cwgl_enum target, 
+                int32_t level, cwgl_enum internalformat, 
                 uint32_t width, uint32_t height, int32_t border, 
-                cwgl_enum_t format, cwgl_enum_t type, 
+                cwgl_enum format, cwgl_enum type, 
                 const void* buf, size_t buflen){
     if(validtexture_p(ctx, target)){
         cwgl_backend_texImage2D(ctx, target, level, internalformat, width, height, border, format, type, buf, buflen);
@@ -180,21 +180,21 @@ cwgl_texImage2D(cwgl_ctx_t* ctx, cwgl_enum_t target,
 
 // 3.7.2 Alternate Texture Image Specification Commands
 CWGL_API void 
-cwgl_copyTexImage2D(cwgl_ctx_t* ctx, cwgl_enum_t target, int32_t level, cwgl_enum_t internalformat, int32_t x, int32_t y, uint32_t width, uint32_t height, int32_t border){
+cwgl_copyTexImage2D(cwgl_ctx* ctx, cwgl_enum target, int32_t level, cwgl_enum internalformat, int32_t x, int32_t y, uint32_t width, uint32_t height, int32_t border){
     if(validtexture_p(ctx, target)){
         cwgl_backend_copyTexImage2D(ctx, target, level, internalformat, x, y, width, height, border);
     }
 }
 
 CWGL_API void 
-cwgl_texSubImage2D(cwgl_ctx_t* ctx, cwgl_enum_t target, int32_t level, int32_t xoffset, int32_t yoffset, uint32_t width, uint32_t height, cwgl_enum_t format, cwgl_enum_t type, const void* buf, size_t buflen){
+cwgl_texSubImage2D(cwgl_ctx* ctx, cwgl_enum target, int32_t level, int32_t xoffset, int32_t yoffset, uint32_t width, uint32_t height, cwgl_enum format, cwgl_enum type, const void* buf, size_t buflen){
     if(validtexture_p(ctx, target)){
         cwgl_backend_texSubImage2D(ctx, target, level, xoffset, yoffset, width, height, format, type, buf, buflen);
     }
 }
 
 CWGL_API void 
-cwgl_copyTexSubImage2D(cwgl_ctx_t* ctx, cwgl_enum_t target, int32_t level, int32_t xoffset, int32_t yoffset, int32_t x, int32_t y, uint32_t width, uint32_t height){
+cwgl_copyTexSubImage2D(cwgl_ctx* ctx, cwgl_enum target, int32_t level, int32_t xoffset, int32_t yoffset, int32_t x, int32_t y, uint32_t width, uint32_t height){
     if(validtexture_p(ctx, target)){
         cwgl_backend_copyTexSubImage2D(ctx, target, level, xoffset, yoffset, x, y, width, height);
     }
@@ -202,14 +202,14 @@ cwgl_copyTexSubImage2D(cwgl_ctx_t* ctx, cwgl_enum_t target, int32_t level, int32
 
 // 3.7.3 Compressed Texture Images
 CWGL_API void 
-cwgl_compressedTexImage2D(cwgl_ctx_t* ctx, cwgl_enum_t target, int32_t level, cwgl_enum_t internalformat, uint32_t width, uint32_t height, int32_t border, const void* buf, size_t buflen){
+cwgl_compressedTexImage2D(cwgl_ctx* ctx, cwgl_enum target, int32_t level, cwgl_enum internalformat, uint32_t width, uint32_t height, int32_t border, const void* buf, size_t buflen){
     if(validtexture_p(ctx, target)){
         cwgl_backend_compressedTexImage2D(ctx, target, level, internalformat, width, height, border, buf, buflen);
     }
 }
 
 CWGL_API void 
-cwgl_compressedTexSubImage2D(cwgl_ctx_t* ctx, cwgl_enum_t target, int32_t level, int32_t xoffset, int32_t yoffset, uint32_t width, uint32_t height, cwgl_enum_t format, const void* buf, size_t buflen){
+cwgl_compressedTexSubImage2D(cwgl_ctx* ctx, cwgl_enum target, int32_t level, int32_t xoffset, int32_t yoffset, uint32_t width, uint32_t height, cwgl_enum format, const void* buf, size_t buflen){
     if(validtexture_p(ctx, target)){
         cwgl_backend_compressedTexSubImage2D(ctx, target, level, xoffset, yoffset, width, height, format, buf, buflen);
     }
@@ -219,17 +219,17 @@ cwgl_compressedTexSubImage2D(cwgl_ctx_t* ctx, cwgl_enum_t target, int32_t level,
 
 // 3.7.4 Texture Parameters
 CWGL_API void 
-cwgl_texParameterf(cwgl_ctx_t* ctx, cwgl_enum_t target, cwgl_enum_t pname, float param){
+cwgl_texParameterf(cwgl_ctx* ctx, cwgl_enum target, cwgl_enum pname, float param){
     // No floating point param for textures
     CTX_SET_ERROR(ctx, INVALID_ENUM);
 }
 
 
 CWGL_API void 
-cwgl_texParameteri(cwgl_ctx_t* ctx, cwgl_enum_t target, cwgl_enum_t pname, int32_t param){
-    cwgl_texture_unit_state_t* current;
-    cwgl_Texture_t* tex;
-    cwgl_enum_t in = (cwgl_enum_t)param;
+cwgl_texParameteri(cwgl_ctx* ctx, cwgl_enum target, cwgl_enum pname, int32_t param){
+    cwgl_texture_unit_state* current;
+    cwgl_Texture* tex;
+    cwgl_enum in = (cwgl_enum)param;
 
     current = current_texture_unit(ctx);
     if(! current){
@@ -310,13 +310,13 @@ cwgl_texParameteri(cwgl_ctx_t* ctx, cwgl_enum_t target, cwgl_enum_t pname, int32
 
 // 3.7.11 Mipmap Generation
 CWGL_API void 
-cwgl_generateMipmap(cwgl_ctx_t* ctx, cwgl_enum_t target){
+cwgl_generateMipmap(cwgl_ctx* ctx, cwgl_enum target){
     cwgl_backend_generateMipmap(ctx, target);
 }
 
 // 3.7.13 Texture Objects
 void
-cwgl_priv_texture_release(cwgl_ctx_t* ctx, cwgl_Texture_t* texture){
+cwgl_priv_texture_release(cwgl_ctx* ctx, cwgl_Texture* texture){
     uintptr_t v;
     if(texture){
         v = cwgl_priv_objhdr_release(&texture->hdr);
@@ -328,9 +328,9 @@ cwgl_priv_texture_release(cwgl_ctx_t* ctx, cwgl_Texture_t* texture){
 }
 
 CWGL_API void 
-cwgl_bindTexture(cwgl_ctx_t* ctx, cwgl_enum_t target, cwgl_Texture_t* texture){
-    cwgl_texture_unit_state_t* state;
-    cwgl_Texture_t** point;
+cwgl_bindTexture(cwgl_ctx* ctx, cwgl_enum target, cwgl_Texture* texture){
+    cwgl_texture_unit_state* state;
+    cwgl_Texture** point;
     state = current_texture_unit(ctx);
     if(! state){
         return;
@@ -365,7 +365,7 @@ cwgl_bindTexture(cwgl_ctx_t* ctx, cwgl_enum_t target, cwgl_Texture_t* texture){
 }
 
 static void
-unbind_texture(cwgl_ctx_t* ctx, cwgl_Texture_t* texture){
+unbind_texture(cwgl_ctx* ctx, cwgl_Texture* texture){
     int i;
     if(texture){
         for(i=0;i!=CWGL_MAX_TEXTURE_UNITS;i++){
@@ -382,14 +382,14 @@ unbind_texture(cwgl_ctx_t* ctx, cwgl_Texture_t* texture){
 }
 
 CWGL_API void 
-cwgl_deleteTexture(cwgl_ctx_t* ctx, cwgl_Texture_t* texture){
+cwgl_deleteTexture(cwgl_ctx* ctx, cwgl_Texture* texture){
     unbind_texture(ctx, texture);
 }
 
-CWGL_API cwgl_Texture_t* 
-cwgl_createTexture(cwgl_ctx_t* ctx){
-    cwgl_Texture_t* t;
-    t = malloc(sizeof(cwgl_Texture_t));
+CWGL_API cwgl_Texture* 
+cwgl_createTexture(cwgl_ctx* ctx){
+    cwgl_Texture* t;
+    t = malloc(sizeof(cwgl_Texture));
     if(t){
         cwgl_priv_objhdr_init(ctx, &t->hdr, CWGL_OBJ_TEXTURE);
         cwgl_priv_texture_init(&t->state);
@@ -399,7 +399,7 @@ cwgl_createTexture(cwgl_ctx_t* ctx){
 }
 
 CWGL_API void
-cwgl_Texture_release(cwgl_ctx_t* ctx, cwgl_Texture_t* texture){
+cwgl_Texture_release(cwgl_ctx* ctx, cwgl_Texture* texture){
     cwgl_priv_texture_release(ctx, texture);
 }
 

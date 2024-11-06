@@ -3,8 +3,8 @@
 #include <string.h>
 
 // FIXME: Copied from s2
-static cwgl_VertexArrayObject_t*
-current_vao(cwgl_ctx_t* ctx){
+static cwgl_VertexArrayObject*
+current_vao(cwgl_ctx* ctx){
     if(ctx->state.bin.VERTEX_ARRAY_BINDING){
         return ctx->state.bin.VERTEX_ARRAY_BINDING;
     }else{
@@ -12,9 +12,9 @@ current_vao(cwgl_ctx_t* ctx){
     }
 }
 
-static cwgl_Buffer_t*
-current_buffer(cwgl_ctx_t* ctx, cwgl_enum_t target){
-    cwgl_VertexArrayObject_t* vao;
+static cwgl_Buffer*
+current_buffer(cwgl_ctx* ctx, cwgl_enum target){
+    cwgl_VertexArrayObject* vao;
     switch(target){
         default:
         case ARRAY_BUFFER:
@@ -26,7 +26,7 @@ current_buffer(cwgl_ctx_t* ctx, cwgl_enum_t target){
 }
 
 void
-cwgl_vkpriv_destroy_buffer(cwgl_ctx_t* ctx, cwgl_backend_Buffer_t* buffer_backend){
+cwgl_vkpriv_destroy_buffer(cwgl_ctx* ctx, cwgl_backend_Buffer* buffer_backend){
     if(buffer_backend->allocated){
         vkDestroyBuffer(ctx->backend->device, buffer_backend->buffer, NULL);
         vkFreeMemory(ctx->backend->device, buffer_backend->device_memory, NULL);
@@ -35,12 +35,12 @@ cwgl_vkpriv_destroy_buffer(cwgl_ctx_t* ctx, cwgl_backend_Buffer_t* buffer_backen
 }
 
 static int
-update_buffer(cwgl_ctx_t* ctx, cwgl_enum_t target,
+update_buffer(cwgl_ctx* ctx, cwgl_enum target,
               size_t size, void* data, uint32_t offset,
-              cwgl_enum_t usage, int allow_reallocate){
-    cwgl_Buffer_t* buffer;
-    cwgl_backend_ctx_t* backend;
-    cwgl_backend_Buffer_t* buffer_backend;
+              cwgl_enum usage, int allow_reallocate){
+    cwgl_Buffer* buffer;
+    cwgl_backend_ctx* backend;
+    cwgl_backend_Buffer* buffer_backend;
     VkBuffer newbuffer;
     VkDeviceMemory device_memory;
     VkMemoryRequirements memory_requirements;
@@ -142,14 +142,14 @@ update_buffer(cwgl_ctx_t* ctx, cwgl_enum_t target,
 }
 
 int
-cwgl_backend_bufferData(cwgl_ctx_t* ctx, cwgl_enum_t target,
-                        uint32_t size, void* data, cwgl_enum_t usage){
+cwgl_backend_bufferData(cwgl_ctx* ctx, cwgl_enum target,
+                        uint32_t size, void* data, cwgl_enum usage){
     return update_buffer(ctx, target, size, data, 0, usage, 1);
 }
 
 
 int
-cwgl_backend_bufferSubData(cwgl_ctx_t* ctx, cwgl_enum_t target,
+cwgl_backend_bufferSubData(cwgl_ctx* ctx, cwgl_enum target,
                            uint32_t offset, void* data, size_t buflen){
     return update_buffer(ctx, target, buflen, data, offset, NONE, 0);
 }

@@ -1,7 +1,7 @@
 #include "cwgl-backend-vk-priv.h"
 
 int
-cwgl_backend_cfg_init(cwgl_ctx_config_t* cfg){
+cwgl_backend_cfg_init(cwgl_ctx_config* cfg){
     cfg->SUBPIXEL_BITS = 4; // GL2 minimum
     cfg->MAX_TEXTURE_SIZE = 16384; // iPod
     cfg->MAX_CUBE_MAP_TEXTURE_SIZE = 16384; // iPod

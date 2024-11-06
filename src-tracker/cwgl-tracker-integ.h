@@ -10,8 +10,8 @@ extern "C" {
 #endif
 // }
 
-int cwgl_integ_ctx_init(cwgl_ctx_t* ctx);
-int cwgl_integ_program_setup(cwgl_ctx_t* ctx, cwgl_Program_t* program,
+int cwgl_integ_ctx_init(cwgl_ctx* ctx);
+int cwgl_integ_program_setup(cwgl_ctx* ctx, cwgl_Program* program,
                          uint32_t n_uniform, uint32_t n_attribute);
 
 // {

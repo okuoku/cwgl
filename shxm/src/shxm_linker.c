@@ -5,7 +5,7 @@
 #include "shxm_private.h"
 
 static int /* zero on success */
-resolve_type(shxm_spirv_ent_t* ent, int32_t* ir, int id){
+resolve_type(shxm_spirv_ent* ent, int32_t* ir, int id){
     int r;
     int op;
     int len;
@@ -220,19 +220,19 @@ resolve_type(shxm_spirv_ent_t* ent, int32_t* ir, int id){
 }
 
 static int
-fill_slots(shxm_program_t* prog, shxm_spirv_intr_t* intr, int phase){
+fill_slots(shxm_program* prog, shxm_spirv_intr* intr, int phase){
     /* Look for OpVariable Input/Output/Uniform/UniformConstant */
     int id;
     int failed = 0;
-    shxm_varusage_t varusage;
+    shxm_varusage varusage;
     char* varname;
     int varclass;
     int varwidth;
     int r;
     int v;
     int typeid;
-    shxm_slot_t* varslot;
-    cwgl_var_type_t vartype;
+    shxm_slot* varslot;
+    cwgl_var_type vartype;
     int32_t* ir = (phase == 0) ? prog->vertex_shader->ir : 
         prog->fragment_shader->ir;
     if(phase == 0){
@@ -276,7 +276,7 @@ fill_slots(shxm_program_t* prog, shxm_spirv_intr_t* intr, int phase){
 
             if(phase == 0){
                 varslot = &prog->slot[prog->slot_count];
-                memset(varslot, 0, sizeof(shxm_slot_t));
+                memset(varslot, 0, sizeof(shxm_slot));
                 prog->slot_count++;
             }else{
                 varslot = NULL;
@@ -289,7 +289,7 @@ fill_slots(shxm_program_t* prog, shxm_spirv_intr_t* intr, int phase){
                 }
                 if(! varslot){
                     varslot = &prog->slot[prog->slot_count];
-                    memset(varslot, 0, sizeof(shxm_slot_t));
+                    memset(varslot, 0, sizeof(shxm_slot));
                     prog->slot_count++;
                 }
             }
@@ -320,7 +320,7 @@ fill_slots(shxm_program_t* prog, shxm_spirv_intr_t* intr, int phase){
 }
 
 static int
-is_builtin(shxm_slot_t* slot){
+is_builtin(shxm_slot* slot){
     // FIXME: Tentative. Use var decoration instead
 #define CHECK(nam) \
     if(slot->name && (! strncmp(slot->name, nam, sizeof(nam)+1))) return 1
@@ -340,7 +340,7 @@ is_builtin(shxm_slot_t* slot){
 }
 
 static int
-is_opaque_type(cwgl_var_type_t type){
+is_opaque_type(cwgl_var_type type){
     switch(type){
         case CWGL_VAR_SAMPLER_2D:
         case CWGL_VAR_SAMPLER_CUBE:
@@ -352,43 +352,43 @@ is_opaque_type(cwgl_var_type_t type){
 }
 
 static void
-add_input(shxm_program_t* prog, shxm_slot_t* slot){
+add_input(shxm_program* prog, shxm_slot* slot){
     prog->input[prog->input_count].slot = slot;
     prog->input_count++;
 }
 static void
-add_output(shxm_program_t* prog, shxm_slot_t* slot){
+add_output(shxm_program* prog, shxm_slot* slot){
     prog->output[prog->output_count].slot = slot;
     prog->output_count++;
 }
 static void
-add_varying(shxm_program_t* prog, shxm_slot_t* slot){
+add_varying(shxm_program* prog, shxm_slot* slot){
     prog->varying[prog->varying_count].slot = slot;
     prog->varying_count++;
 }
 static void
-add_uniform(shxm_program_t* prog, shxm_slot_t* slot){
+add_uniform(shxm_program* prog, shxm_slot* slot){
     prog->uniform[prog->uniform_count].slot = slot;
     prog->uniform_count++;
 }
 static void
-add_unused(shxm_program_t* prog, shxm_slot_t* slot){
+add_unused(shxm_program* prog, shxm_slot* slot){
     prog->unused[prog->unused_count].slot = slot;
     prog->unused_count++;
 }
 static void
-add_opaque(shxm_program_t* prog, shxm_slot_t* slot, int phase){
+add_opaque(shxm_program* prog, shxm_slot* slot, int phase){
     prog->opaque[prog->opaque_count].slot = slot;
     prog->opaque[prog->opaque_count].phase = phase;
     prog->opaque_count++;
 }
 
 static int
-linkup_slots(shxm_program_t* prog, shxm_spirv_intr_t* vintr,
-             shxm_spirv_intr_t* fintr){
+linkup_slots(shxm_program* prog, shxm_spirv_intr* vintr,
+             shxm_spirv_intr* fintr){
     int s;
     int vid, fid;
-    shxm_slot_t* slot;
+    shxm_slot* slot;
     for(s=0;s!=prog->slot_count;s++){
         slot = &prog->slot[s];
         vid = slot->id[0];
@@ -487,8 +487,8 @@ linkup_slots(shxm_program_t* prog, shxm_spirv_intr_t* vintr,
 }
 
 static int /* count */
-calc_location_size(shxm_slot_t* slot){
-    cwgl_var_type_t type;
+calc_location_size(shxm_slot* slot){
+    cwgl_var_type type;
     int locsize;
     switch(slot->type){
         case CWGL_VAR_FLOAT_MAT2:
@@ -512,11 +512,11 @@ calc_location_size(shxm_slot_t* slot){
 }
 
 static int
-assign_locations(shxm_program_t* prog){
+assign_locations(shxm_program* prog){
     int i;
     int curloc;
-    shxm_slot_t* slot;
-    shxm_attribute_t* attr;
+    shxm_slot* slot;
+    shxm_attribute* attr;
 
     curloc = 0;
     for(i=0;i!=prog->input_count;i++){
@@ -557,7 +557,7 @@ assign_locations(shxm_program_t* prog){
 }
 
 static int
-calc_slot_size(shxm_slot_t* slot){
+calc_slot_size(shxm_slot* slot){
     int locsize;
     switch(slot->type){
         case CWGL_VAR_FLOAT_VEC2:
@@ -604,7 +604,7 @@ calc_slot_size(shxm_slot_t* slot){
 }
 
 static int
-calc_slot_alignment(shxm_slot_t* slot){
+calc_slot_alignment(shxm_slot* slot){
     int locsize;
     if(slot->array_length){
         /* Arrays will have 4 component alignment in std140
@@ -647,13 +647,13 @@ calc_slot_alignment(shxm_slot_t* slot){
 }
 
 static int
-layout_uniforms(shxm_program_t* prog){
+layout_uniforms(shxm_program* prog){
     int i;
     int curoff;
     int alignment;
     int size;
     int d,nd;
-    shxm_slot_t* slot;
+    shxm_slot* slot;
     curoff = 0;
     for(i=0;i!=prog->uniform_count;i++){
         slot = prog->uniform[i].slot;
@@ -673,13 +673,13 @@ layout_uniforms(shxm_program_t* prog){
 }
 
 static int
-layout_input_registers(shxm_program_t* prog){
+layout_input_registers(shxm_program* prog){
     int i;
     int curoff;
     int alignment;
     int size;
     int d,nd;
-    shxm_slot_t* slot;
+    shxm_slot* slot;
     curoff = 0;
     for(i=0;i!=prog->input_count;i++){
         slot = prog->input[i].slot;
@@ -699,7 +699,7 @@ layout_input_registers(shxm_program_t* prog){
 }
 
 static int
-bind_uniforms(shxm_program_t* prog){
+bind_uniforms(shxm_program* prog){
     int i;
     int idx[2];
     int phase;
@@ -722,10 +722,10 @@ bind_uniforms(shxm_program_t* prog){
 }
 
 SHXM_API int
-shxm_program_link(shxm_ctx_t* ctx, shxm_program_t* prog){
+shxm_program_link(shxm_ctx* ctx, shxm_program* prog){
     int i;
-    shxm_spirv_intr_t* vintr;
-    shxm_spirv_intr_t* fintr;
+    shxm_spirv_intr* vintr;
+    shxm_spirv_intr* fintr;
 
     if(!prog->vertex_shader){
         printf("ERROR: No vertex shader.\n");

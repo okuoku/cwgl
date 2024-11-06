@@ -2,18 +2,18 @@
 
 // 5.1 Flush and Finish
 CWGL_API void 
-cwgl_finish(cwgl_ctx_t* ctx){
+cwgl_finish(cwgl_ctx* ctx){
     cwgl_backend_finish(ctx);
 }
 
 CWGL_API void 
-cwgl_flush(cwgl_ctx_t* ctx){
+cwgl_flush(cwgl_ctx* ctx){
     cwgl_backend_flush(ctx);
 }
 
 // 5.2 Hints
 CWGL_API void 
-cwgl_hint(cwgl_ctx_t* ctx, cwgl_enum_t target, cwgl_enum_t mode){
+cwgl_hint(cwgl_ctx* ctx, cwgl_enum target, cwgl_enum mode){
     int accepted = 0;
     switch(target){
         case GENERATE_MIPMAP_HINT:

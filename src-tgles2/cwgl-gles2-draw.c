@@ -1,12 +1,12 @@
 #include "cwgl-backend-gles2-priv.h"
 
 static void
-configure_drawstate(cwgl_ctx_t* ctx, cwgl_enum_t primitive){
+configure_drawstate(cwgl_ctx* ctx, cwgl_enum primitive){
     int line = 0;
     int point = 0;
     int triangle = 0;
     int clear = 0;
-    cwgl_ctx_global_state_t* s;
+    cwgl_ctx_global_state* s;
     /* Determine draw type */
     switch(primitive){
         case POINTS:
@@ -130,11 +130,11 @@ configure_drawstate(cwgl_ctx_t* ctx, cwgl_enum_t primitive){
 }
 
 static void
-configure_texture(cwgl_ctx_t* ctx){
+configure_texture(cwgl_ctx* ctx){
     int i;
     int activated;
-    cwgl_texture_unit_state_t* s;
-    cwgl_Texture_t* t;
+    cwgl_texture_unit_state* s;
+    cwgl_Texture* t;
     s = ctx->state.bin.texture_unit;
     for(i=0;i!=CWGL_MAX_TEXTURE_UNITS;i++){
         activated = 0;
@@ -179,8 +179,8 @@ configure_texture(cwgl_ctx_t* ctx){
 }
 
 // FIXME: Copied from s2
-static cwgl_VertexArrayObject_t*
-current_vao(cwgl_ctx_t* ctx){
+static cwgl_VertexArrayObject*
+current_vao(cwgl_ctx* ctx){
     if(ctx->state.bin.VERTEX_ARRAY_BINDING){
         return ctx->state.bin.VERTEX_ARRAY_BINDING;
     }else{
@@ -189,15 +189,15 @@ current_vao(cwgl_ctx_t* ctx){
 }
 
 static void
-configure_shader(cwgl_ctx_t* ctx){
+configure_shader(cwgl_ctx* ctx){
     int i;
     int ai;
-    cwgl_activeinfo_t* u;
-    cwgl_activeinfo_t* a;
-    cwgl_Program_t* program;
-    cwgl_uniformcontent_t* uc;
-    cwgl_VertexArrayObject_t* vao;
-    cwgl_vao_attrib_state_t* attrib;
+    cwgl_activeinfo* u;
+    cwgl_activeinfo* a;
+    cwgl_Program* program;
+    cwgl_uniformcontent* uc;
+    cwgl_VertexArrayObject* vao;
+    cwgl_vao_attrib_state* attrib;
     GLint location;
     
     program = ctx->state.bin.CURRENT_PROGRAM;
@@ -390,7 +390,7 @@ configure_shader(cwgl_ctx_t* ctx){
 }
 
 int 
-cwgl_backend_drawArrays(cwgl_ctx_t* ctx, cwgl_enum_t mode, 
+cwgl_backend_drawArrays(cwgl_ctx* ctx, cwgl_enum mode, 
                         int32_t first, uint32_t count){
     configure_drawstate(ctx, mode);
     configure_texture(ctx);
@@ -401,9 +401,9 @@ cwgl_backend_drawArrays(cwgl_ctx_t* ctx, cwgl_enum_t mode,
 
 
 int 
-cwgl_backend_drawElements(cwgl_ctx_t* ctx, cwgl_enum_t mode, 
-                          uint32_t count, cwgl_enum_t type, uint32_t offset){
-    cwgl_VertexArrayObject_t* vao;
+cwgl_backend_drawElements(cwgl_ctx* ctx, cwgl_enum mode, 
+                          uint32_t count, cwgl_enum type, uint32_t offset){
+    cwgl_VertexArrayObject* vao;
 
     configure_drawstate(ctx, mode);
     configure_texture(ctx);
@@ -417,8 +417,8 @@ cwgl_backend_drawElements(cwgl_ctx_t* ctx, cwgl_enum_t mode,
 }
 
 int 
-cwgl_backend_clear(cwgl_ctx_t* ctx, uint32_t mask){
-    cwgl_ctx_global_state_t* s;
+cwgl_backend_clear(cwgl_ctx* ctx, uint32_t mask){
+    cwgl_ctx_global_state* s;
     s = &ctx->state.glo;
     configure_drawstate(ctx, 0);
     /* Configure clear */

@@ -7,7 +7,7 @@
 /* Globals */
 static int glslang_init = 0;
 
-shxm_ctx_t global_ctx;
+shxm_ctx global_ctx;
 
 /* Glslang interface */
 void shxm_glslang_init(void);
@@ -15,7 +15,7 @@ void shxm_glslang_deinit(void);
 int shxm_glslang_build(int mode, const char* source, int len,
                    int** out_spv, int* out_spvlen);
 
-SHXM_API shxm_ctx_t* 
+SHXM_API shxm_ctx* 
 shxm_init(void){
     if(! glslang_init){
         shxm_glslang_init();
@@ -24,13 +24,13 @@ shxm_init(void){
     return &global_ctx;
 }
 
-SHXM_API shxm_shader_t* 
-shxm_shader_create(shxm_ctx_t* ctx, shxm_shader_stage_t type){
-    shxm_shader_t* shader;
-    shader = malloc(sizeof(shxm_shader_t));
+SHXM_API shxm_shader* 
+shxm_shader_create(shxm_ctx* ctx, shxm_shader_stage type){
+    shxm_shader* shader;
+    shader = malloc(sizeof(shxm_shader));
     if(shader){
         // Assume NULL is zero
-        memset(shader, 0, sizeof(shxm_shader_t));
+        memset(shader, 0, sizeof(shxm_shader));
         shader->refcnt = 1;
         shader->type = type;
     }
@@ -38,7 +38,7 @@ shxm_shader_create(shxm_ctx_t* ctx, shxm_shader_stage_t type){
 }
 
 SHXM_API void 
-shxm_shader_release(shxm_ctx_t* ctx, shxm_shader_t* sh){
+shxm_shader_release(shxm_ctx* ctx, shxm_shader* sh){
     if(sh){
         if(sh->refcnt){
             sh->refcnt--;
@@ -53,19 +53,19 @@ shxm_shader_release(shxm_ctx_t* ctx, shxm_shader_t* sh){
     }
 }
 
-SHXM_API shxm_program_t* 
-shxm_program_create(shxm_ctx_t* ctx){
-    shxm_program_t* program;
-    program = malloc(sizeof(shxm_program_t));
+SHXM_API shxm_program* 
+shxm_program_create(shxm_ctx* ctx){
+    shxm_program* program;
+    program = malloc(sizeof(shxm_program));
     if(program){
         // Assume NULL is zero
-        memset(program, 0, sizeof(shxm_program_t));
+        memset(program, 0, sizeof(shxm_program));
     }
     return program;
 }
 
 SHXM_API void 
-shxm_program_release(shxm_ctx_t* ctx, shxm_program_t* prog){
+shxm_program_release(shxm_ctx* ctx, shxm_program* prog){
     if(prog){
         shxm_shader_release(ctx, prog->vertex_shader);
         shxm_shader_release(ctx, prog->fragment_shader);
@@ -76,7 +76,7 @@ shxm_program_release(shxm_ctx_t* ctx, shxm_program_t* prog){
 }
 
 SHXM_API void 
-shxm_shader_source(shxm_ctx_t* ctx, shxm_shader_t* sh,
+shxm_shader_source(shxm_ctx* ctx, shxm_shader* sh,
                                  const char* src /* Copied */,
                                  unsigned int len){
     char* cpsrc;
@@ -89,7 +89,7 @@ shxm_shader_source(shxm_ctx_t* ctx, shxm_shader_t* sh,
 
 
 SHXM_API int 
-shxm_shader_compile(shxm_ctx_t* ctx, shxm_shader_t* sh){
+shxm_shader_compile(shxm_ctx* ctx, shxm_shader* sh){
     int irlen;
     int* irptr;
     int r;
@@ -107,7 +107,7 @@ shxm_shader_compile(shxm_ctx_t* ctx, shxm_shader_t* sh){
 }
 
 SHXM_API void 
-shxm_program_attach(shxm_ctx_t* ctx, shxm_program_t* prog, shxm_shader_t* sh){
+shxm_program_attach(shxm_ctx* ctx, shxm_program* prog, shxm_shader* sh){
     if(sh->type == SHXM_SHADER_STAGE_FRAGMENT){
         if(prog->fragment_shader){
             shxm_program_detach(ctx, prog, prog->fragment_shader);
@@ -127,7 +127,7 @@ shxm_program_attach(shxm_ctx_t* ctx, shxm_program_t* prog, shxm_shader_t* sh){
 }
 
 SHXM_API int 
-shxm_program_detach(shxm_ctx_t* ctx, shxm_program_t* prog, shxm_shader_t* sh){
+shxm_program_detach(shxm_ctx* ctx, shxm_program* prog, shxm_shader* sh){
     // FIXME: Check if program is valid
     shxm_shader_release(ctx, sh);
     return 0;

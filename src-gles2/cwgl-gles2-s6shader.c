@@ -2,7 +2,7 @@
 
 // 6.1.8 Shader and Program Queries
 CWGL_API int 
-cwgl_isShader(cwgl_ctx_t* ctx, cwgl_Shader_t* shader){
+cwgl_isShader(cwgl_ctx* ctx, cwgl_Shader* shader){
     int r;
     GLuint name;
     CTX_ENTER(ctx);
@@ -12,10 +12,10 @@ cwgl_isShader(cwgl_ctx_t* ctx, cwgl_Shader_t* shader){
     return r;
 }
 
-CWGL_API cwgl_query_result_t 
-cwgl_getShaderParameter_i1(cwgl_ctx_t* ctx, cwgl_Shader_t* shader, 
-                           cwgl_enum_t pname, int32_t* x){
-    cwgl_query_result_t r;
+CWGL_API cwgl_query_result 
+cwgl_getShaderParameter_i1(cwgl_ctx* ctx, cwgl_Shader* shader, 
+                           cwgl_enum pname, int32_t* x){
+    cwgl_query_result r;
     GLint i;
     GLuint name;
     CTX_ENTER(ctx);
@@ -28,7 +28,7 @@ cwgl_getShaderParameter_i1(cwgl_ctx_t* ctx, cwgl_Shader_t* shader,
 }
 
 CWGL_API int 
-cwgl_isProgram(cwgl_ctx_t* ctx, cwgl_Program_t* program){
+cwgl_isProgram(cwgl_ctx* ctx, cwgl_Program* program){
     int r;
     GLuint name;
     CTX_ENTER(ctx);
@@ -38,10 +38,10 @@ cwgl_isProgram(cwgl_ctx_t* ctx, cwgl_Program_t* program){
     return r;
 }
 
-CWGL_API cwgl_query_result_t 
-cwgl_getProgramParameter_i1(cwgl_ctx_t* ctx, cwgl_Program_t* program, 
-                            cwgl_enum_t pname, int32_t* x){
-    cwgl_query_result_t r;
+CWGL_API cwgl_query_result 
+cwgl_getProgramParameter_i1(cwgl_ctx* ctx, cwgl_Program* program, 
+                            cwgl_enum pname, int32_t* x){
+    cwgl_query_result r;
     GLint i;
     GLuint name;
     CTX_ENTER(ctx);
@@ -53,20 +53,20 @@ cwgl_getProgramParameter_i1(cwgl_ctx_t* ctx, cwgl_Program_t* program,
     return r;
 }
 
-CWGL_API cwgl_query_result_t 
-cwgl_getAttachedShaders(cwgl_ctx_t* ctx, cwgl_Program_t* program, 
-                        cwgl_Shader_t** vertex_shader, 
-                        cwgl_Shader_t** fragment_shader){
-    cwgl_query_result_t r;
+CWGL_API cwgl_query_result 
+cwgl_getAttachedShaders(cwgl_ctx* ctx, cwgl_Program* program, 
+                        cwgl_Shader** vertex_shader, 
+                        cwgl_Shader** fragment_shader){
+    cwgl_query_result r;
     CTX_ENTER(ctx);
     r = CWGL_QR_UNIMPLEMENTED;
     CTX_LEAVE(ctx);
     return r;
 }
 
-CWGL_API cwgl_string_t* 
-cwgl_getProgramInfoLog(cwgl_ctx_t* ctx, cwgl_Program_t* program){
-    cwgl_string_t* r;
+CWGL_API cwgl_string* 
+cwgl_getProgramInfoLog(cwgl_ctx* ctx, cwgl_Program* program){
+    cwgl_string* r;
     GLuint name;
     GLsizei len = 0;
     GLsizei maxlen = (512*1024);
@@ -85,9 +85,9 @@ cwgl_getProgramInfoLog(cwgl_ctx_t* ctx, cwgl_Program_t* program){
     }
 }
 
-CWGL_API cwgl_string_t* 
-cwgl_getShaderInfoLog(cwgl_ctx_t* ctx, cwgl_Shader_t* shader){
-    cwgl_string_t* r;
+CWGL_API cwgl_string* 
+cwgl_getShaderInfoLog(cwgl_ctx* ctx, cwgl_Shader* shader){
+    cwgl_string* r;
     GLuint name;
     GLsizei len = 0;
     GLsizei maxlen = (512*1024);
@@ -106,18 +106,18 @@ cwgl_getShaderInfoLog(cwgl_ctx_t* ctx, cwgl_Shader_t* shader){
     }
 }
 
-CWGL_API cwgl_string_t* 
-cwgl_getShaderSource(cwgl_ctx_t* ctx, cwgl_Shader_t* shader){
+CWGL_API cwgl_string* 
+cwgl_getShaderSource(cwgl_ctx* ctx, cwgl_Shader* shader){
     // FIXME: Implement this
     return NULL;
 }
 
-CWGL_API cwgl_query_result_t 
-cwgl_getShaderPrecisionFormat(cwgl_ctx_t* ctx, cwgl_enum_t shadertype, 
-                              cwgl_enum_t precisiontype, 
+CWGL_API cwgl_query_result 
+cwgl_getShaderPrecisionFormat(cwgl_ctx* ctx, cwgl_enum shadertype, 
+                              cwgl_enum precisiontype, 
                               int32_t* rangeMin, int32_t* rangeMax, 
                               int32_t* precision){
-    cwgl_query_result_t r;
+    cwgl_query_result r;
     GLint range[2];
     GLint prec;
     CTX_ENTER(ctx);
@@ -130,31 +130,31 @@ cwgl_getShaderPrecisionFormat(cwgl_ctx_t* ctx, cwgl_enum_t shadertype,
     return r;
 }
 
-CWGL_API cwgl_query_result_t 
-cwgl_getVertexAttrib_i1(cwgl_ctx_t* ctx, uint32_t index, 
-                        cwgl_enum_t pname, int32_t* x){
-    cwgl_query_result_t r;
+CWGL_API cwgl_query_result 
+cwgl_getVertexAttrib_i1(cwgl_ctx* ctx, uint32_t index, 
+                        cwgl_enum pname, int32_t* x){
+    cwgl_query_result r;
     CTX_ENTER(ctx);
     r = CWGL_QR_UNIMPLEMENTED;
     CTX_LEAVE(ctx);
     return r;
 }
 
-CWGL_API cwgl_query_result_t 
-cwgl_getVertexAttrib_f4(cwgl_ctx_t* ctx, uint32_t index, 
-                        cwgl_enum_t pname, 
+CWGL_API cwgl_query_result 
+cwgl_getVertexAttrib_f4(cwgl_ctx* ctx, uint32_t index, 
+                        cwgl_enum pname, 
                         float* x, float* y, float* z, float* w){
-    cwgl_query_result_t r;
+    cwgl_query_result r;
     CTX_ENTER(ctx);
     r = CWGL_QR_UNIMPLEMENTED;
     CTX_LEAVE(ctx);
     return r;
 }
 
-CWGL_API cwgl_query_result_t 
-cwgl_getVertexAttrib_Buffer(cwgl_ctx_t* ctx, uint32_t index, 
-                            cwgl_enum_t pname, cwgl_Buffer_t** buffer){
-    cwgl_query_result_t r;
+CWGL_API cwgl_query_result 
+cwgl_getVertexAttrib_Buffer(cwgl_ctx* ctx, uint32_t index, 
+                            cwgl_enum pname, cwgl_Buffer** buffer){
+    cwgl_query_result r;
     CTX_ENTER(ctx);
     r = CWGL_QR_UNIMPLEMENTED;
     CTX_LEAVE(ctx);
@@ -162,7 +162,7 @@ cwgl_getVertexAttrib_Buffer(cwgl_ctx_t* ctx, uint32_t index,
 }
 
 CWGL_API uint32_t 
-cwgl_getVertexAttribOffset(cwgl_ctx_t* ctx, uint32_t index, cwgl_enum_t pname){
+cwgl_getVertexAttribOffset(cwgl_ctx* ctx, uint32_t index, cwgl_enum pname){
     void* rr = NULL;
     uint32_t r;
     CTX_ENTER(ctx);
@@ -172,114 +172,114 @@ cwgl_getVertexAttribOffset(cwgl_ctx_t* ctx, uint32_t index, cwgl_enum_t pname){
     return r;
 }
 
-CWGL_API cwgl_query_result_t 
-cwgl_getUniform_i1(cwgl_ctx_t* ctx, cwgl_Program_t* program, 
-                   cwgl_UniformLocation_t* location, int32_t* x){
-    cwgl_query_result_t r;
+CWGL_API cwgl_query_result 
+cwgl_getUniform_i1(cwgl_ctx* ctx, cwgl_Program* program, 
+                   cwgl_UniformLocation* location, int32_t* x){
+    cwgl_query_result r;
     CTX_ENTER(ctx);
     r = CWGL_QR_UNIMPLEMENTED;
     CTX_LEAVE(ctx);
     return r;
 }
 
-CWGL_API cwgl_query_result_t 
-cwgl_getUniform_i2(cwgl_ctx_t* ctx, cwgl_Program_t* program, 
-                   cwgl_UniformLocation_t* location, int32_t* x, int32_t* y){
-    cwgl_query_result_t r;
+CWGL_API cwgl_query_result 
+cwgl_getUniform_i2(cwgl_ctx* ctx, cwgl_Program* program, 
+                   cwgl_UniformLocation* location, int32_t* x, int32_t* y){
+    cwgl_query_result r;
     CTX_ENTER(ctx);
     r = CWGL_QR_UNIMPLEMENTED;
     CTX_LEAVE(ctx);
     return r;
 }
 
-CWGL_API cwgl_query_result_t 
-cwgl_getUniform_i3(cwgl_ctx_t* ctx, cwgl_Program_t* program, 
-                   cwgl_UniformLocation_t* location, 
+CWGL_API cwgl_query_result 
+cwgl_getUniform_i3(cwgl_ctx* ctx, cwgl_Program* program, 
+                   cwgl_UniformLocation* location, 
                    int32_t* x, int32_t* y, int32_t* z){
-    cwgl_query_result_t r;
+    cwgl_query_result r;
     CTX_ENTER(ctx);
     r = CWGL_QR_UNIMPLEMENTED;
     CTX_LEAVE(ctx);
     return r;
 }
 
-CWGL_API cwgl_query_result_t 
-cwgl_getUniform_i4(cwgl_ctx_t* ctx, cwgl_Program_t* program, 
-                   cwgl_UniformLocation_t* location, 
+CWGL_API cwgl_query_result 
+cwgl_getUniform_i4(cwgl_ctx* ctx, cwgl_Program* program, 
+                   cwgl_UniformLocation* location, 
                    int32_t* x, int32_t* y, int32_t* z, int32_t* w){
-    cwgl_query_result_t r;
+    cwgl_query_result r;
     CTX_ENTER(ctx);
     r = CWGL_QR_UNIMPLEMENTED;
     CTX_LEAVE(ctx);
     return r;
 }
 
-CWGL_API cwgl_query_result_t 
-cwgl_getUniform_f1(cwgl_ctx_t* ctx, cwgl_Program_t* program, 
-                   cwgl_UniformLocation_t* location, float* x){
-    cwgl_query_result_t r;
+CWGL_API cwgl_query_result 
+cwgl_getUniform_f1(cwgl_ctx* ctx, cwgl_Program* program, 
+                   cwgl_UniformLocation* location, float* x){
+    cwgl_query_result r;
     CTX_ENTER(ctx);
     r = CWGL_QR_UNIMPLEMENTED;
     CTX_LEAVE(ctx);
     return r;
 }
 
-CWGL_API cwgl_query_result_t 
-cwgl_getUniform_f2(cwgl_ctx_t* ctx, cwgl_Program_t* program, 
-                   cwgl_UniformLocation_t* location, float* x, float* y){
-    cwgl_query_result_t r;
+CWGL_API cwgl_query_result 
+cwgl_getUniform_f2(cwgl_ctx* ctx, cwgl_Program* program, 
+                   cwgl_UniformLocation* location, float* x, float* y){
+    cwgl_query_result r;
     CTX_ENTER(ctx);
     r = CWGL_QR_UNIMPLEMENTED;
     CTX_LEAVE(ctx);
     return r;
 }
 
-CWGL_API cwgl_query_result_t 
-cwgl_getUniform_f3(cwgl_ctx_t* ctx, cwgl_Program_t* program, 
-                   cwgl_UniformLocation_t* location, 
+CWGL_API cwgl_query_result 
+cwgl_getUniform_f3(cwgl_ctx* ctx, cwgl_Program* program, 
+                   cwgl_UniformLocation* location, 
                    float* x, float* y, float* z){
-    cwgl_query_result_t r;
+    cwgl_query_result r;
     CTX_ENTER(ctx);
     r = CWGL_QR_UNIMPLEMENTED;
     CTX_LEAVE(ctx);
     return r;
 }
 
-CWGL_API cwgl_query_result_t 
-cwgl_getUniform_f4(cwgl_ctx_t* ctx, cwgl_Program_t* program, 
-                   cwgl_UniformLocation_t* location, 
+CWGL_API cwgl_query_result 
+cwgl_getUniform_f4(cwgl_ctx* ctx, cwgl_Program* program, 
+                   cwgl_UniformLocation* location, 
                    float* x, float* y, float* z, float* w){
-    cwgl_query_result_t r;
+    cwgl_query_result r;
     CTX_ENTER(ctx);
     r = CWGL_QR_UNIMPLEMENTED;
     CTX_LEAVE(ctx);
     return r;
 }
 
-CWGL_API cwgl_query_result_t 
-cwgl_getUniform_m2(cwgl_ctx_t* ctx, cwgl_Program_t* program, 
-                   cwgl_UniformLocation_t* location, float* x){
-    cwgl_query_result_t r;
+CWGL_API cwgl_query_result 
+cwgl_getUniform_m2(cwgl_ctx* ctx, cwgl_Program* program, 
+                   cwgl_UniformLocation* location, float* x){
+    cwgl_query_result r;
     CTX_ENTER(ctx);
     r = CWGL_QR_UNIMPLEMENTED;
     CTX_LEAVE(ctx);
     return r;
 }
 
-CWGL_API cwgl_query_result_t 
-cwgl_getUniform_m3(cwgl_ctx_t* ctx, cwgl_Program_t* program, 
-                   cwgl_UniformLocation_t* location, float* x){
-    cwgl_query_result_t r;
+CWGL_API cwgl_query_result 
+cwgl_getUniform_m3(cwgl_ctx* ctx, cwgl_Program* program, 
+                   cwgl_UniformLocation* location, float* x){
+    cwgl_query_result r;
     CTX_ENTER(ctx);
     r = CWGL_QR_UNIMPLEMENTED;
     CTX_LEAVE(ctx);
     return r;
 }
 
-CWGL_API cwgl_query_result_t 
-cwgl_getUniform_m4(cwgl_ctx_t* ctx, cwgl_Program_t* program, 
-                   cwgl_UniformLocation_t* location, float* x){
-    cwgl_query_result_t r;
+CWGL_API cwgl_query_result 
+cwgl_getUniform_m4(cwgl_ctx* ctx, cwgl_Program* program, 
+                   cwgl_UniformLocation* location, float* x){
+    cwgl_query_result r;
     CTX_ENTER(ctx);
     r = CWGL_QR_UNIMPLEMENTED;
     CTX_LEAVE(ctx);

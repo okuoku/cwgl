@@ -4,18 +4,18 @@
 #include <stdio.h>
 
 int 
-cwgl_backend_ctx_init(cwgl_ctx_t* ctx){
-    cwgl_backend_ctx_t* c;
-    c = malloc(sizeof(cwgl_backend_ctx_t));
+cwgl_backend_ctx_init(cwgl_ctx* ctx){
+    cwgl_backend_ctx* c;
+    c = malloc(sizeof(cwgl_backend_ctx));
     ctx->backend = c;
     return 0;
 }
 
 int 
-cwgl_backend_Buffer_init(cwgl_ctx_t* ctx, cwgl_Buffer_t* buffer){
+cwgl_backend_Buffer_init(cwgl_ctx* ctx, cwgl_Buffer* buffer){
     GLuint name;
-    cwgl_backend_Buffer_t* b;
-    b = malloc(sizeof(cwgl_backend_Buffer_t));
+    cwgl_backend_Buffer* b;
+    b = malloc(sizeof(cwgl_backend_Buffer));
     if(b){
         glGenBuffers(1, &name);
         b->name = name;
@@ -24,10 +24,10 @@ cwgl_backend_Buffer_init(cwgl_ctx_t* ctx, cwgl_Buffer_t* buffer){
     return 0;
 }
 int 
-cwgl_backend_Shader_init(cwgl_ctx_t* ctx, cwgl_Shader_t* shader){
+cwgl_backend_Shader_init(cwgl_ctx* ctx, cwgl_Shader* shader){
     GLuint name;
-    cwgl_backend_Shader_t* s;
-    s = malloc(sizeof(cwgl_backend_Shader_t));
+    cwgl_backend_Shader* s;
+    s = malloc(sizeof(cwgl_backend_Shader));
     if(s){
         if(shader->state.SHADER_TYPE == VERTEX_SHADER){
             name = glCreateShader(GL_VERTEX_SHADER);
@@ -40,10 +40,10 @@ cwgl_backend_Shader_init(cwgl_ctx_t* ctx, cwgl_Shader_t* shader){
     return 0;
 }
 int 
-cwgl_backend_Program_init(cwgl_ctx_t* ctx, cwgl_Program_t* program){
+cwgl_backend_Program_init(cwgl_ctx* ctx, cwgl_Program* program){
     GLuint name;
-    cwgl_backend_Program_t* p;
-    p = malloc(sizeof(cwgl_backend_Program_t));
+    cwgl_backend_Program* p;
+    p = malloc(sizeof(cwgl_backend_Program));
     if(p){
         name = glCreateProgram();
         p->name = name;
@@ -54,10 +54,10 @@ cwgl_backend_Program_init(cwgl_ctx_t* ctx, cwgl_Program_t* program){
     return 0;
 }
 int 
-cwgl_backend_Texture_init(cwgl_ctx_t* ctx, cwgl_Texture_t* texture){
+cwgl_backend_Texture_init(cwgl_ctx* ctx, cwgl_Texture* texture){
     GLuint name;
-    cwgl_backend_Texture_t* t;
-    t = malloc(sizeof(cwgl_backend_Texture_t));
+    cwgl_backend_Texture* t;
+    t = malloc(sizeof(cwgl_backend_Texture));
     if(t){
         glGenTextures(1, &name);
         t->name = name;
@@ -66,11 +66,11 @@ cwgl_backend_Texture_init(cwgl_ctx_t* ctx, cwgl_Texture_t* texture){
     return 0;
 }
 int 
-cwgl_backend_Renderbuffer_init(cwgl_ctx_t* ctx, 
-                               cwgl_Renderbuffer_t* renderbuffer){
+cwgl_backend_Renderbuffer_init(cwgl_ctx* ctx, 
+                               cwgl_Renderbuffer* renderbuffer){
     GLuint name;
-    cwgl_backend_Renderbuffer_t* r;
-    r = malloc(sizeof(cwgl_backend_Renderbuffer_t));
+    cwgl_backend_Renderbuffer* r;
+    r = malloc(sizeof(cwgl_backend_Renderbuffer));
     if(r){
         glGenRenderbuffers(1, &name);
         r->name = name;
@@ -79,11 +79,11 @@ cwgl_backend_Renderbuffer_init(cwgl_ctx_t* ctx,
     return 0;
 }
 int 
-cwgl_backend_Framebuffer_init(cwgl_ctx_t* ctx, 
-                              cwgl_Framebuffer_t* framebuffer){
+cwgl_backend_Framebuffer_init(cwgl_ctx* ctx, 
+                              cwgl_Framebuffer* framebuffer){
     GLuint name;
-    cwgl_backend_Framebuffer_t* f;
-    f = malloc(sizeof(cwgl_backend_Framebuffer_t));
+    cwgl_backend_Framebuffer* f;
+    f = malloc(sizeof(cwgl_backend_Framebuffer));
     if(f){
         glGenFramebuffers(1, &name);
         f->name = name;
@@ -93,50 +93,50 @@ cwgl_backend_Framebuffer_init(cwgl_ctx_t* ctx,
 }
 
 int 
-cwgl_backend_ctx_release(cwgl_ctx_t* ctx){
+cwgl_backend_ctx_release(cwgl_ctx* ctx){
     free(ctx->backend);
     ctx->backend = NULL;
     return 0;
 }
 int 
-cwgl_backend_Buffer_release(cwgl_ctx_t* ctx, cwgl_Buffer_t* buffer){
+cwgl_backend_Buffer_release(cwgl_ctx* ctx, cwgl_Buffer* buffer){
     glDeleteBuffers(1, &buffer->backend->name);
     free(buffer->backend);
     buffer->backend = NULL;
     return 0;
 }
 int 
-cwgl_backend_Shader_release(cwgl_ctx_t* ctx, cwgl_Shader_t* shader){
+cwgl_backend_Shader_release(cwgl_ctx* ctx, cwgl_Shader* shader){
     glDeleteShader(shader->backend->name);
     free(shader->backend);
     shader->backend = NULL;
     return 0;
 }
 int 
-cwgl_backend_Program_release(cwgl_ctx_t* ctx, cwgl_Program_t* program){
+cwgl_backend_Program_release(cwgl_ctx* ctx, cwgl_Program* program){
     glDeleteProgram(program->backend->name);
     free(program->backend);
     program->backend = NULL;
     return 0;
 }
 int 
-cwgl_backend_Texture_release(cwgl_ctx_t* ctx, cwgl_Texture_t* texture){
+cwgl_backend_Texture_release(cwgl_ctx* ctx, cwgl_Texture* texture){
     glDeleteTextures(1, &texture->backend->name);
     free(texture->backend);
     texture->backend = NULL;
     return 0;
 }
 int 
-cwgl_backend_Renderbuffer_release(cwgl_ctx_t* ctx, 
-                                  cwgl_Renderbuffer_t* renderbuffer){
+cwgl_backend_Renderbuffer_release(cwgl_ctx* ctx, 
+                                  cwgl_Renderbuffer* renderbuffer){
     glDeleteRenderbuffers(1, &renderbuffer->backend->name);
     free(renderbuffer->backend);
     renderbuffer->backend = NULL;
     return 0;
 }
 int 
-cwgl_backend_Framebuffer_release(cwgl_ctx_t* ctx, 
-                                 cwgl_Framebuffer_t* framebuffer){
+cwgl_backend_Framebuffer_release(cwgl_ctx* ctx, 
+                                 cwgl_Framebuffer* framebuffer){
     glDeleteFramebuffers(1, &framebuffer->backend->name);
     free(framebuffer->backend);
     framebuffer->backend = NULL;

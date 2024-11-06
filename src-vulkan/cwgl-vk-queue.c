@@ -2,8 +2,8 @@
 #include <stdio.h>
 
 void
-cwgl_vkpriv_graphics_wait(cwgl_ctx_t* ctx){
-    cwgl_backend_ctx_t* backend;
+cwgl_vkpriv_graphics_wait(cwgl_ctx* ctx){
+    cwgl_backend_ctx* backend;
     backend = ctx->backend;
     if(backend->queue_active){
         // FIXME: We need some strategy here..
@@ -13,10 +13,10 @@ cwgl_vkpriv_graphics_wait(cwgl_ctx_t* ctx){
 }
 
 void
-cwgl_vkpriv_graphics_submit(cwgl_ctx_t* ctx){
+cwgl_vkpriv_graphics_submit(cwgl_ctx* ctx){
     VkResult r;
     VkSubmitInfo si;
-    cwgl_backend_ctx_t* backend;
+    cwgl_backend_ctx* backend;
     VkPipelineStageFlags wait_stage;
     backend = ctx->backend;
     if(backend->queue_has_command){
@@ -51,8 +51,8 @@ cwgl_vkpriv_graphics_submit(cwgl_ctx_t* ctx){
 }
 
 static void
-barrier_in(cwgl_ctx_t* ctx){
-    cwgl_backend_ctx_t* backend;
+barrier_in(cwgl_ctx* ctx){
+    cwgl_backend_ctx* backend;
     backend = ctx->backend;
     VkCommandBufferBeginInfo bi;
 
@@ -91,8 +91,8 @@ barrier_in(cwgl_ctx_t* ctx){
 }
 
 static void
-barrier_out(cwgl_ctx_t* ctx){
-    cwgl_backend_ctx_t* backend;
+barrier_out(cwgl_ctx* ctx){
+    cwgl_backend_ctx* backend;
     backend = ctx->backend;
     VkCommandBufferBeginInfo bi;
 
@@ -131,10 +131,10 @@ barrier_out(cwgl_ctx_t* ctx){
 }
 
 int
-cwgl_backend_beginframe(cwgl_ctx_t* ctx){
+cwgl_backend_beginframe(cwgl_ctx* ctx){
     VkResult r;
     uint32_t current_image_index;
-    cwgl_backend_ctx_t* backend;
+    cwgl_backend_ctx* backend;
     backend = ctx->backend;
     r = vkAcquireNextImageKHR(backend->device,
                               backend->swapchain,
@@ -158,10 +158,10 @@ cwgl_backend_beginframe(cwgl_ctx_t* ctx){
 }
 
 int
-cwgl_backend_endframe(cwgl_ctx_t* ctx){
+cwgl_backend_endframe(cwgl_ctx* ctx){
     VkResult r;
     VkPresentInfoKHR pi;
-    cwgl_backend_ctx_t* backend;
+    cwgl_backend_ctx* backend;
     backend = ctx->backend;
     barrier_out(ctx);
     cwgl_vkpriv_graphics_wait(ctx);
@@ -188,14 +188,14 @@ cwgl_backend_endframe(cwgl_ctx_t* ctx){
 }
 
 int
-cwgl_backend_finish(cwgl_ctx_t* ctx){
+cwgl_backend_finish(cwgl_ctx* ctx){
     cwgl_vkpriv_graphics_submit(ctx);
     cwgl_vkpriv_graphics_wait(ctx);
     return 0;
 }
 
 int
-cwgl_backend_flush(cwgl_ctx_t* ctx){
+cwgl_backend_flush(cwgl_ctx* ctx){
     cwgl_vkpriv_graphics_submit(ctx);
     return 0;
 }

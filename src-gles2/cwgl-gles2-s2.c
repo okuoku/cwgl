@@ -1,39 +1,39 @@
 #include "cwgl-gles2-priv.h"
 
 // 2.5 GL Errors
-CWGL_API cwgl_enum_t 
-cwgl_getError(cwgl_ctx_t* ctx){
-    cwgl_enum_t r;
+CWGL_API cwgl_enum
+cwgl_getError(cwgl_ctx* ctx){
+    cwgl_enum r;
     CTX_ENTER(ctx);
-    r = (cwgl_enum_t)glGetError();
+    r = (cwgl_enum)glGetError();
     CTX_LEAVE(ctx);
     return r;
 }
 
 // 2.7 Current Vertex State
 CWGL_API void 
-cwgl_vertexAttrib1f(cwgl_ctx_t* ctx, uint32_t indx, float x){
+cwgl_vertexAttrib1f(cwgl_ctx* ctx, uint32_t indx, float x){
     CTX_ENTER(ctx);
     glVertexAttrib1f(indx, x);
     CTX_LEAVE(ctx);
 }
 
 CWGL_API void 
-cwgl_vertexAttrib2f(cwgl_ctx_t* ctx, uint32_t indx, float x, float y){
+cwgl_vertexAttrib2f(cwgl_ctx* ctx, uint32_t indx, float x, float y){
     CTX_ENTER(ctx);
     glVertexAttrib2f(indx, x, y);
     CTX_LEAVE(ctx);
 }
 
 CWGL_API void 
-cwgl_vertexAttrib3f(cwgl_ctx_t* ctx, uint32_t indx, float x, float y, float z){
+cwgl_vertexAttrib3f(cwgl_ctx* ctx, uint32_t indx, float x, float y, float z){
     CTX_ENTER(ctx);
     glVertexAttrib3f(indx, x, y, z);
     CTX_LEAVE(ctx);
 }
 
 CWGL_API void 
-cwgl_vertexAttrib4f(cwgl_ctx_t* ctx, uint32_t indx, 
+cwgl_vertexAttrib4f(cwgl_ctx* ctx, uint32_t indx, 
                     float x, float y, float z, float w){
     CTX_ENTER(ctx);
     glVertexAttrib4f(indx, x, y, z, w);
@@ -42,8 +42,8 @@ cwgl_vertexAttrib4f(cwgl_ctx_t* ctx, uint32_t indx,
 
 // 2.8 Vertex Arrays
 CWGL_API void 
-cwgl_vertexAttribPointer(cwgl_ctx_t* ctx, uint32_t indx, 
-                         int32_t size, cwgl_enum_t type, int normalized, 
+cwgl_vertexAttribPointer(cwgl_ctx* ctx, uint32_t indx, 
+                         int32_t size, cwgl_enum type, int normalized, 
                          uint32_t stride, uint32_t offset){
     CTX_ENTER(ctx);
     // FIXME: Check we're binding some array buffer now
@@ -54,21 +54,21 @@ cwgl_vertexAttribPointer(cwgl_ctx_t* ctx, uint32_t indx,
 }
 
 CWGL_API void 
-cwgl_enableVertexAttribArray(cwgl_ctx_t* ctx, uint32_t index){
+cwgl_enableVertexAttribArray(cwgl_ctx* ctx, uint32_t index){
     CTX_ENTER(ctx);
     glEnableVertexAttribArray(index);
     CTX_LEAVE(ctx);
 }
 
 CWGL_API void 
-cwgl_disableVertexAttribArray(cwgl_ctx_t* ctx, uint32_t index){
+cwgl_disableVertexAttribArray(cwgl_ctx* ctx, uint32_t index){
     CTX_ENTER(ctx);
     glDisableVertexAttribArray(index);
     CTX_LEAVE(ctx);
 }
 
 CWGL_API void 
-cwgl_drawArrays(cwgl_ctx_t* ctx, cwgl_enum_t mode, 
+cwgl_drawArrays(cwgl_ctx* ctx, cwgl_enum mode, 
                 int32_t first, uint32_t count){
     CTX_ENTER(ctx);
     glDrawArrays(mode, first, count);
@@ -76,8 +76,8 @@ cwgl_drawArrays(cwgl_ctx_t* ctx, cwgl_enum_t mode,
 }
 
 CWGL_API void 
-cwgl_drawElements(cwgl_ctx_t* ctx, cwgl_enum_t mode, 
-                  uint32_t count, cwgl_enum_t type, uint32_t offset){
+cwgl_drawElements(cwgl_ctx* ctx, cwgl_enum mode, 
+                  uint32_t count, cwgl_enum type, uint32_t offset){
     CTX_ENTER(ctx);
     // FIXME: Check we're binding some array buffer now
     //        https://www.khronos.org/registry/webgl/specs/latest/1.0/#6.2
@@ -88,7 +88,7 @@ cwgl_drawElements(cwgl_ctx_t* ctx, cwgl_enum_t mode,
 
 // 2.9 Buffer Objects
 CWGL_API void 
-cwgl_bindBuffer(cwgl_ctx_t* ctx, cwgl_enum_t target, cwgl_Buffer_t* buffer){
+cwgl_bindBuffer(cwgl_ctx* ctx, cwgl_enum target, cwgl_Buffer* buffer){
     GLuint name;
     CTX_ENTER(ctx);
     if(buffer){
@@ -101,7 +101,7 @@ cwgl_bindBuffer(cwgl_ctx_t* ctx, cwgl_enum_t target, cwgl_Buffer_t* buffer){
 }
 
 CWGL_API void 
-cwgl_deleteBuffer(cwgl_ctx_t* ctx, cwgl_Buffer_t* buffer){
+cwgl_deleteBuffer(cwgl_ctx* ctx, cwgl_Buffer* buffer){
     GLuint name;
     CTX_ENTER(ctx);
     if(buffer){
@@ -111,10 +111,10 @@ cwgl_deleteBuffer(cwgl_ctx_t* ctx, cwgl_Buffer_t* buffer){
     CTX_LEAVE(ctx);
 }
 
-CWGL_API cwgl_Buffer_t* 
-cwgl_createBuffer(cwgl_ctx_t* ctx){
+CWGL_API cwgl_Buffer* 
+cwgl_createBuffer(cwgl_ctx* ctx){
     GLuint name = 0;
-    cwgl_Buffer_t* b;
+    cwgl_Buffer* b;
     CTX_ENTER(ctx);
     glGenBuffers(1, &name);
     b = CTX_ALLOC(ctx, Buffer);
@@ -124,7 +124,7 @@ cwgl_createBuffer(cwgl_ctx_t* ctx){
 }
 
 CWGL_API void
-cwgl_Buffer_release(cwgl_ctx_t* ctx, cwgl_Buffer_t* buffer){
+cwgl_Buffer_release(cwgl_ctx* ctx, cwgl_Buffer* buffer){
     //CTX_ENTER(ctx);
     if(buffer){
         CTX_FREE(ctx, Buffer, buffer);
@@ -133,15 +133,15 @@ cwgl_Buffer_release(cwgl_ctx_t* ctx, cwgl_Buffer_t* buffer){
 }
 
 CWGL_API void 
-cwgl_bufferData(cwgl_ctx_t* ctx, cwgl_enum_t target, 
-                uint32_t size, void* data, cwgl_enum_t usage){
+cwgl_bufferData(cwgl_ctx* ctx, cwgl_enum target, 
+                uint32_t size, void* data, cwgl_enum usage){
     CTX_ENTER(ctx);
     glBufferData(target, size, data, usage);
     CTX_LEAVE(ctx);
 }
 
 CWGL_API void 
-cwgl_bufferSubData(cwgl_ctx_t* ctx, cwgl_enum_t target, 
+cwgl_bufferSubData(cwgl_ctx* ctx, cwgl_enum target, 
                    uint32_t offset, void* data, size_t buflen){
     CTX_ENTER(ctx);
     glBufferSubData(target, offset, buflen, data);
@@ -149,10 +149,10 @@ cwgl_bufferSubData(cwgl_ctx_t* ctx, cwgl_enum_t target,
 }
 
 // 2.10.1 Loading and Creating Shader Source
-CWGL_API cwgl_Shader_t* 
-cwgl_createShader(cwgl_ctx_t* ctx, cwgl_enum_t type){
+CWGL_API cwgl_Shader* 
+cwgl_createShader(cwgl_ctx* ctx, cwgl_enum type){
     GLuint name;
-    cwgl_Shader_t* r;
+    cwgl_Shader* r;
     CTX_ENTER(ctx);
     name = glCreateShader(type);
     if(name){
@@ -166,7 +166,7 @@ cwgl_createShader(cwgl_ctx_t* ctx, cwgl_enum_t type){
 }
 
 CWGL_API void
-cwgl_Shader_release(cwgl_ctx_t* ctx, cwgl_Shader_t* shader){
+cwgl_Shader_release(cwgl_ctx* ctx, cwgl_Shader* shader){
     //CTX_ENTER(ctx);
     if(shader){
         CTX_FREE(ctx, Shader, shader);
@@ -175,7 +175,7 @@ cwgl_Shader_release(cwgl_ctx_t* ctx, cwgl_Shader_t* shader){
 }
 
 CWGL_API void 
-cwgl_shaderSource(cwgl_ctx_t* ctx, cwgl_Shader_t* shader, const char* source,
+cwgl_shaderSource(cwgl_ctx* ctx, cwgl_Shader* shader, const char* source,
                   size_t sourcelen){
     GLuint name;
     const GLint len = sourcelen;
@@ -186,7 +186,7 @@ cwgl_shaderSource(cwgl_ctx_t* ctx, cwgl_Shader_t* shader, const char* source,
 }
 
 CWGL_API void 
-cwgl_compileShader(cwgl_ctx_t* ctx, cwgl_Shader_t* shader){
+cwgl_compileShader(cwgl_ctx* ctx, cwgl_Shader* shader){
     GLuint name;
     CTX_ENTER(ctx);
     name = CTX_GETNAME(ctx, shader);
@@ -195,7 +195,7 @@ cwgl_compileShader(cwgl_ctx_t* ctx, cwgl_Shader_t* shader){
 }
 
 CWGL_API void 
-cwgl_deleteShader(cwgl_ctx_t* ctx, cwgl_Shader_t* shader){
+cwgl_deleteShader(cwgl_ctx* ctx, cwgl_Shader* shader){
     GLuint name;
     CTX_ENTER(ctx);
     name = CTX_GETNAME(ctx, shader);
@@ -204,10 +204,10 @@ cwgl_deleteShader(cwgl_ctx_t* ctx, cwgl_Shader_t* shader){
 }
 
 // 2.10.3 Program Objects
-CWGL_API cwgl_Program_t* 
-cwgl_createProgram(cwgl_ctx_t* ctx){
+CWGL_API cwgl_Program* 
+cwgl_createProgram(cwgl_ctx* ctx){
     GLuint name;
-    cwgl_Program_t* r;
+    cwgl_Program* r;
     CTX_ENTER(ctx);
     name = glCreateProgram();
     if(name){
@@ -221,7 +221,7 @@ cwgl_createProgram(cwgl_ctx_t* ctx){
 }
 
 CWGL_API void
-cwgl_Program_release(cwgl_ctx_t* ctx, cwgl_Program_t* program){
+cwgl_Program_release(cwgl_ctx* ctx, cwgl_Program* program){
     //CTX_ENTER(ctx);
     if(program){
         CTX_FREE(ctx, Program, program);
@@ -231,8 +231,8 @@ cwgl_Program_release(cwgl_ctx_t* ctx, cwgl_Program_t* program){
 
 
 CWGL_API void 
-cwgl_attachShader(cwgl_ctx_t* ctx, cwgl_Program_t* program, 
-                  cwgl_Shader_t* shader){
+cwgl_attachShader(cwgl_ctx* ctx, cwgl_Program* program, 
+                  cwgl_Shader* shader){
     GLuint namep;
     GLuint names;
     CTX_ENTER(ctx);
@@ -243,8 +243,8 @@ cwgl_attachShader(cwgl_ctx_t* ctx, cwgl_Program_t* program,
 }
 
 CWGL_API void 
-cwgl_detachShader(cwgl_ctx_t* ctx, cwgl_Program_t* program, 
-                  cwgl_Shader_t* shader){
+cwgl_detachShader(cwgl_ctx* ctx, cwgl_Program* program, 
+                  cwgl_Shader* shader){
     GLuint namep;
     GLuint names;
     CTX_ENTER(ctx);
@@ -255,7 +255,7 @@ cwgl_detachShader(cwgl_ctx_t* ctx, cwgl_Program_t* program,
 }
 
 CWGL_API void 
-cwgl_linkProgram(cwgl_ctx_t* ctx, cwgl_Program_t* program){
+cwgl_linkProgram(cwgl_ctx* ctx, cwgl_Program* program){
     GLuint name;
     CTX_ENTER(ctx);
     name = CTX_GETNAME(ctx, program);
@@ -264,7 +264,7 @@ cwgl_linkProgram(cwgl_ctx_t* ctx, cwgl_Program_t* program){
 }
 
 CWGL_API void 
-cwgl_useProgram(cwgl_ctx_t* ctx, cwgl_Program_t* program){
+cwgl_useProgram(cwgl_ctx* ctx, cwgl_Program* program){
     GLuint name;
     CTX_ENTER(ctx);
     if(program){
@@ -277,7 +277,7 @@ cwgl_useProgram(cwgl_ctx_t* ctx, cwgl_Program_t* program){
 }
 
 CWGL_API void 
-cwgl_deleteProgram(cwgl_ctx_t* ctx, cwgl_Program_t* program){
+cwgl_deleteProgram(cwgl_ctx* ctx, cwgl_Program* program){
     GLuint name;
     CTX_ENTER(ctx);
     name = CTX_GETNAME(ctx, program);
@@ -286,10 +286,10 @@ cwgl_deleteProgram(cwgl_ctx_t* ctx, cwgl_Program_t* program){
 }
 
 // 2.10.4 Shader Variables
-CWGL_API cwgl_query_result_t 
-cwgl_getActiveAttrib(cwgl_ctx_t* ctx, cwgl_Program_t* program, 
+CWGL_API cwgl_query_result
+cwgl_getActiveAttrib(cwgl_ctx* ctx, cwgl_Program* program, 
                      int32_t index, int32_t* out_size, 
-                     int32_t* type, cwgl_string_t** name){
+                     int32_t* type, cwgl_string** name){
     GLuint tname;
     GLsizei length;
     GLint tsize;
@@ -313,7 +313,7 @@ cwgl_getActiveAttrib(cwgl_ctx_t* ctx, cwgl_Program_t* program,
 }
 
 CWGL_API int32_t 
-cwgl_getAttribLocation(cwgl_ctx_t* ctx, cwgl_Program_t* program, 
+cwgl_getAttribLocation(cwgl_ctx* ctx, cwgl_Program* program, 
                        const char* name){
     GLuint namep;
     int32_t r;
@@ -325,7 +325,7 @@ cwgl_getAttribLocation(cwgl_ctx_t* ctx, cwgl_Program_t* program,
 }
 
 CWGL_API void 
-cwgl_bindAttribLocation(cwgl_ctx_t* ctx, cwgl_Program_t* program, 
+cwgl_bindAttribLocation(cwgl_ctx* ctx, cwgl_Program* program, 
                         uint32_t index, const char* name){
     GLuint namep;
     CTX_ENTER(ctx);
@@ -334,12 +334,12 @@ cwgl_bindAttribLocation(cwgl_ctx_t* ctx, cwgl_Program_t* program,
     CTX_LEAVE(ctx);
 }
 
-CWGL_API cwgl_UniformLocation_t* 
-cwgl_getUniformLocation(cwgl_ctx_t* ctx, cwgl_Program_t* program, 
+CWGL_API cwgl_UniformLocation* 
+cwgl_getUniformLocation(cwgl_ctx* ctx, cwgl_Program* program, 
                         const char* name){
     GLint nameu;
     GLuint namep;
-    cwgl_UniformLocation_t* r;
+    cwgl_UniformLocation* r;
     CTX_ENTER(ctx);
     namep = CTX_GETNAME(ctx, program);
     nameu = glGetUniformLocation(namep, name);
@@ -354,7 +354,7 @@ cwgl_getUniformLocation(cwgl_ctx_t* ctx, cwgl_Program_t* program,
 }
 
 CWGL_API void
-cwgl_UniformLocation_release(cwgl_ctx_t* ctx, cwgl_UniformLocation_t* u){
+cwgl_UniformLocation_release(cwgl_ctx* ctx, cwgl_UniformLocation* u){
     //CTX_ENTER(ctx);
     if(u){
         CTX_FREE(ctx, UniformLocation, u);
@@ -362,11 +362,11 @@ cwgl_UniformLocation_release(cwgl_ctx_t* ctx, cwgl_UniformLocation_t* u){
     //CTX_LEAVE(ctx);
 }
 
-CWGL_API cwgl_query_result_t 
-cwgl_getActiveUniform(cwgl_ctx_t* ctx, cwgl_Program_t* program, 
+CWGL_API cwgl_query_result 
+cwgl_getActiveUniform(cwgl_ctx* ctx, cwgl_Program* program, 
                       int32_t index, int32_t* out_size, int32_t* out_type, 
-                      cwgl_string_t** name){
-    cwgl_string_t* r;
+                      cwgl_string** name){
+    cwgl_string* r;
     char namebuf[320]; // In WebGL, it should be <256
     GLuint namep;
     GLint size = 0;
@@ -385,7 +385,7 @@ cwgl_getActiveUniform(cwgl_ctx_t* ctx, cwgl_Program_t* program,
 }
 
 CWGL_API void 
-cwgl_uniform1f(cwgl_ctx_t* ctx, cwgl_UniformLocation_t* location, float x){
+cwgl_uniform1f(cwgl_ctx* ctx, cwgl_UniformLocation* location, float x){
     GLint loc;
     CTX_ENTER(ctx);
     loc = CTX_GETNAME(ctx, location);
@@ -394,7 +394,7 @@ cwgl_uniform1f(cwgl_ctx_t* ctx, cwgl_UniformLocation_t* location, float x){
 }
 
 CWGL_API void 
-cwgl_uniform1i(cwgl_ctx_t* ctx, cwgl_UniformLocation_t* location, int32_t x){
+cwgl_uniform1i(cwgl_ctx* ctx, cwgl_UniformLocation* location, int32_t x){
     GLint loc;
     CTX_ENTER(ctx);
     loc = CTX_GETNAME(ctx, location);
@@ -403,7 +403,7 @@ cwgl_uniform1i(cwgl_ctx_t* ctx, cwgl_UniformLocation_t* location, int32_t x){
 }
 
 CWGL_API void 
-cwgl_uniform2f(cwgl_ctx_t* ctx, cwgl_UniformLocation_t* location, 
+cwgl_uniform2f(cwgl_ctx* ctx, cwgl_UniformLocation* location, 
                float x, float y){
     GLint loc;
     CTX_ENTER(ctx);
@@ -413,7 +413,7 @@ cwgl_uniform2f(cwgl_ctx_t* ctx, cwgl_UniformLocation_t* location,
 }
 
 CWGL_API void 
-cwgl_uniform2i(cwgl_ctx_t* ctx, cwgl_UniformLocation_t* location, 
+cwgl_uniform2i(cwgl_ctx* ctx, cwgl_UniformLocation* location, 
                int32_t x, int32_t y){
     GLint loc;
     CTX_ENTER(ctx);
@@ -423,7 +423,7 @@ cwgl_uniform2i(cwgl_ctx_t* ctx, cwgl_UniformLocation_t* location,
 }
 
 CWGL_API void 
-cwgl_uniform3f(cwgl_ctx_t* ctx, cwgl_UniformLocation_t* location, 
+cwgl_uniform3f(cwgl_ctx* ctx, cwgl_UniformLocation* location, 
                float x, float y, float z){
     GLint loc;
     CTX_ENTER(ctx);
@@ -433,7 +433,7 @@ cwgl_uniform3f(cwgl_ctx_t* ctx, cwgl_UniformLocation_t* location,
 }
 
 CWGL_API void 
-cwgl_uniform3i(cwgl_ctx_t* ctx, cwgl_UniformLocation_t* location, 
+cwgl_uniform3i(cwgl_ctx* ctx, cwgl_UniformLocation* location, 
                int32_t x, int32_t y, int32_t z){
     GLint loc;
     CTX_ENTER(ctx);
@@ -443,7 +443,7 @@ cwgl_uniform3i(cwgl_ctx_t* ctx, cwgl_UniformLocation_t* location,
 }
 
 CWGL_API void 
-cwgl_uniform4f(cwgl_ctx_t* ctx, cwgl_UniformLocation_t* location, 
+cwgl_uniform4f(cwgl_ctx* ctx, cwgl_UniformLocation* location, 
                float x, float y, float z, float w){
     GLint loc;
     CTX_ENTER(ctx);
@@ -453,7 +453,7 @@ cwgl_uniform4f(cwgl_ctx_t* ctx, cwgl_UniformLocation_t* location,
 }
 
 CWGL_API void 
-cwgl_uniform4i(cwgl_ctx_t* ctx, cwgl_UniformLocation_t* location, 
+cwgl_uniform4i(cwgl_ctx* ctx, cwgl_UniformLocation* location, 
                int32_t x, int32_t y, int32_t z, int32_t w){
     GLint loc;
     CTX_ENTER(ctx);
@@ -463,7 +463,7 @@ cwgl_uniform4i(cwgl_ctx_t* ctx, cwgl_UniformLocation_t* location,
 }
 
 CWGL_API void 
-cwgl_uniform1fv(cwgl_ctx_t* ctx, cwgl_UniformLocation_t* location, 
+cwgl_uniform1fv(cwgl_ctx* ctx, cwgl_UniformLocation* location, 
                 float* values, size_t count){
     GLint loc;
     CTX_ENTER(ctx);
@@ -473,7 +473,7 @@ cwgl_uniform1fv(cwgl_ctx_t* ctx, cwgl_UniformLocation_t* location,
 }
 
 CWGL_API void 
-cwgl_uniform1iv(cwgl_ctx_t* ctx, cwgl_UniformLocation_t* location, 
+cwgl_uniform1iv(cwgl_ctx* ctx, cwgl_UniformLocation* location, 
                 int32_t* values, size_t count){
     GLint loc;
     CTX_ENTER(ctx);
@@ -483,7 +483,7 @@ cwgl_uniform1iv(cwgl_ctx_t* ctx, cwgl_UniformLocation_t* location,
 }
 
 CWGL_API void 
-cwgl_uniform2fv(cwgl_ctx_t* ctx, cwgl_UniformLocation_t* location, 
+cwgl_uniform2fv(cwgl_ctx* ctx, cwgl_UniformLocation* location, 
                 float* values, size_t count){
     GLint loc;
     CTX_ENTER(ctx);
@@ -493,7 +493,7 @@ cwgl_uniform2fv(cwgl_ctx_t* ctx, cwgl_UniformLocation_t* location,
 }
 
 CWGL_API void 
-cwgl_uniform2iv(cwgl_ctx_t* ctx, cwgl_UniformLocation_t* location, 
+cwgl_uniform2iv(cwgl_ctx* ctx, cwgl_UniformLocation* location, 
                 int32_t* values, size_t count){
     GLint loc;
     CTX_ENTER(ctx);
@@ -503,7 +503,7 @@ cwgl_uniform2iv(cwgl_ctx_t* ctx, cwgl_UniformLocation_t* location,
 }
 
 CWGL_API void 
-cwgl_uniform3fv(cwgl_ctx_t* ctx, cwgl_UniformLocation_t* location, 
+cwgl_uniform3fv(cwgl_ctx* ctx, cwgl_UniformLocation* location, 
                 float* values, size_t count){
     GLint loc;
     CTX_ENTER(ctx);
@@ -513,7 +513,7 @@ cwgl_uniform3fv(cwgl_ctx_t* ctx, cwgl_UniformLocation_t* location,
 }
 
 CWGL_API void 
-cwgl_uniform3iv(cwgl_ctx_t* ctx, cwgl_UniformLocation_t* location, 
+cwgl_uniform3iv(cwgl_ctx* ctx, cwgl_UniformLocation* location, 
                 int32_t* values, size_t count){
     GLint loc;
     CTX_ENTER(ctx);
@@ -523,7 +523,7 @@ cwgl_uniform3iv(cwgl_ctx_t* ctx, cwgl_UniformLocation_t* location,
 }
 
 CWGL_API void 
-cwgl_uniform4fv(cwgl_ctx_t* ctx, cwgl_UniformLocation_t* location, 
+cwgl_uniform4fv(cwgl_ctx* ctx, cwgl_UniformLocation* location, 
                 float* values, size_t count){
     GLint loc;
     CTX_ENTER(ctx);
@@ -533,7 +533,7 @@ cwgl_uniform4fv(cwgl_ctx_t* ctx, cwgl_UniformLocation_t* location,
 }
 
 CWGL_API void 
-cwgl_uniform4iv(cwgl_ctx_t* ctx, cwgl_UniformLocation_t* location, 
+cwgl_uniform4iv(cwgl_ctx* ctx, cwgl_UniformLocation* location, 
                 int32_t* values, size_t count){
     GLint loc;
     CTX_ENTER(ctx);
@@ -543,7 +543,7 @@ cwgl_uniform4iv(cwgl_ctx_t* ctx, cwgl_UniformLocation_t* location,
 }
 
 CWGL_API void 
-cwgl_uniformMatrix2fv(cwgl_ctx_t* ctx, cwgl_UniformLocation_t* location, 
+cwgl_uniformMatrix2fv(cwgl_ctx* ctx, cwgl_UniformLocation* location, 
                       int transpose, float* value, size_t count){
     GLint loc;
     CTX_ENTER(ctx);
@@ -553,7 +553,7 @@ cwgl_uniformMatrix2fv(cwgl_ctx_t* ctx, cwgl_UniformLocation_t* location,
 }
 
 CWGL_API void 
-cwgl_uniformMatrix3fv(cwgl_ctx_t* ctx, cwgl_UniformLocation_t* location, 
+cwgl_uniformMatrix3fv(cwgl_ctx* ctx, cwgl_UniformLocation* location, 
                       int transpose, float* value, size_t count){
     GLint loc;
     CTX_ENTER(ctx);
@@ -563,7 +563,7 @@ cwgl_uniformMatrix3fv(cwgl_ctx_t* ctx, cwgl_UniformLocation_t* location,
 }
 
 CWGL_API void 
-cwgl_uniformMatrix4fv(cwgl_ctx_t* ctx, cwgl_UniformLocation_t* location, 
+cwgl_uniformMatrix4fv(cwgl_ctx* ctx, cwgl_UniformLocation* location, 
                       int transpose, float* value, size_t count){
     GLint loc;
     CTX_ENTER(ctx);
@@ -575,7 +575,7 @@ cwgl_uniformMatrix4fv(cwgl_ctx_t* ctx, cwgl_UniformLocation_t* location,
 
 // 2.10.5 Shader Execution
 CWGL_API void 
-cwgl_validateProgram(cwgl_ctx_t* ctx, cwgl_Program_t* program){
+cwgl_validateProgram(cwgl_ctx* ctx, cwgl_Program* program){
     GLuint namep;
     CTX_ENTER(ctx);
     namep = CTX_GETNAME(ctx, program);
@@ -585,14 +585,14 @@ cwgl_validateProgram(cwgl_ctx_t* ctx, cwgl_Program_t* program){
 
 // 2.12.1 Controlling the Viewport
 CWGL_API void 
-cwgl_depthRange(cwgl_ctx_t* ctx, float zNear, float zFar){
+cwgl_depthRange(cwgl_ctx* ctx, float zNear, float zFar){
     CTX_ENTER(ctx);
     glDepthRangef(zNear, zFar);
     CTX_LEAVE(ctx);
 }
 
 CWGL_API void 
-cwgl_viewport(cwgl_ctx_t* ctx, 
+cwgl_viewport(cwgl_ctx* ctx, 
               int32_t x, int32_t y, int32_t width, int32_t height){
     CTX_ENTER(ctx);
     glViewport(x, y, width, height);

@@ -16,7 +16,7 @@ struct iddata_s {
         TYPE_CONSTANT_UNDEF,
         TYPE_CONSTANT_COMPOSITE
     } type;
-    cwgl_var_type_t cls; /* GL type for type object */
+    cwgl_var_type cls; /* GL type for type object */
     int bitwidth;
     int elms;
     union {
@@ -35,26 +35,26 @@ struct iddata_s {
     int next;
 };
 
-typedef struct iddata_s iddata_t;
+typedef struct iddata_s iddata;
 
 struct asmctx_s {
     int last_reg;
-    iddata_t* idd;
+    iddata* idd;
 };
 
-typedef struct asmctx_s asmctx_t;
+typedef struct asmctx_s asmctx;
 
 static int max_regs = 0;
 
 static int /* bool */
-fill_opinfo(int idx, uint32_t op, int oplen, uint32_t* ops, asmctx_t* ctx){
+fill_opinfo(int idx, uint32_t op, int oplen, uint32_t* ops, asmctx* ctx){
     uint32_t in0 = 0;
     uint32_t in1 = 0;
     uint32_t in2 = 0;
     uint32_t out = 0;
     uint32_t typeid = 0;
     int i;
-    iddata_t* idd = ctx->idd;
+    iddata* idd = ctx->idd;
 
     (void) oplen;
     switch(op){
@@ -335,10 +335,10 @@ shxm_ms_asm0(uint32_t* ops, int len){
     int i,r;
     int* regs;
     int curreg;
-    asmctx_t ctx;
-    iddata_t* idd;
+    asmctx ctx;
+    iddata* idd;
     idcount = ops[3];
-    idd = malloc(sizeof(iddata_t)*idcount);
+    idd = malloc(sizeof(iddata)*idcount);
 
     for(i=0;i!=idcount;i++){
         idd[i].type = TYPE_REGISTER;

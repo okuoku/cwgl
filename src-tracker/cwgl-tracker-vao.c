@@ -1,10 +1,10 @@
 #include "cwgl-tracker-priv.h"
 #include <stdlib.h>
 
-CWGL_API cwgl_VertexArrayObject_t* 
-cwgl_createVertexArray(cwgl_ctx_t* ctx){
-    cwgl_VertexArrayObject_t* vao;
-    vao = malloc(sizeof(cwgl_VertexArrayObject_t));
+CWGL_API cwgl_VertexArrayObject* 
+cwgl_createVertexArray(cwgl_ctx* ctx){
+    cwgl_VertexArrayObject* vao;
+    vao = malloc(sizeof(cwgl_VertexArrayObject));
     if(vao){
         cwgl_priv_objhdr_init(ctx, &vao->hdr, CWGL_OBJ_VAO);
         cwgl_priv_vao_init(&vao->state, vao->attrib);
@@ -13,7 +13,7 @@ cwgl_createVertexArray(cwgl_ctx_t* ctx){
 }
 
 static void
-free_vao(cwgl_ctx_t* ctx, cwgl_VertexArrayObject_t* vao){
+free_vao(cwgl_ctx* ctx, cwgl_VertexArrayObject* vao){
     int i;
     cwgl_priv_buffer_release(ctx, vao->state.ELEMENT_ARRAY_BUFFER_BINDING);
     for(i=0;i!=CWGL_MAX_VAO_SIZE;i++){
@@ -23,7 +23,7 @@ free_vao(cwgl_ctx_t* ctx, cwgl_VertexArrayObject_t* vao){
 }
 
 static void
-release_vao(cwgl_ctx_t* ctx, cwgl_VertexArrayObject_t* vao){
+release_vao(cwgl_ctx* ctx, cwgl_VertexArrayObject* vao){
     uintptr_t v;
     if(vao){
         v = cwgl_priv_objhdr_release(&vao->hdr);
@@ -34,7 +34,7 @@ release_vao(cwgl_ctx_t* ctx, cwgl_VertexArrayObject_t* vao){
 }
 
 static void
-unbind_vao(cwgl_ctx_t* ctx, cwgl_VertexArrayObject_t* vao){
+unbind_vao(cwgl_ctx* ctx, cwgl_VertexArrayObject* vao){
     if(ctx->state.bin.VERTEX_ARRAY_BINDING == vao){
         ctx->state.bin.VERTEX_ARRAY_BINDING = NULL;
         release_vao(ctx, vao);
@@ -42,7 +42,7 @@ unbind_vao(cwgl_ctx_t* ctx, cwgl_VertexArrayObject_t* vao){
 }
 
 CWGL_API void 
-cwgl_bindVertexArray(cwgl_ctx_t* ctx, cwgl_VertexArrayObject_t* obj){
+cwgl_bindVertexArray(cwgl_ctx* ctx, cwgl_VertexArrayObject* obj){
     if(obj != ctx->state.bin.VERTEX_ARRAY_BINDING){
         unbind_vao(ctx, ctx->state.bin.VERTEX_ARRAY_BINDING);
         if(obj){
@@ -53,12 +53,12 @@ cwgl_bindVertexArray(cwgl_ctx_t* ctx, cwgl_VertexArrayObject_t* obj){
 }
 
 CWGL_API void 
-cwgl_deleteVertexArray(cwgl_ctx_t* ctx, cwgl_VertexArrayObject_t* obj){
+cwgl_deleteVertexArray(cwgl_ctx* ctx, cwgl_VertexArrayObject* obj){
     unbind_vao(ctx, obj);
 }
 
 
 CWGL_API void 
-cwgl_VertexArrayObject_release(cwgl_ctx_t* ctx, cwgl_VertexArrayObject_t* vao){
+cwgl_VertexArrayObject_release(cwgl_ctx* ctx, cwgl_VertexArrayObject* vao){
     release_vao(ctx, vao);
 }

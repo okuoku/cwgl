@@ -9,7 +9,7 @@
 
 /* OpenGL State */
 CWGL_API void 
-cwgl_disable(cwgl_ctx_t* ctx, cwgl_enum_t cap){
+cwgl_disable(cwgl_ctx* ctx, cwgl_enum cap){
     switch(cap){
         UNSET(BLEND);
         UNSET(CULL_FACE);
@@ -27,7 +27,7 @@ cwgl_disable(cwgl_ctx_t* ctx, cwgl_enum_t cap){
 }
 
 CWGL_API void 
-cwgl_enable(cwgl_ctx_t* ctx, cwgl_enum_t cap){
+cwgl_enable(cwgl_ctx* ctx, cwgl_enum cap){
     switch(cap){
         SET(BLEND);
         SET(CULL_FACE);

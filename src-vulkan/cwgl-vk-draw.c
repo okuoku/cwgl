@@ -5,8 +5,8 @@
 #include "shxm_private.h"
 
 // FIXME: Copied from s2
-static cwgl_VertexArrayObject_t*
-current_vao(cwgl_ctx_t* ctx){
+static cwgl_VertexArrayObject*
+current_vao(cwgl_ctx* ctx){
     if(ctx->state.bin.VERTEX_ARRAY_BINDING){
         return ctx->state.bin.VERTEX_ARRAY_BINDING;
     }else{
@@ -14,9 +14,9 @@ current_vao(cwgl_ctx_t* ctx){
     }
 }
 
-static cwgl_Texture_t*
-current_texture(cwgl_ctx_t* ctx, int id, cwgl_enum_t slot){
-    cwgl_texture_unit_state_t* s;
+static cwgl_Texture*
+current_texture(cwgl_ctx* ctx, int id, cwgl_enum slot){
+    cwgl_texture_unit_state* s;
     s = ctx->state.bin.texture_unit;
     if(id > 32){
         return NULL;
@@ -31,9 +31,9 @@ current_texture(cwgl_ctx_t* ctx, int id, cwgl_enum_t slot){
 }
 
 static int
-update_texture(cwgl_ctx_t* ctx, cwgl_Texture_t* texture){
-    cwgl_backend_Texture_t* texture_backend;
-    cwgl_backend_ctx_t* backend;
+update_texture(cwgl_ctx* ctx, cwgl_Texture* texture){
+    cwgl_backend_Texture* texture_backend;
+    cwgl_backend_ctx* backend;
     VkSamplerCreateInfo si;
     VkResult r;
     texture_backend = texture->backend;
@@ -41,7 +41,7 @@ update_texture(cwgl_ctx_t* ctx, cwgl_Texture_t* texture){
     if(texture_backend->sampler_allocated){
         if(! memcmp(&texture_backend->cached_tracker_state,
                     &texture->state,
-                    sizeof(cwgl_texture_state_t))){
+                    sizeof(cwgl_texture_state))){
             /* Cache hit */
             return 0;
         }else{
@@ -119,13 +119,13 @@ update_texture(cwgl_ctx_t* ctx, cwgl_Texture_t* texture){
 }
 
 static int
-create_framebuffer(cwgl_ctx_t* ctx, 
-                   const cwgl_backend_Framebuffer_t* framebuffer_backend,
+create_framebuffer(cwgl_ctx* ctx, 
+                   const cwgl_backend_Framebuffer* framebuffer_backend,
                    int is_framebuffer, VkRenderPass renderpass, 
                    VkFramebuffer* out_framebuffer){
     VkResult r;
     VkFramebufferCreateInfo fi;
-    cwgl_backend_ctx_t* backend;
+    cwgl_backend_ctx* backend;
     VkImageView as[2];
     backend = ctx->backend;
     int has_color0 = 0;
@@ -182,8 +182,8 @@ create_framebuffer(cwgl_ctx_t* ctx,
 }
 
 static int
-create_renderpass(cwgl_ctx_t* ctx, 
-                  const cwgl_backend_Framebuffer_t* framebuffer_backend,
+create_renderpass(cwgl_ctx* ctx, 
+                  const cwgl_backend_Framebuffer* framebuffer_backend,
                   int is_framebuffer, VkRenderPass* out_renderpass){
     VkResult r;
     int has_color = 0;
@@ -196,7 +196,7 @@ create_renderpass(cwgl_ctx_t* ctx,
     VkRenderPassCreateInfo ri;
     VkSubpassDescription sp;
     VkSubpassDependency dep;
-    cwgl_backend_ctx_t* backend;
+    cwgl_backend_ctx* backend;
     backend = ctx->backend;
 
     if(is_framebuffer){
@@ -301,8 +301,8 @@ create_renderpass(cwgl_ctx_t* ctx,
 }
 
 static void
-update_framebuffer(cwgl_ctx_t* ctx, 
-                   cwgl_backend_Framebuffer_t* framebuffer_backend, 
+update_framebuffer(cwgl_ctx* ctx, 
+                   cwgl_backend_Framebuffer* framebuffer_backend, 
                    int is_framebuffer){
     uint64_t next_color_texture_ident0 = 0;
     uint64_t next_color_renderbuffer_ident0 = 0;
@@ -313,7 +313,7 @@ update_framebuffer(cwgl_ctx_t* ctx,
     int need_update = 0;
     VkRenderPass renderpass;
     VkFramebuffer framebuffer;
-    cwgl_backend_ctx_t* backend;
+    cwgl_backend_ctx* backend;
     backend = ctx->backend;
     if(is_framebuffer){
         next_color_renderbuffer_ident0 = backend->framebuffer_ident;
@@ -394,7 +394,7 @@ update_framebuffer(cwgl_ctx_t* ctx,
 }
 
 static VkFormat
-to_vk_value_format(int size, cwgl_enum_t type, int normalized){
+to_vk_value_format(int size, cwgl_enum type, int normalized){
     switch(size){
         default:
         case 1:
@@ -537,7 +537,7 @@ to_vk_value_format(int size, cwgl_enum_t type, int normalized){
 }
 
 static VkFormat
-to_vk_value_format_floatreg(cwgl_enum_t type){
+to_vk_value_format_floatreg(cwgl_enum type){
     switch(type){
         default:
             return 0;
@@ -561,24 +561,24 @@ struct cwgl_backend_pipeline_vtxbinds_s {
     VkDeviceSize bind_offsets[CWGL_MAX_VAO_SIZE]; /* Cache */
 };
 
-typedef struct cwgl_backend_pipeline_vtxbinds_s cwgl_backend_pipeline_vtxbinds_t;
+typedef struct cwgl_backend_pipeline_vtxbinds_s cwgl_backend_pipeline_vtxbinds;
 
 static void
-configure_shaders(cwgl_ctx_t* ctx, VkPipelineShaderStageCreateInfo* vxi,
+configure_shaders(cwgl_ctx* ctx, VkPipelineShaderStageCreateInfo* vxi,
                   VkPipelineShaderStageCreateInfo* pxi,
                   VkPipelineVertexInputStateCreateInfo* vii,
-                  cwgl_backend_pipeline_identity_t* id,
-                  cwgl_backend_pipeline_vtxbinds_t* vtx){
+                  cwgl_backend_pipeline_identity* id,
+                  cwgl_backend_pipeline_vtxbinds* vtx){
     int i;
     int ai;
     int bind_at;
     int use_attrib_register;
     int location;
-    cwgl_Program_t* program;
-    cwgl_backend_Program_t* program_backend;
-    cwgl_VertexArrayObject_t* vao;
-    cwgl_vao_attrib_state_t* attrib;
-    cwgl_activeinfo_t* a;
+    cwgl_Program* program;
+    cwgl_backend_Program* program_backend;
+    cwgl_VertexArrayObject* vao;
+    cwgl_vao_attrib_state* attrib;
+    cwgl_activeinfo* a;
 
     program = ctx->state.bin.CURRENT_PROGRAM;
     program_backend = program->backend;
@@ -645,7 +645,7 @@ configure_shaders(cwgl_ctx_t* ctx, VkPipelineShaderStageCreateInfo* vxi,
 }
 
 static VkStencilOp
-to_vk_stencilop(cwgl_enum_t op){
+to_vk_stencilop(cwgl_enum op){
     switch(op){
         default:
         case KEEP:
@@ -667,7 +667,7 @@ to_vk_stencilop(cwgl_enum_t op){
     }
 }
 static VkCompareOp
-to_vk_compareop(cwgl_enum_t op){
+to_vk_compareop(cwgl_enum op){
     switch(op){
         default:
         case NEVER:
@@ -689,7 +689,7 @@ to_vk_compareop(cwgl_enum_t op){
     }
 }
 static VkBlendFactor
-to_vk_blendfactor(cwgl_enum_t op){
+to_vk_blendfactor(cwgl_enum op){
     switch(op){
         default:
         case ZERO:
@@ -726,7 +726,7 @@ to_vk_blendfactor(cwgl_enum_t op){
 }
 
 static VkBlendOp
-to_vk_blendop(cwgl_enum_t op){
+to_vk_blendop(cwgl_enum op){
     switch(op){
         default:
         case FUNC_ADD:
@@ -739,9 +739,9 @@ to_vk_blendop(cwgl_enum_t op){
 }
 
 static void
-fill_pipeline_identity(cwgl_ctx_t* ctx,
-                       cwgl_enum_t primitive,
-                       cwgl_backend_pipeline_identity_t* id){
+fill_pipeline_identity(cwgl_ctx* ctx,
+                       cwgl_enum primitive,
+                       cwgl_backend_pipeline_identity* id){
 
     VkPipelineRasterizationStateCreateInfo rsi = {0};
     VkPipelineMultisampleStateCreateInfo msi = {0};
@@ -749,7 +749,7 @@ fill_pipeline_identity(cwgl_ctx_t* ctx,
     VkPipelineInputAssemblyStateCreateInfo iai = {0};
     VkPipelineColorBlendAttachmentState cbas_color = {0};
 
-    cwgl_ctx_global_state_t* s;
+    cwgl_ctx_global_state* s;
     int line = 0;
     int point = 0;
     int triangle = 0;
@@ -935,9 +935,9 @@ fill_pipeline_identity(cwgl_ctx_t* ctx,
     id->cbas_color = cbas_color;
 }
 
-static cwgl_backend_pipeline_t*
-lookup_pipeline(cwgl_backend_ctx_t* backend,
-                cwgl_backend_pipeline_identity_t* query,
+static cwgl_backend_pipeline*
+lookup_pipeline(cwgl_backend_ctx* backend,
+                cwgl_backend_pipeline_identity* query,
                 int* out_hit){
     int first_idx;
     uint64_t first_ident = UINT64_MAX;
@@ -945,7 +945,7 @@ lookup_pipeline(cwgl_backend_ctx_t* backend,
     for(i=0;i!=CWGL_PIPELINE_CACHE_SIZE;i++){
         if(backend->pipelines[i].allocated){
             if(! memcmp(&backend->pipelines[i].cache, query,
-                        sizeof(cwgl_backend_pipeline_identity_t))){
+                        sizeof(cwgl_backend_pipeline_identity))){
                 break;
             }else{
                 if(first_ident > backend->pipelines[i].ident){
@@ -979,17 +979,17 @@ lookup_pipeline(cwgl_backend_ctx_t* backend,
 }
 
 static int
-create_pipeline(cwgl_ctx_t* ctx, cwgl_enum_t primitive, 
-                cwgl_backend_Framebuffer_t* fb,
-                cwgl_backend_Program_t* prog,
-                cwgl_backend_pipeline_t** out_ppipe,
-                cwgl_backend_pipeline_vtxbinds_t* out_vtx){
+create_pipeline(cwgl_ctx* ctx, cwgl_enum primitive, 
+                cwgl_backend_Framebuffer* fb,
+                cwgl_backend_Program* prog,
+                cwgl_backend_pipeline** out_ppipe,
+                cwgl_backend_pipeline_vtxbinds* out_vtx){
     int cache_hit = 0;
     VkPipeline pipeline;
     VkRenderPass renderpass; 
     VkPipelineLayout layout;
-    cwgl_backend_pipeline_identity_t id = {0};
-    cwgl_backend_pipeline_t* p;
+    cwgl_backend_pipeline_identity id = {0};
+    cwgl_backend_pipeline* p;
 
     VkGraphicsPipelineCreateInfo pi;
     VkPipelineShaderStageCreateInfo ssci[2];
@@ -999,7 +999,7 @@ create_pipeline(cwgl_ctx_t* ctx, cwgl_enum_t primitive,
     VkPipelineColorBlendStateCreateInfo cbi;
     VkPipelineDynamicStateCreateInfo dyi;
     VkDynamicState dys[2];
-    cwgl_backend_ctx_t* backend;
+    cwgl_backend_ctx* backend;
     VkResult r;
     backend = ctx->backend;
 
@@ -1079,15 +1079,15 @@ create_pipeline(cwgl_ctx_t* ctx, cwgl_enum_t primitive,
     p->allocated = 1;
     p->ident = cwgl_vkpriv_newident(ctx);
     p->pipeline = pipeline;
-    memset(&p->cache, 0, sizeof(cwgl_backend_pipeline_identity_t));
+    memset(&p->cache, 0, sizeof(cwgl_backend_pipeline_identity));
     p->cache = id;
     return 0;
 }
 
 static void
-begin_cmd(cwgl_ctx_t* ctx){
+begin_cmd(cwgl_ctx* ctx){
     VkCommandBufferBeginInfo bi;
-    cwgl_backend_ctx_t* backend;
+    cwgl_backend_ctx* backend;
     backend = ctx->backend;
     bi.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
     bi.pNext = NULL;
@@ -1097,10 +1097,10 @@ begin_cmd(cwgl_ctx_t* ctx){
 }
 
 static void
-begin_renderpass(cwgl_ctx_t* ctx, cwgl_backend_Framebuffer_t* framebuffer_backend,
+begin_renderpass(cwgl_ctx* ctx, cwgl_backend_Framebuffer* framebuffer_backend,
                  VkRenderPass renderpass, VkFramebuffer framebuffer){
     VkRenderPassBeginInfo bi;
-    cwgl_backend_ctx_t* backend;
+    cwgl_backend_ctx* backend;
     backend = ctx->backend;
     bi.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
     bi.pNext = NULL;
@@ -1116,16 +1116,16 @@ begin_renderpass(cwgl_ctx_t* ctx, cwgl_backend_Framebuffer_t* framebuffer_backen
 }
 
 static void
-transfer_opaques(cwgl_ctx_t* ctx, cwgl_Program_t* program){
-    cwgl_backend_Program_t* program_backend;
-    cwgl_backend_ctx_t* backend;
-    shxm_program_t* p;
-    cwgl_activeinfo_t* u;
-    cwgl_uniformcontent_t* uc;
+transfer_opaques(cwgl_ctx* ctx, cwgl_Program* program){
+    cwgl_backend_Program* program_backend;
+    cwgl_backend_ctx* backend;
+    shxm_program* p;
+    cwgl_activeinfo* u;
+    cwgl_uniformcontent* uc;
 
     VkDescriptorImageInfo di;
     VkWriteDescriptorSet ws;
-    cwgl_Texture_t* texture;
+    cwgl_Texture* texture;
     int32_t sampler_id;
     int i;
 
@@ -1170,15 +1170,15 @@ transfer_opaques(cwgl_ctx_t* ctx, cwgl_Program_t* program){
 }
 
 static void
-transfer_uniforms(cwgl_ctx_t* ctx, cwgl_Program_t* program){
+transfer_uniforms(cwgl_ctx* ctx, cwgl_Program* program){
     /* Also transfer input register contents */
     VkResult r;
-    cwgl_backend_Program_t* program_backend;
-    cwgl_backend_ctx_t* backend;
+    cwgl_backend_Program* program_backend;
+    cwgl_backend_ctx* backend;
     uint8_t* device_memory_addr;
-    shxm_program_t* p;
-    cwgl_activeinfo_t* u;
-    cwgl_uniformcontent_t* uc;
+    shxm_program* p;
+    cwgl_activeinfo* u;
+    cwgl_uniformcontent* uc;
 
     backend = ctx->backend;
     program_backend = program->backend;
@@ -1204,9 +1204,9 @@ transfer_uniforms(cwgl_ctx_t* ctx, cwgl_Program_t* program){
         float* loc;
         int i;
         int ai;
-        cwgl_VertexArrayObject_t* vao;
-        cwgl_vao_attrib_state_t* attrib;
-        cwgl_activeinfo_t* a;
+        cwgl_VertexArrayObject* vao;
+        cwgl_vao_attrib_state* attrib;
+        cwgl_activeinfo* a;
 
         vao = current_vao(ctx);
         a = program->state.attributes;
@@ -1290,25 +1290,25 @@ transfer_uniforms(cwgl_ctx_t* ctx, cwgl_Program_t* program){
 
 struct drawreq {
     int use_index;
-    cwgl_enum_t mode;
-    cwgl_enum_t index_type;
+    cwgl_enum mode;
+    cwgl_enum index_type;
     uint32_t first;
     uint32_t count;
     uint32_t offset;
 };
 static int
-kick_draw(cwgl_ctx_t* ctx, struct drawreq* dr){
+kick_draw(cwgl_ctx* ctx, struct drawreq* dr){
     VkRenderPass renderpass;
     VkFramebuffer framebuffer;
     int is_framebuffer;
-    cwgl_backend_Framebuffer_t* framebuffer_backend;
-    cwgl_VertexArrayObject_t* vao;
-    cwgl_Program_t* program;
-    cwgl_backend_Program_t* program_backend;
-    cwgl_backend_ctx_t* backend;
-    cwgl_ctx_global_state_t* s;
-    cwgl_backend_pipeline_vtxbinds_t vtxbinds;
-    cwgl_backend_pipeline_t* pipeline_backend;
+    cwgl_backend_Framebuffer* framebuffer_backend;
+    cwgl_VertexArrayObject* vao;
+    cwgl_Program* program;
+    cwgl_backend_Program* program_backend;
+    cwgl_backend_ctx* backend;
+    cwgl_ctx_global_state* s;
+    cwgl_backend_pipeline_vtxbinds vtxbinds;
+    cwgl_backend_pipeline* pipeline_backend;
     s = &ctx->state.glo;
     backend = ctx->backend;
     program = ctx->state.bin.CURRENT_PROGRAM;
@@ -1389,7 +1389,7 @@ kick_draw(cwgl_ctx_t* ctx, struct drawreq* dr){
 }
 
 int
-cwgl_backend_drawArrays(cwgl_ctx_t* ctx, cwgl_enum_t mode,
+cwgl_backend_drawArrays(cwgl_ctx* ctx, cwgl_enum mode,
                         int32_t first, uint32_t count){
     struct drawreq dr;
     dr.use_index = 0;
@@ -1400,8 +1400,8 @@ cwgl_backend_drawArrays(cwgl_ctx_t* ctx, cwgl_enum_t mode,
 }
 
 int
-cwgl_backend_drawElements(cwgl_ctx_t* ctx, cwgl_enum_t mode,
-                          uint32_t count, cwgl_enum_t type, uint32_t offset){
+cwgl_backend_drawElements(cwgl_ctx* ctx, cwgl_enum mode,
+                          uint32_t count, cwgl_enum type, uint32_t offset){
     struct drawreq dr;
     dr.mode = mode;
     dr.use_index = 1;
@@ -1416,9 +1416,9 @@ cwgl_backend_drawElements(cwgl_ctx_t* ctx, cwgl_enum_t mode,
 #define GL_COLOR_BUFFER_BIT 0x00004000
 
 static void
-cmd_barrier(cwgl_ctx_t* ctx, VkImage image, VkImageLayout from, VkImageLayout to,
+cmd_barrier(cwgl_ctx* ctx, VkImage image, VkImageLayout from, VkImageLayout to,
             VkImageAspectFlags aspect){
-    cwgl_backend_ctx_t* backend;
+    cwgl_backend_ctx* backend;
     VkImageMemoryBarrier ib;
     backend = ctx->backend;
     ib.sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
@@ -1443,7 +1443,7 @@ cmd_barrier(cwgl_ctx_t* ctx, VkImage image, VkImageLayout from, VkImageLayout to
 }
 
 int
-cwgl_backend_clear(cwgl_ctx_t* ctx, uint32_t mask){
+cwgl_backend_clear(cwgl_ctx* ctx, uint32_t mask){
     // FIXME: Consider SCISSOR_TEST and its rect
     // FIXME: Consider COLOR_WRITEMASK
     // FIXME: Implement mipmap/cubemap clear
@@ -1453,10 +1453,10 @@ cwgl_backend_clear(cwgl_ctx_t* ctx, uint32_t mask){
     VkImageSubresourceRange r;
     VkImage img = 0;
     int is_framebuffer;
-    cwgl_backend_Framebuffer_t* fb;
+    cwgl_backend_Framebuffer* fb;
 
-    cwgl_backend_ctx_t* backend;
-    cwgl_ctx_global_state_t* s;
+    cwgl_backend_ctx* backend;
+    cwgl_ctx_global_state* s;
     backend = ctx->backend;
     s = &ctx->state.glo;
 

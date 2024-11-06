@@ -4,8 +4,8 @@
 #include <stdio.h>
 #include <string.h>
 
-static shxm_spirv_ent_t*
-calc_ent(shxm_spirv_intr_t* intr, int id){
+static shxm_spirv_ent*
+calc_ent(shxm_spirv_intr* intr, int id){
     if(id < intr->ent_count){
         return &intr->ent[id];
     }else{
@@ -14,11 +14,11 @@ calc_ent(shxm_spirv_intr_t* intr, int id){
     }
 }
 
-shxm_spirv_intr_t* 
+shxm_spirv_intr* 
 shxm_private_read_spirv(uint32_t* ir, int len){
-    shxm_spirv_intr_t* intr;
-    shxm_spirv_ent_t* ent;
-    shxm_spirv_ent_t* ment;
+    shxm_spirv_intr* intr;
+    shxm_spirv_ent* ent;
+    shxm_spirv_ent* ment;
     int failed = 0;
     int prev;
     uint32_t magic;
@@ -41,7 +41,7 @@ shxm_private_read_spirv(uint32_t* ir, int len){
     printf("Reading: magic = %x version = %x bound = %d zero = %d\n",
            magic, version, bound, zero);
 
-    intr = malloc(sizeof(shxm_spirv_intr_t));
+    intr = malloc(sizeof(shxm_spirv_intr));
     if(! intr){
         return NULL;
     }
@@ -50,7 +50,7 @@ shxm_private_read_spirv(uint32_t* ir, int len){
         free(intr);
         return NULL;
     }
-    ent = malloc(sizeof(shxm_spirv_ent_t)*bound);
+    ent = malloc(sizeof(shxm_spirv_ent)*bound);
     intr->entrypoint = 0;
     intr->defs_start = 0;
     intr->defs_end = 0;
@@ -62,7 +62,7 @@ shxm_private_read_spirv(uint32_t* ir, int len){
     if(ent){
         intr->ent = ent;
         intr->ent_count = bound;
-        memset(ent, 0, sizeof(shxm_spirv_ent_t)*bound);
+        memset(ent, 0, sizeof(shxm_spirv_ent)*bound);
         memset(intr->chain, 0, sizeof(unsigned int)*len);
         i = 5;
         while(i<len){
