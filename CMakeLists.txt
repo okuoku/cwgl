@@ -106,6 +106,10 @@ if(YFRM_CWGL_EXPERIMENTAL_TRACKER)
             )
     endif()
 else()
+    if(YFRM_CWGL_USE_ANGLE)
+        # ANGLE always exports GLES3
+        add_definitions(-DCWGL_LEVEL_L2)
+    endif()
     set(cwglsrc
         src-gles2/cwgl-gles2-objstr.c
         src-gles2/cwgl-gles2-priv.h
@@ -118,6 +122,11 @@ else()
         src-gles2/cwgl-gles2-snone.c
         src-gles2/cwgl-gles2-vao.c
         src-gles2/cwgl-integ-gles2.c
+        # L2
+        src-gles2/cwgl-gles2-query.c
+        src-gles2/cwgl-gles2-sampler.c
+        src-gles2/cwgl-gles2-sync.c
+        src-gles2/cwgl-gles2-tfb.c
         )
 endif()
 
