@@ -63,7 +63,7 @@ struct cwgl_Sampler_s{
 };
 
 struct cwgl_Sync_s{
-    int name;
+    void* sync;
 };
 
 struct cwgl_TransformFeedback_s{
@@ -85,5 +85,13 @@ struct cwgl_TransformFeedback_s{
 
 #define CTX_GETNAME(ctx, p) \
     p->name
+
+#ifdef CWGL_LEVEL_L2
+#define CTX_SETSYNC(ctx, p, id) \
+    p->sync = id
+
+#define CTX_GETSYNC(ctx, p) \
+    p->sync
+#endif
 
 #endif

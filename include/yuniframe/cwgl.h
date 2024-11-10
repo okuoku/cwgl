@@ -493,11 +493,11 @@ CWGL_API cwgl_query_result cwgl_getSamplerParameter_i1(cwgl_ctx* ctx, cwgl_Sampl
 CWGL_API cwgl_query_result cwgl_getSamplerParameter_f1(cwgl_ctx* ctx, cwgl_Sampler* sampler, cwgl_enum pname, float* out);
 
 // WebGL2 3.7.14 Sync objects
-CWGL_API cwgl_Sync* cwgl_fenceSync(cwgl_ctx* ctx);
+CWGL_API cwgl_Sync* cwgl_fenceSync(cwgl_ctx* ctx, cwgl_enum condition, uint32_t flags);
 CWGL_API void cwgl_deleteSync(cwgl_ctx* ctx, cwgl_Sync* sync);
 CWGL_API cwgl_enum cwgl_clientWaitSync(cwgl_ctx* ctx, cwgl_Sync* sync, uint32_t flags, uint32_t timeout);
-CWGL_API void cwgl_waitSync(cwgl_ctx* ctx, cwgl_Sync* sync, uint32_t flags, uint32_t timeout);
-CWGL_API cwgl_query_result cwgl_getSyncParameter_i1(cwgl_ctx* ctx, cwgl_Sync* sync, cwgl_enum pname);
+CWGL_API void cwgl_waitSync(cwgl_ctx* ctx, cwgl_Sync* sync, uint32_t flags, uint32_t reserved);
+CWGL_API cwgl_query_result cwgl_getSyncParameter_i1(cwgl_ctx* ctx, cwgl_Sync* sync, cwgl_enum pname, int32_t* out);
 
 // WebGL2 3.7.15 Transform feedback
 CWGL_API cwgl_TransformFeedback* cwgl_createTransformFeedback(cwgl_ctx* ctx);

@@ -71,10 +71,10 @@ cwgl_getSamplerParameter_i1(cwgl_ctx* ctx, cwgl_Sampler* sampler,
     name = CTX_GETNAME(ctx, sampler);
     glGetSamplerParameteriv(name, pname, &res);
     e = glGetError();
+    CTX_LEAVE(ctx);
     if(e){
         return CWGL_QR_GLERROR;
     }
-    CTX_LEAVE(ctx);
     *out = res;
     return CWGL_QR_SUCCESS;
 }
@@ -90,10 +90,10 @@ cwgl_getSamplerParameter_f1(cwgl_ctx* ctx, cwgl_Sampler* sampler,
     name = CTX_GETNAME(ctx, sampler);
     glGetSamplerParameterfv(name, pname, &res);
     e = glGetError();
+    CTX_LEAVE(ctx);
     if(e){
         return CWGL_QR_GLERROR;
     }
-    CTX_LEAVE(ctx);
     *out = res;
     return CWGL_QR_SUCCESS;
 }
