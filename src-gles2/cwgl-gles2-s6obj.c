@@ -1,5 +1,6 @@
 #include <string.h>
 #include "cwgl-gles2-priv.h"
+#include <stdlib.h>
 
 // 6.1.1 Simple Queries
 CWGL_API cwgl_query_result
@@ -136,6 +137,7 @@ cwgl_getParameter_str(cwgl_ctx* ctx, cwgl_enum pname, cwgl_string** str){
 CWGL_API cwgl_query_result 
 cwgl_getParameter_Buffer(cwgl_ctx* ctx, cwgl_enum pname, 
                          cwgl_Buffer** buffer){
+    abort();
     cwgl_query_result r;
     CTX_ENTER(ctx);
     r = CWGL_QR_UNIMPLEMENTED;
@@ -146,6 +148,7 @@ cwgl_getParameter_Buffer(cwgl_ctx* ctx, cwgl_enum pname,
 CWGL_API cwgl_query_result 
 cwgl_getParameter_Program(cwgl_ctx* ctx, cwgl_enum pname, 
                           cwgl_Program** program){
+    abort();
     cwgl_query_result r;
     CTX_ENTER(ctx);
     r = CWGL_QR_UNIMPLEMENTED;
@@ -156,6 +159,7 @@ cwgl_getParameter_Program(cwgl_ctx* ctx, cwgl_enum pname,
 CWGL_API cwgl_query_result 
 cwgl_getParameter_Framebuffer(cwgl_ctx* ctx, cwgl_enum pname, 
                               cwgl_Framebuffer** framebuffer){
+    abort();
     cwgl_query_result r;
     CTX_ENTER(ctx);
     r = CWGL_QR_UNIMPLEMENTED;
@@ -166,6 +170,7 @@ cwgl_getParameter_Framebuffer(cwgl_ctx* ctx, cwgl_enum pname,
 CWGL_API cwgl_query_result 
 cwgl_getParameter_Renderbuffer(cwgl_ctx* ctx, cwgl_enum pname, 
                                cwgl_Renderbuffer** renderbuffer){
+    abort();
     cwgl_query_result r;
     CTX_ENTER(ctx);
     r = CWGL_QR_UNIMPLEMENTED;
@@ -176,12 +181,39 @@ cwgl_getParameter_Renderbuffer(cwgl_ctx* ctx, cwgl_enum pname,
 CWGL_API cwgl_query_result 
 cwgl_getParameter_Texture(cwgl_ctx* ctx, cwgl_enum pname, 
                           cwgl_Texture** texture){
+    abort();
     cwgl_query_result r;
     CTX_ENTER(ctx);
     r = CWGL_QR_UNIMPLEMENTED;
     CTX_LEAVE(ctx);
     return r;
 }
+
+#ifdef CWGL_LEVEL_L2
+CWGL_API cwgl_query_result
+cwgl_getIndexedParameter_i1(cwgl_ctx* ctx, cwgl_enum pname, uint32_t index,
+                            int32_t* x){
+    GLint i4[4] = { 0 };
+    cwgl_query_result r;
+    CTX_ENTER(ctx);
+    glGetIntegeri_v(pname, index, i4);
+    *x = i4[0];
+    r = CWGL_QR_SUCCESS;
+    CTX_LEAVE(ctx);
+    return r;
+}
+
+CWGL_API cwgl_query_result 
+cwgl_getIndexedParameter_Buffer(cwgl_ctx* ctx, cwgl_enum pname, uint32_t index,
+                                cwgl_Buffer** buffer){
+    abort();
+    cwgl_query_result r;
+    CTX_ENTER(ctx);
+    r = CWGL_QR_UNIMPLEMENTED;
+    CTX_LEAVE(ctx);
+    return r;
+}
+#endif
 
 CWGL_API int 
 cwgl_isEnabled(cwgl_ctx* ctx, cwgl_enum cap){
@@ -239,7 +271,7 @@ cwgl_getFramebufferAttachmentParameter_Renderbuffer(cwgl_ctx* ctx,
                                                     cwgl_enum attachment, 
                                                     cwgl_enum pname, 
                                                     cwgl_Renderbuffer** renderbuffer){
-
+    abort();
     cwgl_query_result r;
     CTX_ENTER(ctx);
     r = CWGL_QR_UNIMPLEMENTED;
@@ -253,6 +285,7 @@ cwgl_getFramebufferAttachmentParameter_Texture(cwgl_ctx* ctx,
                                                cwgl_enum attachment, 
                                                cwgl_enum pname, 
                                                cwgl_Texture** texture){
+    abort();
     cwgl_query_result r;
     CTX_ENTER(ctx);
     r = CWGL_QR_UNIMPLEMENTED;
@@ -272,6 +305,17 @@ cwgl_getRenderbufferParameter_i1(cwgl_ctx* ctx, cwgl_enum target,
     CTX_LEAVE(ctx);
     return r;
 }
+
+#ifdef CWGL_LEVEL_L2
+CWGL_API cwgl_query_result 
+cwgl_getInternalformatParameter_iarray(cwgl_ctx* ctx, cwgl_enum target, 
+                                       cwgl_enum internalformat, 
+                                       cwgl_enum pname, int32_t* out, 
+                                       size_t bufcount){
+    /* UNIMPLEMENTED */
+    abort();
+}
+#endif
 
 // 6.1.4 Texture Queries
 CWGL_API int 
