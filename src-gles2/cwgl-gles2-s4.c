@@ -158,6 +158,45 @@ cwgl_clearStencil(cwgl_ctx* ctx, int32_t s){
     CTX_LEAVE(ctx);
 }
 
+#ifdef CWGL_LEVEL_L2
+CWGL_API void 
+cwgl_drawBuffers(cwgl_ctx* ctx, cwgl_enum* buffers, size_t count){
+    CTX_ENTER(ctx);
+    glDrawBuffers(count, buffers);
+    CTX_LEAVE(ctx);
+}
+
+CWGL_API void 
+cwgl_clearBufferiv(cwgl_ctx* ctx, cwgl_enum buffer, int32_t drawbuffer, 
+                   const int32_t* value, size_t count){
+    CTX_ENTER(ctx);
+    glClearBufferiv(buffer, drawbuffer, value);
+    CTX_LEAVE(ctx);
+}
+
+CWGL_API void 
+cwgl_clearBufferuiv(cwgl_ctx* ctx, cwgl_enum buffer, int32_t drawbuffer, 
+                    const uint32_t* value, size_t count){
+    CTX_ENTER(ctx);
+    glClearBufferuiv(buffer, drawbuffer, value);
+    CTX_LEAVE(ctx);
+}
+
+CWGL_API void 
+cwgl_clearBufferfv(cwgl_ctx* ctx, cwgl_enum buffer, int32_t drawbuffer, 
+                   const float* value, size_t count){
+    CTX_ENTER(ctx);
+    glClearBufferfv(buffer, drawbuffer, value);
+    CTX_LEAVE(ctx);
+}
+
+CWGL_API void 
+cwgl_clearBufferfi(cwgl_ctx* ctx, cwgl_enum buffer, int32_t drawbuffer, float depth, int32_t stencil){
+    CTX_ENTER(ctx);
+    glClearBufferfi(buffer, drawbuffer, depth, stencil);
+    CTX_LEAVE(ctx);
+}
+#endif
 
 // 4.3.1 Reading Pixels
 CWGL_API void 
@@ -213,6 +252,53 @@ cwgl_Framebuffer_release(cwgl_ctx* ctx, cwgl_Framebuffer* framebuffer){
     }
     //CTX_LEAVE(ctx);
 }
+
+#ifdef CWGL_LEVEL_L2
+CWGL_API void 
+cwgl_blitFramebuffer(cwgl_ctx* ctx, int32_t srcx0, int32_t srcy0, 
+                     int32_t srcx1, int32_t srcy1, int32_t dstx0, 
+                     int32_t dsty0, int32_t dstx1, int32_t dsty1, 
+                     uint32_t mask, cwgl_enum filter){
+    CTX_ENTER(ctx);
+    glBlitFramebuffer(srcx0, srcy0, srcx1, srcy1, dstx0, dsty0, dstx1, dsty1,
+                      mask, filter);
+    CTX_LEAVE(ctx);
+}
+
+CWGL_API void 
+cwgl_framebufferTextureLayer(cwgl_ctx* ctx, cwgl_enum target, 
+                             cwgl_enum attachment, cwgl_Texture* texture, 
+                             int32_t level, int32_t layer){
+    GLuint name;
+    CTX_ENTER(ctx);
+    name = CTX_GETNAME(ctx, texture);
+    glFramebufferTextureLayer(target, attachment, name, level, layer);
+    CTX_LEAVE(ctx);
+}
+
+CWGL_API void cwgl_invalidateFramebuffer(cwgl_ctx* ctx, cwgl_enum target, 
+                                         cwgl_enum* attachments, size_t count){
+    CTX_ENTER(ctx);
+    glInvalidateFramebuffer(target, count, attachments);
+    CTX_LEAVE(ctx);
+}
+
+CWGL_API void cwgl_invalidateSubFramebuffer(cwgl_ctx* ctx, cwgl_enum target, 
+                                            cwgl_enum* attachments, 
+                                            size_t count, int32_t x, 
+                                            int32_t y, uint32_t width, 
+                                            uint32_t height){
+    CTX_ENTER(ctx);
+    glInvalidateSubFramebuffer(target, count, attachments, x, y, width, height);
+    CTX_LEAVE(ctx);
+}
+
+CWGL_API void cwgl_readBuffer(cwgl_ctx* ctx, cwgl_enum src){
+    CTX_ENTER(ctx);
+    glReadBuffer(src);
+    CTX_LEAVE(ctx);
+}
+#endif
 
 // 4.4.3 Renderbuffer Objects
 CWGL_API void 
@@ -301,6 +387,18 @@ cwgl_framebufferTexture2D(cwgl_ctx* ctx, cwgl_enum target,
     glFramebufferTexture2D(target, attachment, textarget, name, level);
     CTX_LEAVE(ctx);
 }
+
+#ifdef CWGL_LEVEL_L2
+CWGL_API void 
+cwgl_renderbufferStorageMultisample(cwgl_ctx* ctx, cwgl_enum target, 
+                                    uint32_t samples, cwgl_enum internalformat,
+                                    uint32_t width, uint32_t height){
+    CTX_ENTER(ctx);
+    glRenderbufferStorageMultisample(target, samples, internalformat, width,
+                                     height);
+    CTX_LEAVE(ctx);
+}
+#endif
 
 
 // 4.4.5 Framebuffer Completeness
