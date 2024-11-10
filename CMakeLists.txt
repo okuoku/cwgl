@@ -127,6 +127,7 @@ else()
         src-gles2/cwgl-gles2-sampler.c
         src-gles2/cwgl-gles2-sync.c
         src-gles2/cwgl-gles2-tfb.c
+        src-gles2/cwgl-gles2-ubo.c
         )
 endif()
 

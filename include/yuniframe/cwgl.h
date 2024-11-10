@@ -407,6 +407,10 @@ CWGL_API cwgl_query_result cwgl_getParameter_Program(cwgl_ctx* ctx, cwgl_enum pn
 CWGL_API cwgl_query_result cwgl_getParameter_Framebuffer(cwgl_ctx* ctx, cwgl_enum pname, cwgl_Framebuffer** framebuffer);
 CWGL_API cwgl_query_result cwgl_getParameter_Renderbuffer(cwgl_ctx* ctx, cwgl_enum pname, cwgl_Renderbuffer** renderbuffer);
 CWGL_API cwgl_query_result cwgl_getParameter_Texture(cwgl_ctx* ctx, cwgl_enum pname, cwgl_Texture** texture);
+#ifdef CWGL_LEVEL_L2
+CWGL_API cwgl_query_result cwgl_getIndexedParameter_i1(cwgl_ctx* ctx, cwgl_enum target, uint32_t index, int32_t* out);
+CWGL_API cwgl_query_result cwgl_getIndexedParameter_Buffer(cwgl_ctx* ctx, cwgl_enum target, uint32_t index, cwgl_Buffer** out);
+#endif
 CWGL_API int cwgl_isEnabled(cwgl_ctx* ctx, cwgl_enum cap);
 // 6.1.3 Enumerated Queries
 CWGL_API cwgl_query_result cwgl_getTexParameter_i1(cwgl_ctx* ctx, cwgl_enum target, cwgl_enum pname, int32_t* x);
@@ -513,11 +517,9 @@ CWGL_API void cwgl_resumeTransformFeedback(cwgl_ctx* ctx);
 // WebGL2 3.7.16 Uniform Buffer objects
 CWGL_API void cwgl_bindBufferBase(cwgl_ctx* ctx, cwgl_enum target, uint32_t index, cwgl_Buffer* buffer);
 CWGL_API void cwgl_bindBufferRange(cwgl_ctx* ctx, cwgl_enum target, uint32_t index, cwgl_Buffer* buffer, uint32_t offset, uint32_t size);
-CWGL_API cwgl_query_result cwgl_getIndexedParameter_i1(cwgl_ctx* ctx, cwgl_enum target, uint32_t index, int32_t* out);
-CWGL_API cwgl_query_result cwgl_getIndexedParameter_Buffer(cwgl_ctx* ctx, cwgl_enum target, uint32_t index, cwgl_Buffer** out);
-CWGL_API cwgl_query_result cwgl_getUniformIndices_iarray(cwgl_ctx* ctx, cwgl_Program* program, cwgl_string** uniformnames, size_t namecount, int32_t* out, uint32_t outcount, int32_t* resultcount);
-CWGL_API cwgl_query_result cwgl_getActiveUniforms_iarray(cwgl_ctx* ctx, cwgl_Program* program, uint32_t* indices, size_t indicecount, cwgl_enum pname, int32_t* out, uint32_t outcount, int32_t* resultcount);
-CWGL_API uint32_t cwgl_getUniformBlockIndex(cwgl_ctx* ctx, cwgl_Program* program, cwgl_string* uniformblockname);
+CWGL_API void cwgl_getUniformIndices(cwgl_ctx* ctx, cwgl_Program* program, const char** uniformnames, size_t namecount, uint32_t* out);
+CWGL_API cwgl_query_result cwgl_getActiveUniforms_iarray(cwgl_ctx* ctx, cwgl_Program* program, uint32_t* indices, size_t indicecount, cwgl_enum pname, int32_t* out);
+CWGL_API uint32_t cwgl_getUniformBlockIndex(cwgl_ctx* ctx, cwgl_Program* program, const char* uniformblockname);
 CWGL_API cwgl_query_result cwgl_getActiveUniformBlockParameter_i1(cwgl_ctx* ctx, cwgl_Program* program, uint32_t uniformblockindex, cwgl_enum pname, int32_t* out);
 CWGL_API cwgl_query_result cwgl_getActiveUniformBlockParameter_iarray(cwgl_ctx* ctx, cwgl_Program* program, uint32_t uniformblockindex, cwgl_enum pname, int32_t* out, uint32_t outcount, int32_t* resultcount);
 CWGL_API cwgl_string* cwgl_getActiveUniformBlockName(cwgl_ctx* ctx, cwgl_Program* program, uint32_t uniformblockindex);
