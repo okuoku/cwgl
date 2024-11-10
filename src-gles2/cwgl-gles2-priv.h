@@ -1,9 +1,13 @@
 #ifndef __YUNI_CWGL_GLES2_PRIV_H
 #define __YUNI_CWGL_GLES2_PRIV_H
 
+#ifdef CWGL_LEVEL_L2
+#include <GLES3/gl3.h>
+#else /* L1 */
 #include <GLES2/gl2.h>
 #define GL_GLEXT_PROTOTYPES
 #include <GLES2/gl2ext.h>
+#endif
 #include <yuniframe/cwgl.h>
 
 /* Context */
@@ -48,6 +52,24 @@ struct cwgl_Framebuffer_s {
 struct cwgl_VertexArrayObject_s {
     int name;
 };
+
+#ifdef CWGL_LEVEL_L2
+struct cwgl_Query_s{
+    int name;
+};
+
+struct cwgl_Sampler_s{
+    int name;
+};
+
+struct cwgl_Sync_s{
+    int name;
+};
+
+struct cwgl_TransformFeedback_s{
+    int name;
+};
+#endif
 
 /* Buffer allocation */
 #include <stdlib.h>

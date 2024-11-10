@@ -481,7 +481,7 @@ CWGL_API void cwgl_deleteQuery(cwgl_ctx* ctx, cwgl_Query* query);
 CWGL_API void cwgl_beginQuery(cwgl_ctx* ctx, cwgl_enum target, cwgl_Query* query);
 CWGL_API void cwgl_endQuery(cwgl_ctx* ctx, cwgl_enum target);
 CWGL_API cwgl_Query* cwgl_getQuery(cwgl_ctx* ctx, cwgl_enum target, cwgl_enum pname);
-CWGL_API cwgl_query_result cwgl_getQueryParameter_i1(cwgl_ctx* ctx, cwgl_Query* query, cwgl_enum pname, int32_t* out);
+CWGL_API cwgl_query_result cwgl_getQueryParameter_u1(cwgl_ctx* ctx, cwgl_Query* query, cwgl_enum pname, uint32_t* out);
 
 // WebGL2 3.7.13 Sampler objects
 CWGL_API cwgl_Sampler* cwgl_createSampler(cwgl_ctx* ctx);
