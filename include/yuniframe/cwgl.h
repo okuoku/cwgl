@@ -505,7 +505,8 @@ CWGL_API void cwgl_deleteTransformFeedback(cwgl_ctx* ctx, cwgl_TransformFeedback
 CWGL_API void cwgl_bindTransformFeedback(cwgl_ctx* ctx, cwgl_enum target, cwgl_TransformFeedback* tf);
 CWGL_API void cwgl_beginTransformFeedback(cwgl_ctx* ctx, cwgl_enum primitivemode);
 CWGL_API void cwgl_endTransformFeedback(cwgl_ctx* ctx);
-CWGL_API void cwgl_transformFeedbackVarying(cwgl_ctx* ctx, cwgl_Program* program, uint32_t index);
+CWGL_API void cwgl_transformFeedbackVaryings(cwgl_ctx* ctx, cwgl_Program* program, cwgl_string** varyings, size_t varyingcount, cwgl_enum buffermode);
+CWGL_API void cwgl_getTransformFeedbackVarying(cwgl_ctx* ctx, cwgl_Program* program, uint32_t index);
 CWGL_API void cwgl_pauseTransformFeedback(cwgl_ctx* ctx);
 CWGL_API void cwgl_resumeTransformFeedback(cwgl_ctx* ctx);
 

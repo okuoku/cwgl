@@ -17,7 +17,7 @@ cwgl_createSampler(cwgl_ctx* ctx){
     o = CTX_ALLOC(ctx, Sampler);
     CTX_SETNAME(ctx, o, name);
     CTX_LEAVE(ctx);
-    return 0;
+    return o;
 }
 
 CWGL_API void 
@@ -35,7 +35,11 @@ CWGL_API void
 cwgl_bindSampler(cwgl_ctx* ctx, uint32_t unit, cwgl_Sampler* sampler){
     GLuint name = 0;
     CTX_ENTER(ctx);
-    name = CTX_GETNAME(ctx, sampler);
+    if(sampler){
+        name = CTX_GETNAME(ctx, sampler);
+    }else{
+        name = 0;
+    }
     glBindSampler(unit, name);
     CTX_LEAVE(ctx);
 }
