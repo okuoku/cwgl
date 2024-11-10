@@ -176,10 +176,8 @@ CWGL_API void cwgl_vertexAttrib3f(cwgl_ctx* ctx, uint32_t indx, float x, float y
 CWGL_API void cwgl_vertexAttrib4f(cwgl_ctx* ctx, uint32_t indx, float x, float y, float z, float w);
 #ifdef CWGL_LEVEL_L2
 // WebGL2 3.7.8 Uniforms and attributes
-CWGL_API void cwgl_vertexAttrib4i(cwgl_ctx* ctx, uint32_t indx, int32_t x, int32_t y, int32_t z, int32_t w);
-CWGL_API void cwgl_vertexAttrib4ui(cwgl_ctx* ctx, uint32_t indx, uint32_t x, uint32_t y, uint32_t z, uint32_t w);
-CWGL_API void cwgl_vertexAttrib4iv(cwgl_ctx* ctx, uint32_t indx, int32_t* x, size_t count);
-CWGL_API void cwgl_vertexAttrib4uiv(cwgl_ctx* ctx, uint32_t indx, uint32_t* x, size_t count);
+CWGL_API void cwgl_vertexAttribI4i(cwgl_ctx* ctx, uint32_t indx, int32_t x, int32_t y, int32_t z, int32_t w);
+CWGL_API void cwgl_vertexAttribI4ui(cwgl_ctx* ctx, uint32_t indx, uint32_t x, uint32_t y, uint32_t z, uint32_t w);
 #endif
 // 2.8 Vertex Arrays
 CWGL_API void cwgl_vertexAttribPointer(cwgl_ctx* ctx, uint32_t indx, int32_t size, cwgl_enum type, int normalized, uint32_t stride, uint32_t offset);
@@ -267,7 +265,7 @@ CWGL_API void cwgl_uniformMatrix4x3fv(cwgl_ctx* ctx, cwgl_UniformLocation* locat
 CWGL_API void cwgl_validateProgram(cwgl_ctx* ctx, cwgl_Program* program);
 #ifdef CWGL_LEVEL_L2
 // WebGL2 3.7.7 Programs and Shaders
-CWGL_API void cwgl_getFragDataLocation(cwgl_ctx* ctx, cwgl_Program* program, const char* name);
+CWGL_API int32_t cwgl_getFragDataLocation(cwgl_ctx* ctx, cwgl_Program* program, const char* name);
 #endif
 // 2.12.1 Controlling the Viewport
 CWGL_API void cwgl_depthRange(cwgl_ctx* ctx, float zNear, float zFar);
