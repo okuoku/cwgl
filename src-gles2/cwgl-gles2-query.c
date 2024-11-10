@@ -27,8 +27,8 @@ cwgl_deleteQuery(cwgl_ctx* ctx, cwgl_Query* query){
     CTX_ENTER(ctx);
     if(query){
         name = CTX_GETNAME(ctx, query);
+        glDeleteQueries(1, &name);
     }
-    glDeleteQueries(1, &name);
     CTX_LEAVE(ctx);
 }
 
@@ -97,10 +97,11 @@ cwgl_getQueryParameter_u1(cwgl_ctx* ctx, cwgl_Query* query, cwgl_enum pname, uin
     glGetQueryObjectuiv(name, pname, &res);
     e = glGetError();
     if(e){
+        // FIXME: Set query error
         return CWGL_QR_GLERROR;
     }
     CTX_LEAVE(ctx);
-    *out = e;
+    *out = res;
     return CWGL_QR_SUCCESS;
 }
 
