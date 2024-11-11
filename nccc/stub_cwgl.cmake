@@ -564,4 +564,8 @@ nccc_api(cwgl_bindVertexArray
     IN ptr ptr
     OUT)
 
+if(CWGL_LEVEL_L2)
+    include(${CMAKE_CURRENT_LIST_DIR}/stub_cwgl2.cmake)
+endif()
+
 nccc_stub_end(cwgl)

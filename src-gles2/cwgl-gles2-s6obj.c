@@ -121,7 +121,7 @@ cwgl_getParameter_str(cwgl_ctx* ctx, cwgl_enum pname, cwgl_string** str){
     cwgl_string* out;
     cwgl_query_result r;
     CTX_ENTER(ctx);
-    res = glGetString(pname);
+    res = (const char*)glGetString(pname);
     if(!res){
         r = CWGL_QR_GLERROR;
     }else{
@@ -237,6 +237,21 @@ cwgl_getTexParameter_i1(cwgl_ctx* ctx, cwgl_enum target, cwgl_enum pname,
     CTX_LEAVE(ctx);
     return r;
 }
+
+#ifdef CWGL_LEVEL_L2
+CWGL_API cwgl_query_result 
+cwgl_getTexParameter_f1(cwgl_ctx* ctx, cwgl_enum target, cwgl_enum pname,
+                        float* x){
+    GLfloat f4[4] = { 0 };
+    cwgl_query_result r;
+    CTX_ENTER(ctx);
+    glGetTexParameterfv(target, pname, f4);
+    *x = f4[0];
+    r = CWGL_QR_SUCCESS;
+    CTX_LEAVE(ctx);
+    return r;
+}
+#endif
 
 CWGL_API cwgl_query_result 
 cwgl_getBufferParameter_i1(cwgl_ctx* ctx, cwgl_enum target, 

@@ -206,6 +206,15 @@ cwgl_readPixels(cwgl_ctx* ctx, int32_t x, int32_t y, uint32_t width, uint32_t he
     CTX_LEAVE(ctx);
 }
 
+#ifdef CWGL_LEVEL_L2
+CWGL_API void 
+cwgl_readPixels_buffer(cwgl_ctx* ctx, int32_t x, int32_t y, uint32_t width, uint32_t height, cwgl_enum format, cwgl_enum type, uint32_t offset){
+    CTX_ENTER(ctx);
+    glReadPixels(x, y, width, height, format, type, (void*)(uintptr_t)offset);
+    CTX_LEAVE(ctx);
+}
+#endif
+
 // 4.4.1 Binding and Managing Framebuffer Objects
 CWGL_API void 
 cwgl_bindFramebuffer(cwgl_ctx* ctx, 
