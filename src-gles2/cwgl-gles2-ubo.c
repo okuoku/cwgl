@@ -169,6 +169,7 @@ cwgl_getActiveUniformBlockParameter_iarray(cwgl_ctx* ctx,
     }else{
         abort();
     }
+    e = glGetError();
     CTX_LEAVE(ctx);
     if(e){
         return CWGL_QR_GLERROR;
