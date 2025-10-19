@@ -47,7 +47,7 @@ cwgl_backend_ctx_init(cwgl_ctx* ctx){
     VkCommandBuffer command_buffer;
     VkSwapchainCreateInfoKHR sci;
     VkSwapchainKHR swapchain;
-    char** device_extensions;
+    void** device_extensions;
     VkSemaphoreCreateInfo si;
     VkPipelineCacheCreateInfo pci;
     const uint32_t device_idx = 0;
@@ -157,9 +157,9 @@ cwgl_backend_ctx_init(cwgl_ctx* ctx){
         di.queueCreateInfoCount = 1;
         di.pQueueCreateInfos = &qi;
         di.enabledExtensionCount = 1;
-        char* swapchain_extension = VK_KHR_SWAPCHAIN_EXTENSION_NAME;
+        void* swapchain_extension = VK_KHR_SWAPCHAIN_EXTENSION_NAME;
         device_extensions = &swapchain_extension;
-        di.ppEnabledExtensionNames = device_extensions;
+        di.ppEnabledExtensionNames = (const char* const*)device_extensions;
         di.enabledLayerCount = 0;
         di.ppEnabledLayerNames = NULL;
         di.pEnabledFeatures = NULL;
