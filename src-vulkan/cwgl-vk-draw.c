@@ -1175,7 +1175,7 @@ transfer_uniforms(cwgl_ctx* ctx, cwgl_Program* program){
     VkResult r;
     cwgl_backend_Program* program_backend;
     cwgl_backend_ctx* backend;
-    void* device_memory_addr;
+    unsigned char* device_memory_addr;
     shxm_program* p;
     cwgl_activeinfo* u;
     cwgl_uniformcontent* uc;
