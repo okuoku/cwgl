@@ -1190,7 +1190,7 @@ transfer_uniforms(cwgl_ctx* ctx, cwgl_Program* program){
                     0, 
                     program_backend->program->uniform_size +
                     program_backend->program->input_register_size,
-                    0, &device_memory_addr);
+                    0, (void*)&device_memory_addr);
     if(r != VK_SUCCESS){
         printf("Failed to map uniform buffer\n");
         return;
