@@ -106,7 +106,7 @@ if(YFRM_CWGL_EXPERIMENTAL_TRACKER)
             )
     endif()
 else()
-    if(YFRM_CWGL_USE_ANGLE)
+    if(YFRM_CWGL_USE_ANGLE OR CWGL_LEVEL_L2)
         # ANGLE always exports GLES3
         add_definitions(-DCWGL_LEVEL_L2)
     endif()
