@@ -131,6 +131,13 @@ else()
         )
 endif()
 
+if(CWGL_USE_EGL_CTX)
+    add_definitions(-DCWGL_USE_EGL_CTX)
+    list(APPEND cwglsrc
+        src-egl/cwgl-egl-ctx.c
+    )
+endif()
+
 add_library(cwgl OBJECT ${cwglsrc})
 
 if(CWGL_KHRONOS_HEADER_DIR)
