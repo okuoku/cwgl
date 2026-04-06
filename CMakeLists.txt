@@ -138,7 +138,35 @@ if(CWGL_USE_EGL_CTX)
     )
 endif()
 
-add_library(cwgl OBJECT ${cwglsrc})
+if(CWGL_BUILD_MODULE)
+    add_library(cwgl SHARED ${cwglsrc})
+    if(APPLE)
+        # Configure dyld
+        set_target_properties(cwgl
+            PROPERTIES
+            PREFIX ""
+            SUFFIX ".dylib"
+            MACOSX_RPATH ON
+            BUILD_RPATH "@loader_path"
+            INSTALL_RPATH "@loader_path"
+            BUILD_WITH_INSTALL_RPATH ON)
+        set(libname "cwgl.dylib")
+    else()
+        set(libname "libcwgl.so")
+    endif()
+    if(NCCC_DEBUG_NODE_MODULES)
+        add_custom_command(TARGET cwgl POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy
+            "$<TARGET_FILE:cwgl>"
+            "${NCCC_DEBUG_NODE_MODULES}/${libname}")
+    endif()
+
+    target_link_libraries(cwgl PRIVATE
+        EGL GLESv2)
+else()
+    # OBJECT by default for static link
+    add_library(cwgl OBJECT ${cwglsrc})
+endif()
 
 if(CWGL_KHRONOS_HEADER_DIR)
     target_include_directories(cwgl PRIVATE
