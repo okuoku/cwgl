@@ -568,4 +568,6 @@ if(CWGL_LEVEL_L2)
     include(${CMAKE_CURRENT_LIST_DIR}/stub_cwgl2.cmake)
 endif()
 
+include(${CMAKE_CURRENT_LIST_DIR}/stub_cwgl_ctx.cmake)
+
 nccc_stub_end(cwgl)
