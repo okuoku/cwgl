@@ -5,7 +5,6 @@
 
 struct cwgl_ctx_s {
     EGLDisplay egl_disp;
-    EGLSurface egl_surf;
     EGLContext egl_ctx;
     EGLConfig egl_cfg;
 };

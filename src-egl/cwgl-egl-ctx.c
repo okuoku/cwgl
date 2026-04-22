@@ -95,9 +95,6 @@ init_gles_debug(void){
         return;
     }
 
-    glEnable(GL_DEBUG_OUTPUT_KHR);
-    glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS_KHR);
-
     pglDebugMessageControlKHR(GL_DONT_CARE,
                               GL_DONT_CARE,
                               GL_DONT_CARE,
@@ -105,6 +102,9 @@ init_gles_debug(void){
                               GL_TRUE);
 
     pglDebugMessageCallbackKHR(cb_gles_debug, NULL);
+    glEnable(GL_DEBUG_OUTPUT_KHR);
+    glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS_KHR);
+
     fprintf(stderr, "debug message init.\n");
 }
 
@@ -140,7 +140,6 @@ cwgl_init_offscreen0(void){
     ctx->egl_ctx = EGL_NO_CONTEXT;
 
     init_egl_debug();
-    init_gles_debug();
 
     return ctx;
 }
@@ -225,12 +224,14 @@ CWGL_API void
 cwgl_surface_set(cwgl_ctx* ctx, cwgl_surface* s){
     EGLBoolean b;
     b = eglMakeCurrent(ctx->egl_disp,
-                       ctx->egl_surf,
-                       ctx->egl_surf,
+                       s->egl_surf,
+                       s->egl_surf,
                        ctx->egl_ctx);
     if(! b){
         xabort("Failed to set current context");
     }
+
+    init_gles_debug();
 }
 
 #endif
