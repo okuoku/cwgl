@@ -6,6 +6,10 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+/* FIXME: Move this to gles2 */
+#include <GLES2/gl2.h>
+#include <GLES2/gl2ext.h>
+
 #include "cwgl-egl-ctx_priv.h"
 #include "yuniframe/cwgl.h"
 #include "yuniframe/cwgl_ctx.h"
@@ -47,6 +51,20 @@ cb_egl_debug(EGLenum error, const char* command,
 }
 
 static void
+cb_gles_debug(GLenum source, GLenum type, GLuint id,
+    GLenum severity, GLsizei length, const GLchar *message,
+    const void *userParam){
+    (void)source;
+    (void)userParam;
+
+    fprintf(stderr,
+            "[GL] type=0x%x id=%u severity=0x%x: %.*s\n",
+            type, id, severity,
+            (int)length,
+            message ? message : "");
+}
+
+static void
 init_egl_debug(void){
     PFNEGLDEBUGMESSAGECONTROLKHRPROC ptr_eglDebugMessageControl =
         (PFNEGLDEBUGMESSAGECONTROLKHRPROC)
@@ -64,7 +82,30 @@ init_egl_debug(void){
 
 static void
 init_gles_debug(void){
-    // FIXME: Implement it
+    PFNGLDEBUGMESSAGECALLBACKKHRPROC pglDebugMessageCallbackKHR =
+        (PFNGLDEBUGMESSAGECALLBACKKHRPROC)
+        eglGetProcAddress("glDebugMessageCallbackKHR");
+
+    PFNGLDEBUGMESSAGECONTROLKHRPROC pglDebugMessageControlKHR =
+        (PFNGLDEBUGMESSAGECONTROLKHRPROC)
+        eglGetProcAddress("glDebugMessageControlKHR");
+
+    if (!pglDebugMessageCallbackKHR || !pglDebugMessageControlKHR) {
+        fprintf(stderr, "GL_KHR_debug seems not available for the ctx\n");
+        return;
+    }
+
+    glEnable(GL_DEBUG_OUTPUT_KHR);
+    glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS_KHR);
+
+    pglDebugMessageControlKHR(GL_DONT_CARE,
+                              GL_DONT_CARE,
+                              GL_DONT_CARE,
+                              0, NULL,
+                              GL_TRUE);
+
+    pglDebugMessageCallbackKHR(cb_gles_debug, NULL);
+    fprintf(stderr, "debug message init.\n");
 }
 
 
@@ -76,9 +117,6 @@ cwgl_init_offscreen0(void){
     EGLDisplay disp;
     major = minor = 0;
     cwgl_ctx* ctx;
-
-    init_egl_debug();
-    init_gles_debug();
 
     ctx = malloc(sizeof(cwgl_ctx));
     if(! ctx){
@@ -100,6 +138,9 @@ cwgl_init_offscreen0(void){
 
     ctx->egl_disp = disp;
     ctx->egl_ctx = EGL_NO_CONTEXT;
+
+    init_egl_debug();
+    init_gles_debug();
 
     return ctx;
 }
@@ -141,6 +182,8 @@ cwgl_surface_create(cwgl_ctx* ctx,
 
     const EGLint cattr[] = {
         EGL_CONTEXT_CLIENT_VERSION, 3,
+        /* FIXME: Make it controllable */
+        EGL_CONTEXT_FLAGS_KHR, EGL_CONTEXT_OPENGL_DEBUG_BIT_KHR,
         EGL_NONE
     };
 
